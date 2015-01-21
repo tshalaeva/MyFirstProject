@@ -21,7 +21,8 @@ namespace MyFirstProject
             title = titleValue;
             content = contentValue;
             author = authorValue;
-
+            comments = new List<Comment>();
+            rating = new List<Rating>();
         }
 
         public string getTitle()

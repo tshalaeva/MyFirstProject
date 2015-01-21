@@ -8,13 +8,11 @@ namespace MyFirstProject
 {
     class Rating
     {
-        private int value;
-        private int id;
+        private int value;        
         private User user;
 
-        public Rating(int idValue, int val, User ratingUser)
+        public Rating(int val, User ratingUser)
         {
-            id = idValue;
             value = val;
             user = ratingUser;
         }
@@ -41,11 +39,6 @@ namespace MyFirstProject
         public void setRating(int ratingValue)
         {
             value = ratingValue;
-        }
-
-        public int getId()
-        {
-            return id;
         }
 
         public User getUser()
