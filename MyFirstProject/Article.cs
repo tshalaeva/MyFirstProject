@@ -7,79 +7,52 @@ using System.Threading.Tasks;
 namespace MyFirstProject
 {
     class Article
-    {
-        private string title;
-        private string content;
-        private Author author;
-        private List<Comment> comments;
-        private List<Rating>  rating;
-        private int id;
+    {        
+        public string Title {get; set;}
+        
+        public string Content {get; set;}
+                
+        public Author Author {get; set;}      
 
-        public Article(int idValue, Author authorValue, string titleValue, string contentValue)
+        private List<Rating>  rating;
+        public List<Rating> Rating
         {
-            id = idValue;
-            title = titleValue;
-            content = contentValue;
-            author = authorValue;
-            comments = new List<Comment>();
+            get
+            {
+                return rating;
+            }
+        }
+
+        private int id;
+        public int Id
+        {
+            get
+            {
+                return id;
+            }
+        }
+
+        public Article(int id)
+        {
+            this.id = id;                 
             rating = new List<Rating>();
         }
 
-        public string getTitle()
-        {
-            return title;
-        }
-
-        public void setTitle(string titleValue)
-        {
-            title = titleValue;
-        }
-
-        public string getContent()
-        {
-            return content;
-        }
-
-        public void setContent(string contentValue)
-        {
-            content = contentValue;
-        }
-
-        public Author getAuthor()
-        {
-            return author;
-        }
-
-        public void setAuthor(Author authorValue)
-        {
-            author = authorValue;
-        }
-
-        public List<Comment> getComments()
-        {
-            return comments;
-        }
-
-        public void addComment(Comment commentValue)
-        {
-            comments.Add(commentValue);
-        }
-
-        public void setRating(Rating ratingValue)
+        public void setRating(Rating rating)
         {
             bool flag = false;
-            for(int i = 0; i < rating.Count; i++)
+            for(int i = 0; i < this.rating.Count; i++)
             {
-                if (rating[i].getUser().getId() == ratingValue.getUser().getId())
+                if (this.rating[i].User.Id == rating.User.Id)
                 {
-                    rating[i].setRating(ratingValue.getRating());
+                    this.rating[i].Value = rating.Value;
                     flag = true;
                     break;
                 }
             }
             if (flag == false)
             {
-                rating.Add(ratingValue);
+                this.rating.Add(rating);
             }
         }
 
@@ -88,7 +61,7 @@ namespace MyFirstProject
             int sum = 0;
             for (int i = 0; i < rating.Count; i++)
             {
-                sum = sum + rating[i].getRating();
+                sum = sum + rating[i].Value;
             }
             if (rating.Count != 0)
             {
@@ -100,9 +73,13 @@ namespace MyFirstProject
             }
         }
 
-        public int getId()
+        public Comment addComment(int id, string content, User user)
         {
-            return id;
+            Comment comment = new Comment(id); 
+            comment.Article = this;
+            comment.User = user;
+            comment.Content = content;
+            return comment;
         }
     }
 }

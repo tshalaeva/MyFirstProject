@@ -8,22 +8,23 @@ namespace MyFirstProject
 {
     class Admin : User
     {
-        private string[] privilegies;
-
-        public Admin(int id, string firstName, string lastName, int age, string[] privilegiesValues)
-            : base(id, firstName, lastName, age)
+        private List<string> privilegies;
+        public List<string> Privilegies
         {
-            privilegies = privilegiesValues;
+            get 
+            {
+                return privilegies;
+            }
+            set
+            {
+                privilegies = value;
+            }
         }
 
-        public string[] getPrivilegies()
+        public Admin(int id)
+            : base(id)
         {
-            return privilegies;
-        }
-
-        public void printListOfPrivilegies()
-        {
-
+            privilegies = new List<string>();
         }
     }
 }

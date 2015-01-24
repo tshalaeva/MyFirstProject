@@ -9,34 +9,23 @@ namespace MyFirstProject
     class Comment
     {
         private int id;
-        private string content;
-        private User user;
-
-        public Comment(int idValue, string contentValue, User commentUser)
+        public int Id 
         {
-            id = idValue;
-            content = contentValue;
-            user = commentUser;
+            get
+            {
+                return id;
+            }
         }
+        
+        public string Content {get; set;}
+        
+        public User User {get; set;}
+        
+        public Article Article {get; set;}
 
-        public int getId()
+        public Comment(int id)
         {
-            return id;
-        }
-
-        public string getContent()
-        {
-            return content;
-        }
-
-        public void setContent(string contentValue)
-        {
-            content = contentValue;
-        }
-
-        public User getUser()
-        {
-            return user;
+            this.id = id;
         }
     }
 }

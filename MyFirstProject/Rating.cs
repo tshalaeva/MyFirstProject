@@ -7,43 +7,36 @@ using System.Threading.Tasks;
 namespace MyFirstProject
 {
     class Rating
-    {
-        private int value;        
+    {        
+        public int Value {get; set;}
+        
         private User user;
-
-        public Rating(int val, User ratingUser)
+        public User User
         {
-            value = val;
-            user = ratingUser;
-        }
-
-        public int getRating()
-        {
-            return value;
-        }
-
-        public void setRating(int ratingValue, User ratingUser)
-        {
-            if (ratingValue > 5)
+            get
             {
-                ratingValue = 5;
+                return user;
             }
-            if (ratingValue < 1)
+        }
+
+        public Rating(int value, User user)
+        {
+            this.Value = value;
+            this.user = user;
+        }
+
+        public void setRating(int value, User user)
+        {
+            if (value > 5)
             {
-                ratingValue = 1;
+                value = 5;
             }
-            value = ratingValue;
-            user = ratingUser;
-        }
-
-        public void setRating(int ratingValue)
-        {
-            value = ratingValue;
-        }
-
-        public User getUser()
-        {
-            return user;
+            if (value < 1)
+            {
+                value = 1;
+            }
+            this.Value = value;
+            this.user = user;
         }
     }
 }
