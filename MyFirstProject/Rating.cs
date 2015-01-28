@@ -6,23 +6,16 @@ using System.Threading.Tasks;
 
 namespace MyFirstProject
 {
-    class Rating
+    public class Rating
     {        
         public int Value {get; set;}
+                
+        public User User {get; private set;}
         
-        private User user;
-        public User User
-        {
-            get
-            {
-                return user;
-            }
-        }
-
         public Rating(int value, User user)
         {
             this.Value = value;
-            this.user = user;
+            User = user;
         }
 
         public void setRating(int value, User user)
@@ -36,7 +29,7 @@ namespace MyFirstProject
                 value = 1;
             }
             this.Value = value;
-            this.user = user;
+            User = user;
         }
     }
 }

@@ -6,66 +6,52 @@ using System.Threading.Tasks;
 
 namespace MyFirstProject
 {
-    class Article
+    public class Article
     {        
         public string Title {get; set;}
         
         public string Content {get; set;}
                 
-        public Author Author {get; set;}      
+        public Author Author {get; set;}
 
-        private List<Rating>  rating;
-        public List<Rating> Rating
-        {
-            get
-            {
-                return rating;
-            }
-        }
+        public List<Rating> Rating { get; private set; }
 
-        private int id;
-        public int Id
-        {
-            get
-            {
-                return id;
-            }
-        }
+        public int Id {get; private set;}
 
         public Article(int id)
         {
-            this.id = id;                 
-            rating = new List<Rating>();
+            Id = id;                 
+            Rating = new List<Rating>();
         }
 
         public void setRating(Rating rating)
         {
             bool flag = false;
-            for(int i = 0; i < this.rating.Count; i++)
+            for(int i = 0; i < Rating.Count; i++)
             {
-                if (this.rating[i].User.Id == rating.User.Id)
+                if (Rating[i].User.Id == rating.User.Id)
                 {
-                    this.rating[i].Value = rating.Value;
+                    Rating[i].Value = rating.Value;
                     flag = true;
                     break;
                 }
             }
             if (flag == false)
             {
-                this.rating.Add(rating);
+                Rating.Add(rating);
             }
         }
 
         public int getAverageRating()
         {
             int sum = 0;
-            for (int i = 0; i < rating.Count; i++)
+            for (int i = 0; i < Rating.Count; i++)
             {
-                sum = sum + rating[i].Value;
+                sum = sum + Rating[i].Value;
             }
-            if (rating.Count != 0)
+            if (Rating.Count != 0)
             {
-                return sum / rating.Count;
+                return sum / Rating.Count;
             }
             else
             {
@@ -77,7 +63,7 @@ namespace MyFirstProject
         {
             Comment comment = new Comment(id); 
             comment.Article = this;
-            comment.User = user;
+            comment.user = user;
             comment.Content = content;
             return comment;
         }

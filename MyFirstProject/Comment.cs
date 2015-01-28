@@ -6,26 +6,19 @@ using System.Threading.Tasks;
 
 namespace MyFirstProject
 {
-    class Comment
-    {
-        private int id;
-        public int Id 
-        {
-            get
-            {
-                return id;
-            }
-        }
+    public class Comment
+    {        
+        public int Id {get; private set;}        
         
         public string Content {get; set;}
         
-        public User User {get; set;}
+        public User user {get; set;}
         
         public Article Article {get; set;}
 
         public Comment(int id)
         {
-            this.id = id;
+            Id = id;
         }
     }
 }

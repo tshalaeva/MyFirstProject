@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MyFirstProject
 {
-    class Author : User
+    public class Author : User
     {        
         public string NickName {get; set;}
         

@@ -6,26 +6,19 @@ using System.Threading.Tasks;
 
 namespace MyFirstProject
 {
-    class User
+    public class User
     {        
         public string FirstName {get; set;}
         
         public string LastName {get; set;}
         
         public int Age {get; set;}
-        
-        protected int id;
-        public int Id
-        {
-            get
-            {
-                return id;
-            }
-        }
+
+        public int Id {get; private set;}
 
         public User(int idValue)
         {
-            id = idValue;
+            Id = idValue;
         }
     }
 }

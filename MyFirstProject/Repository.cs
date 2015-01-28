@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MyFirstProject
 {
-    class Repository
+    class Repository : IRepository
     {
         private List<Article> articles;
         private List<User> users;

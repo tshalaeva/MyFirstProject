@@ -8,19 +8,7 @@ namespace MyFirstProject
 {
     class Report
     {
-        public List<Comment> filterCommentsByArticle(List<Comment> comments, Article article)
-        {
-            List<Comment> result = new List<Comment>();
-            for (int i = 0; i < comments.Count; i++)
-            {
-                if (comments[i].Article.Id == article.Id)
-                {
-                    result.Add(comments[i]);
-                }
-            }
-            return result;
-        }
-
+        private Facade facade = new Facade();
         public void printArticleTitles(List<Article> articles)
         {
             for (int i = 0; i < articles.Count; i++)
@@ -67,7 +55,7 @@ namespace MyFirstProject
             {
                 Console.Write("Article " + (i + 1).ToString() + ": ");
                 articleComments = new List<Comment>();
-                articleComments = filterCommentsByArticle(comments, articles[i]);
+                articleComments = facade.filterCommentsByArticle(comments, articles[i]);
                 for (int j = 0; j < articleComments.Count; j++)
                 {
                     if (j == articleComments.Count - 1)
