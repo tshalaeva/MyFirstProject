@@ -8,23 +8,11 @@ namespace MyFirstProject
 {
     public class Admin : User
     {
-        private List<string> privilegies;
-        public List<string> Privilegies
-        {
-            get 
-            {
-                return privilegies;
-            }
-            set
-            {
-                privilegies = value;
-            }
-        }
+        public List<string> Privilegies { get; set; }
 
         public Admin(int id)
             : base(id)
-        {
-            privilegies = new List<string>();
+        {            
         }
     }
 }

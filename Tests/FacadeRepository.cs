@@ -39,49 +39,49 @@ namespace Tests
             }
         }
 
-        public void deleteComment(Comment comment) { }
+        public void DeleteComment(Comment comment) { }
 
-        public void deleteAuthor(Author author) { }
+        public void DeleteAuthor(Author author) { }
 
-        public void deleteAdmin(Admin admin) { }
+        public void DeleteAdmin(Admin admin) { }
 
-        public void deleteUser(User user) { }
+        public void DeleteUser(User user) { }
 
-        public void deleteArticle(Article article) { }
+        public void DeleteArticle(Article article) { }
 
-        public List<Comment> getComments() 
+        public List<Comment> GetComments() 
         {
             return comments;
         }
 
-        public List<Author> getAuthors()
+        public List<Author> GetAuthors()
         {
             return authors;
         }
 
-        public List<Admin> getAdmins()
+        public List<Admin> GetAdmins()
         {
             return admins;
         }
 
-        public List<User> getUsers()
+        public List<User> GetUsers()
         {
             return users;
         }
 
-        public List<Article> getArticles()
+        public List<Article> GetArticles()
         {
             return articles;
         }
 
-        public void saveComment(Comment comment) { }
+        public void SaveComment(Comment comment) { }
 
-        public void saveAuthor(Author author) { }
+        public void SaveAuthor(Author author) { }
 
-        public void saveAdmin(Admin admin) { }
+        public void SaveAdmin(Admin admin) { }
 
-        public void saveUser(User user) { }
+        public void SaveUser(User user) { }
 
-        public void saveArticle(Article article) { }
+        public void SaveArticle(Article article) { }
     }
 }

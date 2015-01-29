@@ -24,7 +24,7 @@ namespace MyFirstProject
             Rating = new List<Rating>();             
         }
 
-        public void setRating(Rating rating)
+        public void AddRating(Rating rating)
         {
             bool flag = false;
             for (int i = 0; i < Rating.Count; i++)
@@ -42,7 +42,7 @@ namespace MyFirstProject
             }
         }
 
-        public int getAverageRating()
+        public int GetAverageRating()
         {
             int sum = 0;
             for (int i = 0; i < Rating.Count; i++)
@@ -59,7 +59,7 @@ namespace MyFirstProject
             }
         }
 
-        public Comment addComment(int id, string content, User user)
+        public Comment AddComment(int id, string content, User user)
         {
             Comment comment = new Comment(id); 
             comment.Article = this;

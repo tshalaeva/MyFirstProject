@@ -21,7 +21,7 @@ namespace MyFirstProject
             Id = id;
         }
 
-        public void display()
+        public void Display()
         {
             Console.WriteLine(Rating.User.FirstName + " " + Rating.User.LastName);
             Console.WriteLine(Rating.Value);

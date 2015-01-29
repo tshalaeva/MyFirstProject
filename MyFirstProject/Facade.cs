@@ -8,8 +8,9 @@ namespace MyFirstProject
 {
     public class Facade
     {
-        public List<Comment> filterCommentsByArticle(List<Comment> comments, Article article)
+        public List<Comment> FilterCommentsByArticle(IRepository repository, Article article)
         {
+            var comments = repository.GetComments();
             List<Comment> result = new List<Comment>();
             for (int i = 0; i < comments.Count; i++)
             {
@@ -21,8 +22,9 @@ namespace MyFirstProject
             return result;
         }
 
-        public List<Article> filterArticlesByAuthor(List<Article> articles, Author author)
+        public List<Article> FilterArticlesByAuthor(IRepository repository, Author author)
         {
+            var articles = repository.GetArticles();
             List<Article> result = new List<Article>();
             for (int i = 0; i < articles.Count; i++)
             {

@@ -10,6 +10,6 @@ namespace MyFirstProject
     {
         Article Article { get; set; }
 
-        void display();        
+        void Display();        
     }
 }

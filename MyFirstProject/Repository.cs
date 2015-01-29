@@ -23,77 +23,77 @@ namespace MyFirstProject
             comments = new List<Comment>();
         }
 
-        public void saveArticle(Article article)
+        public void SaveArticle(Article article)
         {
             articles.Add(article);
         }
 
-        public void saveUser(User user)
+        public void SaveUser(User user)
         {
             users.Add(user);
         }
 
-        public void saveAdmin(Admin admin)
+        public void SaveAdmin(Admin admin)
         {
             admins.Add(admin);
         }
 
-        public void saveAuthor(Author author)
+        public void SaveAuthor(Author author)
         {
             authors.Add(author);
         }
 
-        public void saveComment(Comment comment)
+        public void SaveComment(Comment comment)
         {
             comments.Add(comment);
         }
 
-        public List<Article> getArticles()
+        public List<Article> GetArticles()
         {
             return articles;
         }
 
-        public List<User> getUsers()
+        public List<User> GetUsers()
         {
             return users;
         }
 
-        public List<Admin> getAdmins()
+        public List<Admin> GetAdmins()
         {
             return admins;
         }
 
-        public List<Author> getAuthors()
+        public List<Author> GetAuthors()
         {
             return authors;
         }
 
-        public List<Comment> getComments()
+        public List<Comment> GetComments()
         {
             return comments;
         }
 
-        public void deleteArticle(Article article)
+        public void DeleteArticle(Article article)
         {
             articles.Remove(article);
         }
 
-        public void deleteUser(User user)
+        public void DeleteUser(User user)
         {
             users.Remove(user);
         }
 
-        public void deleteAdmin(Admin admin)
+        public void DeleteAdmin(Admin admin)
         {
             admins.Remove(admin);
         }
 
-        public void deleteAuthor(Author author)
+        public void DeleteAuthor(Author author)
         {
             authors.Remove(author);
         }
 
-        public void deleteComment(Comment comment)
+        public void DeleteComment(Comment comment)
         {
             comments.Remove(comment);
         }
@@ -146,32 +146,32 @@ namespace MyFirstProject
                 articles[i].Author = authors[i];
             }
             
-            comments.Add(articles[0].addComment(1, "Comment 1", users[1]));
-            comments.Add(articles[1].addComment(2, "Comment 2", users[0]));
-            comments.Add(articles[1].addComment(2, "Comment 3", users[2]));
-            comments.Add(articles[2].addComment(3, "Comment 4", users[0]));
-            comments.Add(articles[3].addComment(4, "Comment 5", users[2]));
+            comments.Add(articles[0].AddComment(1, "Comment 1", users[1]));
+            comments.Add(articles[1].AddComment(2, "Comment 2", users[0]));
+            comments.Add(articles[1].AddComment(2, "Comment 3", users[2]));
+            comments.Add(articles[2].AddComment(3, "Comment 4", users[0]));
+            comments.Add(articles[3].AddComment(4, "Comment 5", users[2]));
 
-            articles[0].setRating(new Rating(3, users[0]));
-            articles[0].setRating(new Rating(3, users[1]));
-            articles[0].setRating(new Rating(2, users[2]));
-            articles[0].setRating(new Rating(5, authors[0]));
+            articles[0].AddRating(new Rating(3, users[0]));
+            articles[0].AddRating(new Rating(3, users[1]));
+            articles[0].AddRating(new Rating(2, users[2]));
+            articles[0].AddRating(new Rating(5, authors[0]));
 
-            articles[1].setRating(new Rating(2, users[0]));
-            articles[1].setRating(new Rating(1, users[1]));
-            articles[1].setRating(new Rating(5, users[2]));
-            articles[1].setRating(new Rating(5, authors[0]));
-            articles[1].setRating(new Rating(3, admins[0]));
+            articles[1].AddRating(new Rating(2, users[0]));
+            articles[1].AddRating(new Rating(1, users[1]));
+            articles[1].AddRating(new Rating(5, users[2]));
+            articles[1].AddRating(new Rating(5, authors[0]));
+            articles[1].AddRating(new Rating(3, admins[0]));
 
-            articles[2].setRating(new Rating(1, users[0]));
-            articles[2].setRating(new Rating(2, users[1]));
-            articles[2].setRating(new Rating(3, users[2]));
-            articles[2].setRating(new Rating(4, admins[0]));
+            articles[2].AddRating(new Rating(1, users[0]));
+            articles[2].AddRating(new Rating(2, users[1]));
+            articles[2].AddRating(new Rating(3, users[2]));
+            articles[2].AddRating(new Rating(4, admins[0]));
 
-            articles[3].setRating(new Rating(1, users[0]));
-            articles[3].setRating(new Rating(5, users[0]));
-            articles[3].setRating(new Rating(3, users[1]));
-            articles[3].setRating(new Rating(5, users[2]));
+            articles[3].AddRating(new Rating(1, users[0]));
+            articles[3].AddRating(new Rating(5, users[0]));
+            articles[3].AddRating(new Rating(3, users[1]));
+            articles[3].AddRating(new Rating(5, users[2]));
         }
     }
 }

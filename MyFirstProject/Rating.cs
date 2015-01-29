@@ -18,7 +18,7 @@ namespace MyFirstProject
             User = user;
         }
 
-        public void setRating(int value, User user)
+        public void SetRating(int value, User user)
         {
             if (value > 5)
             {

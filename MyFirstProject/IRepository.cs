@@ -8,35 +8,35 @@ namespace MyFirstProject
 {
     public interface IRepository
     {
-        void saveArticle(Article article);
+        void SaveArticle(Article article);
 
-        void saveUser(User user);
+        void SaveUser(User user);
 
-        void saveAdmin(Admin admin);
+        void SaveAdmin(Admin admin);
 
-        void saveAuthor(Author author);
+        void SaveAuthor(Author author);
 
-        void saveComment(Comment comment);
+        void SaveComment(Comment comment);
 
-        List<Article> getArticles();
+        List<Article> GetArticles();
 
-        List<User> getUsers();
+        List<User> GetUsers();
 
-        List<Admin> getAdmins();
+        List<Admin> GetAdmins();
 
-        List<Author> getAuthors();
+        List<Author> GetAuthors();
 
-        List<Comment> getComments();
+        List<Comment> GetComments();
 
-        void deleteArticle(Article article);
+        void DeleteArticle(Article article);
 
-        void deleteUser(User user);
+        void DeleteUser(User user);
 
-        void deleteAdmin(Admin admin);
+        void DeleteAdmin(Admin admin);
 
-        void deleteAuthor(Author author);
+        void DeleteAuthor(Author author);
 
-        void deleteComment(Comment comment);
+        void DeleteComment(Comment comment);
 
         void Initialize();      
     }

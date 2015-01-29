@@ -14,13 +14,13 @@ namespace MyFirstProject
             Repository repository = new Repository();
             repository.Initialize();
 
-            report.printArticleTitles(repository.getArticles());
+            report.PrintArticleTitles(repository);
 
-            report.printAverageRatingForArticle(repository.getArticles());
+            report.PrintAverageRatingForArticle(repository);
 
-            report.printListOfPrivilegies(repository.getAdmins());
+            report.PrintListOfPrivilegies(repository);
 
-            report.printListOfCommentsForArticle(repository.getComments(), repository.getArticles());
+            report.PrintListOfCommentsForArticles(repository);
 
             Console.ReadLine();
         }

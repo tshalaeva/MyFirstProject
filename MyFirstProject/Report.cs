@@ -9,8 +9,9 @@ namespace MyFirstProject
     class Report
     {
         private Facade facade = new Facade();
-        public void printArticleTitles(List<Article> articles)
+        public void PrintArticleTitles(Repository repository)
         {
+            List<Article> articles = repository.GetArticles();
             for (int i = 0; i < articles.Count; i++)
             {
                 Console.WriteLine("Title of article " + (i + 1).ToString() + ": " + articles[i].Title);
@@ -19,18 +20,20 @@ namespace MyFirstProject
             Console.WriteLine();
         }
 
-        public void printAverageRatingForArticle(List<Article> articles)
+        public void PrintAverageRatingForArticle(Repository repository)
         {
+            List<Article> articles = repository.GetArticles();
             for (int i = 0; i < articles.Count; i++)
             {
-                Console.WriteLine("Average rating of article" + (i + 1).ToString() + ": " + articles[i].getAverageRating());
+                Console.WriteLine("Average rating of article" + (i + 1).ToString() + ": " + articles[i].GetAverageRating());
             }
 
             Console.WriteLine();
         }
 
-        public void printListOfPrivilegies(List<Admin> admins)
+        public void PrintListOfPrivilegies(Repository repository)
         {
+            List<Admin> admins = repository.GetAdmins();
             for (int i = 0; i < admins.Count; i++)
             {
                 Console.Write("List of " + admins[i].FirstName + " " + admins[i].LastName + " privilegies: ");
@@ -47,15 +50,17 @@ namespace MyFirstProject
             Console.WriteLine();
         }
 
-        public void printListOfCommentsForArticle(List<Comment> comments, List<Article> articles)
+        public void PrintListOfCommentsForArticles(Repository repository)
         {
+            List<Article> articles = repository.GetArticles();
+            List<Comment> comments = repository.GetComments();
             Console.WriteLine("List of comments for each article:");
             List<Comment> articleComments;
             for (int i = 0; i < articles.Count; i++)
             {
                 Console.Write("Article " + (i + 1).ToString() + ": ");
                 articleComments = new List<Comment>();
-                articleComments = facade.filterCommentsByArticle(comments, articles[i]);
+                articleComments = facade.FilterCommentsByArticle(repository, articles[i]);
                 for (int j = 0; j < articleComments.Count; j++)
                 {
                     if (j == articleComments.Count - 1)
