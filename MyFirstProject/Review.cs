@@ -6,24 +6,25 @@ using System.Threading.Tasks;
 
 namespace MyFirstProject
 {
-    public class Comment : IComment
-    {        
-        public int Id {get; private set;}        
-        
-        public string Content {get; set;}
-        
-        public User user {get; set;}
+    class Review : IComment
+    {
+        public int Id { get; private set; }
+
+        public string Content { get; set; }        
 
         public Article Article { get; set; }
 
-        public Comment(int id)
+        public Rating Rating { get; set; }
+
+        public Review(int id)
         {
             Id = id;
         }
 
         public void display()
         {
-            Console.WriteLine(user.FirstName + " " + user.LastName);
+            Console.WriteLine(Rating.User.FirstName + " " + Rating.User.LastName);
+            Console.WriteLine(Rating.Value);
             Console.WriteLine(Content);
         }
     }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MyFirstProject
 {
-    class Admin : User
+    public class Admin : User
     {
         private List<string> privilegies;
         public List<string> Privilegies

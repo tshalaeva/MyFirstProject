@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MyFirstProject
 {
-    interface IRepository
+    public interface IRepository
     {
         void saveArticle(Article article);
 

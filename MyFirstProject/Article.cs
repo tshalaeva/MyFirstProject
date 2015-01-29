@@ -20,14 +20,14 @@ namespace MyFirstProject
 
         public Article(int id)
         {
-            Id = id;                 
-            Rating = new List<Rating>();
+            Id = id;
+            Rating = new List<Rating>();             
         }
 
         public void setRating(Rating rating)
         {
             bool flag = false;
-            for(int i = 0; i < Rating.Count; i++)
+            for (int i = 0; i < Rating.Count; i++)
             {
                 if (Rating[i].User.Id == rating.User.Id)
                 {
