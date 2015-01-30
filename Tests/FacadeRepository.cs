@@ -13,7 +13,7 @@ namespace Tests
         private List<User> users;
         private List<Admin> admins;
         private List<Author> authors;
-        private List<Comment> comments;
+        private List<IComment> comments;
 
         public FacadeRepository()
         {
@@ -21,7 +21,7 @@ namespace Tests
             users = new List<User>();
             admins = new List<Admin>();
             authors = new List<Author>();
-            comments = new List<Comment>();
+            comments = new List<IComment>();
         }
 
         public void Initialize()
@@ -39,7 +39,7 @@ namespace Tests
             }
         }
 
-        public void DeleteComment(Comment comment) { }
+        public void DeleteComment(IComment comment) { }
 
         public void DeleteAuthor(Author author) { }
 
@@ -49,7 +49,7 @@ namespace Tests
 
         public void DeleteArticle(Article article) { }
 
-        public List<Comment> GetComments() 
+        public List<IComment> GetComments() 
         {
             return comments;
         }

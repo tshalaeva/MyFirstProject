@@ -14,7 +14,7 @@ namespace Tests
             Facade facade = new Facade();
             IRepository repository = new FacadeRepository();
             repository.Initialize();
-            List<Comment> after = facade.FilterCommentsByArticle(repository, new Article(0));
+            List<IComment> after = facade.FilterCommentsByArticle(repository, new Article(0));
             Assert.AreEqual(2, after.Count);
         }
 
@@ -23,7 +23,7 @@ namespace Tests
         {
             FacadeRepository repository = new FacadeRepository();
             Facade facade = new Facade();            
-            List<Comment> after = facade.FilterCommentsByArticle(repository, new Article(5));
+            List<IComment> after = facade.FilterCommentsByArticle(repository, new Article(5));
             Assert.AreEqual(0, after.Count);
         }
     }

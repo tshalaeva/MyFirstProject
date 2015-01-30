@@ -53,23 +53,19 @@ namespace MyFirstProject
         public void PrintListOfCommentsForArticles(Repository repository)
         {
             List<Article> articles = repository.GetArticles();
-            List<Comment> comments = repository.GetComments();
+            List<IComment> comments = repository.GetComments();
             Console.WriteLine("List of comments for each article:");
-            List<Comment> articleComments;
+            List<IComment> articleComments;
             for (int i = 0; i < articles.Count; i++)
             {
-                Console.Write("Article " + (i + 1).ToString() + ": ");
-                articleComments = new List<Comment>();
+                Console.WriteLine("Article " + (i + 1).ToString() + ": ");
+                Console.WriteLine();
+                articleComments = new List<IComment>();
                 articleComments = facade.FilterCommentsByArticle(repository, articles[i]);
                 for (int j = 0; j < articleComments.Count; j++)
                 {
-                    if (j == articleComments.Count - 1)
-                    {
-                        Console.WriteLine(articleComments[j].Content);
-                        articleComments = null;
-                        break;
-                    }
-                    Console.Write(articleComments[j].Content + ", ");
+                    articleComments[j].Display();
+                    Console.WriteLine();
                 }
                 Console.WriteLine();
             }

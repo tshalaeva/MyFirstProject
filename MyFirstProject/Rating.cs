@@ -8,17 +8,14 @@ namespace MyFirstProject
 {
     public class Rating
     {        
-        public int Value {get; set;}
-                
-        public User User {get; private set;}
+        public int Value {get; private set;}                        
         
-        public Rating(int value, User user)
+        public Rating(int value)
         {
-            this.Value = value;
-            User = user;
+            this.Value = value;         
         }
 
-        public void SetRating(int value, User user)
+        public void SetRating(int value)
         {
             if (value > 5)
             {
@@ -28,8 +25,7 @@ namespace MyFirstProject
             {
                 value = 1;
             }
-            this.Value = value;
-            User = user;
+            this.Value = value;            
         }
     }
 }

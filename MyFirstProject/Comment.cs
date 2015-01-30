@@ -6,13 +6,11 @@ using System.Threading.Tasks;
 
 namespace MyFirstProject
 {
-    public class Comment : IComment
-    {        
-        public int Id {get; private set;}        
-        
+    public class Comment : Entity, IComment
+    {                           
         public string Content {get; set;}
         
-        public User user {get; set;}
+        public User User {get; set;}
 
         public Article Article { get; set; }
 
@@ -23,8 +21,13 @@ namespace MyFirstProject
 
         public void Display()
         {
-            Console.WriteLine(user.FirstName + " " + user.LastName);
+            Console.WriteLine(User.FirstName + " " + User.LastName);
             Console.WriteLine(Content);
+        }
+
+        public bool IsReview()
+        {
+            return false;
         }
     }
 }

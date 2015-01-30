@@ -8,10 +8,10 @@ namespace MyFirstProject
 {
     public class Facade
     {
-        public List<Comment> FilterCommentsByArticle(IRepository repository, Article article)
+        public List<IComment> FilterCommentsByArticle(IRepository repository, Article article)
         {
             var comments = repository.GetComments();
-            List<Comment> result = new List<Comment>();
+            List<IComment> result = new List<IComment>();
             for (int i = 0; i < comments.Count; i++)
             {
                 if (comments[i].Article.Id == article.Id)

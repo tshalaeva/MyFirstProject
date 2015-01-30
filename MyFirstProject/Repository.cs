@@ -12,7 +12,7 @@ namespace MyFirstProject
         private List<User> users;
         private List<Admin> admins;
         private List<Author> authors;
-        private List<Comment> comments;
+        private List<IComment> comments;        
 
         public Repository()
         {
@@ -20,7 +20,7 @@ namespace MyFirstProject
             users = new List<User>();
             admins = new List<Admin>();
             authors = new List<Author>();
-            comments = new List<Comment>();
+            comments = new List<IComment>();            
         }
 
         public void SaveArticle(Article article)
@@ -48,6 +48,11 @@ namespace MyFirstProject
             comments.Add(comment);
         }
 
+        public void SaveReview(Review review)
+        {
+            comments.Add(review);
+        }
+
         public List<Article> GetArticles()
         {
             return articles;
@@ -68,7 +73,7 @@ namespace MyFirstProject
             return authors;
         }
 
-        public List<Comment> GetComments()
+        public List<IComment> GetComments()
         {
             return comments;
         }
@@ -93,7 +98,7 @@ namespace MyFirstProject
             authors.Remove(author);
         }
 
-        public void DeleteComment(Comment comment)
+        public void DeleteComment(IComment comment)
         {
             comments.Remove(comment);
         }
@@ -145,33 +150,61 @@ namespace MyFirstProject
                 }
                 articles[i].Author = authors[i];
             }
-            
-            comments.Add(articles[0].AddComment(1, "Comment 1", users[1]));
-            comments.Add(articles[1].AddComment(2, "Comment 2", users[0]));
-            comments.Add(articles[1].AddComment(2, "Comment 3", users[2]));
-            comments.Add(articles[2].AddComment(3, "Comment 4", users[0]));
-            comments.Add(articles[3].AddComment(4, "Comment 5", users[2]));
 
-            articles[0].AddRating(new Rating(3, users[0]));
-            articles[0].AddRating(new Rating(3, users[1]));
-            articles[0].AddRating(new Rating(2, users[2]));
-            articles[0].AddRating(new Rating(5, authors[0]));
+            comments.Add(CreateReview(1, "Review 1", new Rating(3), users[1], articles[0]));
+            comments.Add(CreateComment(2, "Comment 1", users[2], articles[1]));
+            comments.Add(CreateReview(2, "Review 2", new Rating(6), users[0], articles[1]));
+            comments.Add(CreateReview(3, "Review 3", new Rating(-1), users[2], articles[1]));
+            comments.Add(CreateReview(4, "Review 4", new Rating(1), users[0], articles[2]));
+            comments.Add(CreateReview(5, "Review 5", new Rating(0), users[2], articles[3]));
+        }
 
-            articles[1].AddRating(new Rating(2, users[0]));
-            articles[1].AddRating(new Rating(1, users[1]));
-            articles[1].AddRating(new Rating(5, users[2]));
-            articles[1].AddRating(new Rating(5, authors[0]));
-            articles[1].AddRating(new Rating(3, admins[0]));
 
-            articles[2].AddRating(new Rating(1, users[0]));
-            articles[2].AddRating(new Rating(2, users[1]));
-            articles[2].AddRating(new Rating(3, users[2]));
-            articles[2].AddRating(new Rating(4, admins[0]));
+        private Comment CreateComment(int id, string content, User user, Article article)
+        {
+            Comment comment = new Comment(id);
+            comment.Article = article;
+            comment.User = user;
+            comment.Content = content;
+            return comment;
+        }
 
-            articles[3].AddRating(new Rating(1, users[0]));
-            articles[3].AddRating(new Rating(5, users[0]));
-            articles[3].AddRating(new Rating(3, users[1]));
-            articles[3].AddRating(new Rating(5, users[2]));
+        private Review CreateReview(int id, string content, Rating rating, User user, Article article)
+        {
+            Review review = new Review(id);
+            review.Article = article;
+            review.User = user;                        
+            bool flag = false;
+            List<Review> reviews = new List<Review>();
+            for (int i = 0; i < GetComments().Count; i++)
+            {
+                if (GetComments()[i].IsReview())
+                {
+                    reviews.Add((Review)GetComments()[i]);
+                }
+            }
+            for (int j = 0; j < reviews.Count; j++)
+            {
+                if (reviews[j].Article == article)
+                {
+                    for (int i = 0; i < article.Rating.Count; i++)
+                    {
+                        if (reviews[j].User.Id == user.Id)
+                        {
+                            article.Rating[i].SetRating(rating.Value);
+                            flag = true;
+                            break;
+                        }
+                    }
+                }
+            }
+            if (flag == false)
+            {
+                article.AddRating(rating);
+            }
+            review.Content = content;
+            review.Rating = rating;
+            return review;
         }
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MyFirstProject
 {
-    public class Article
+    public class Article : Entity
     {        
         public string Title {get; set;}
         
@@ -14,32 +14,17 @@ namespace MyFirstProject
                 
         public Author Author {get; set;}
 
-        public List<Rating> Rating { get; private set; }
+        public List<Rating> Rating { get; private set; }        
 
-        public int Id {get; private set;}
-
-        public Article(int id)
-        {
-            Id = id;
+        public Article(int id) : base(id)
+        {            
             Rating = new List<Rating>();             
         }
 
         public void AddRating(Rating rating)
         {
-            bool flag = false;
-            for (int i = 0; i < Rating.Count; i++)
-            {
-                if (Rating[i].User.Id == rating.User.Id)
-                {
-                    Rating[i].Value = rating.Value;
-                    flag = true;
-                    break;
-                }
-            }
-            if (flag == false)
-            {
-                Rating.Add(rating);
-            }
+            rating.SetRating(rating.Value);
+            Rating.Add(rating);
         }
 
         public int GetAverageRating()
@@ -57,15 +42,6 @@ namespace MyFirstProject
             {
                 return 0;
             }
-        }
-
-        public Comment AddComment(int id, string content, User user)
-        {
-            Comment comment = new Comment(id); 
-            comment.Article = this;
-            comment.user = user;
-            comment.Content = content;
-            return comment;
         }
     }
 }
