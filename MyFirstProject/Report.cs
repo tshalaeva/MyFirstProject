@@ -34,17 +34,17 @@ namespace MyFirstProject
         public void PrintListOfPrivilegies(Repository repository)
         {
             List<Admin> admins = repository.GetAdmins();
-            for (int i = 0; i < admins.Count; i++)
+            foreach (Admin admin in admins)
             {
-                Console.Write("List of " + admins[i].FirstName + " " + admins[i].LastName + " privilegies: ");
-                for (int j = 0; j < admins[i].Privilegies.Count; j++)
+                Console.Write("List of " + admin.FirstName + " " + admin.LastName + " privilegies: ");
+                foreach(string privilegy in admin.Privilegies)
                 {
-                    if (j == admins[i].Privilegies.Count - 1)
+                    if (privilegy == admin.Privilegies.Last())
                     {
-                        Console.WriteLine(admins[i].Privilegies[j]);
+                        Console.WriteLine(privilegy);
                         break;
                     }
-                    Console.Write(admins[i].Privilegies[j] + ", ");
+                    Console.Write(privilegy + ", ");
                 }
             }
             Console.WriteLine();
@@ -56,15 +56,15 @@ namespace MyFirstProject
             List<IComment> comments = repository.GetComments();
             Console.WriteLine("List of comments for each article:");
             List<IComment> articleComments;
-            for (int i = 0; i < articles.Count; i++)
+            foreach (Article article in articles)
             {
-                Console.WriteLine("Article " + (i + 1).ToString() + ": ");
+                Console.WriteLine("Artcle " + article.Title + ": ");
                 Console.WriteLine();
                 articleComments = new List<IComment>();
-                articleComments = facade.FilterCommentsByArticle(repository, articles[i]);
-                for (int j = 0; j < articleComments.Count; j++)
+                articleComments = facade.FilterCommentsByArticle(repository, article);
+                foreach (IComment comment in articleComments)
                 {
-                    articleComments[j].Display();
+                    comment.Display();
                     Console.WriteLine();
                 }
                 Console.WriteLine();

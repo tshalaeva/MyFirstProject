@@ -175,23 +175,18 @@ namespace MyFirstProject
             review.Article = article;
             review.User = user;                        
             bool flag = false;
-            List<Review> reviews = new List<Review>();
-            for (int i = 0; i < GetComments().Count; i++)
+            List<IComment> reviews = (from comment in GetComments()
+                                        where comment.IsReview()
+                                    select comment).ToList();
+            foreach (Review mreview in reviews)
             {
-                if (GetComments()[i].IsReview())
+                if (mreview.Article == article)
                 {
-                    reviews.Add((Review)GetComments()[i]);
-                }
-            }
-            for (int j = 0; j < reviews.Count; j++)
-            {
-                if (reviews[j].Article == article)
-                {
-                    for (int i = 0; i < article.Rating.Count; i++)
+                    foreach (Rating mrating in article.Rating)
                     {
-                        if (reviews[j].User.Id == user.Id)
+                        if (mreview.User.Id == user.Id)
                         {
-                            article.Rating[i].SetRating(rating.Value);
+                            mrating.SetRating(rating.Value);
                             flag = true;
                             break;
                         }

@@ -11,28 +11,18 @@ namespace MyFirstProject
         public List<IComment> FilterCommentsByArticle(IRepository repository, Article article)
         {
             var comments = repository.GetComments();
-            List<IComment> result = new List<IComment>();
-            for (int i = 0; i < comments.Count; i++)
-            {
-                if (comments[i].Article.Id == article.Id)
-                {
-                    result.Add(comments[i]);
-                }
-            }
+            List<IComment> result = (from comment in comments
+                                     where comment.Article.Id == article.Id
+                                     select comment).ToList();
             return result;
         }
 
         public List<Article> FilterArticlesByAuthor(IRepository repository, Author author)
         {
             var articles = repository.GetArticles();
-            List<Article> result = new List<Article>();
-            for (int i = 0; i < articles.Count; i++)
-            {
-                if (articles[i].Author.Id == author.Id)
-                {
-                    result.Add(articles[i]);
-                }
-            }
+            List<Article> result = (from article in articles
+                                    where article.Author.Id == author.Id
+                                    select article).ToList();
             return result;
         }
     }

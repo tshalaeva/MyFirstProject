@@ -30,9 +30,9 @@ namespace MyFirstProject
         public int GetAverageRating()
         {
             int sum = 0;
-            for (int i = 0; i < Rating.Count; i++)
+            foreach (Rating rating in Rating)
             {
-                sum = sum + Rating[i].Value;
+                sum = sum + rating.Value;
             }
             if (Rating.Count != 0)
             {
