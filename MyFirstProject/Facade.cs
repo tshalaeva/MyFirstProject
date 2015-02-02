@@ -8,18 +8,26 @@ namespace MyFirstProject
 {
     public class Facade
     {
-        public List<IComment> FilterCommentsByArticle(IRepository repository, Article article)
+        public IRepository Repository {get; private set;}
+
+        public Facade(IRepository repository)
         {
-            var comments = repository.GetComments();
+            Repository = repository;
+            Repository.Initialize();
+        }
+
+        public List<IComment> FilterCommentsByArticle(Article article)
+        {
+            var comments = Repository.GetComments();
             List<IComment> result = (from comment in comments
                                      where comment.Article.Id == article.Id
                                      select comment).ToList();
             return result;
         }
 
-        public List<Article> FilterArticlesByAuthor(IRepository repository, Author author)
+        public List<Article> FilterArticlesByAuthor(Author author)
         {
-            var articles = repository.GetArticles();
+            var articles = Repository.GetArticles();
             List<Article> result = (from article in articles
                                     where article.Author.Id == author.Id
                                     select article).ToList();

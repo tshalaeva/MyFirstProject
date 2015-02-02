@@ -8,10 +8,11 @@ namespace MyFirstProject
 {
     class Report
     {
-        private Facade facade = new Facade();
-        public void PrintArticleTitles(Repository repository)
+        private Facade facade = new Facade(new Repository());
+        
+        public void PrintArticleTitles()
         {
-            List<Article> articles = repository.GetArticles();
+            List<Article> articles = facade.Repository.GetArticles();
             for (int i = 0; i < articles.Count; i++)
             {
                 Console.WriteLine("Title of article " + (i + 1).ToString() + ": " + articles[i].Title);
@@ -20,9 +21,9 @@ namespace MyFirstProject
             Console.WriteLine();
         }
 
-        public void PrintAverageRatingForArticle(Repository repository)
+        public void PrintAverageRatingForArticle()
         {
-            List<Article> articles = repository.GetArticles();
+            List<Article> articles = facade.Repository.GetArticles();
             for (int i = 0; i < articles.Count; i++)
             {
                 Console.WriteLine("Average rating of article" + (i + 1).ToString() + ": " + articles[i].GetAverageRating());
@@ -31,9 +32,9 @@ namespace MyFirstProject
             Console.WriteLine();
         }
 
-        public void PrintListOfPrivilegies(Repository repository)
+        public void PrintListOfPrivilegies()
         {
-            List<Admin> admins = repository.GetAdmins();
+            List<Admin> admins = facade.Repository.GetAdmins();
             foreach (Admin admin in admins)
             {
                 Console.Write("List of " + admin.FirstName + " " + admin.LastName + " privilegies: ");
@@ -50,10 +51,10 @@ namespace MyFirstProject
             Console.WriteLine();
         }
 
-        public void PrintListOfCommentsForArticles(Repository repository)
+        public void PrintListOfCommentsForArticles()
         {
-            List<Article> articles = repository.GetArticles();
-            List<IComment> comments = repository.GetComments();
+            List<Article> articles = facade.Repository.GetArticles();
+            List<IComment> comments = facade.Repository.GetComments();
             Console.WriteLine("List of comments for each article:");
             List<IComment> articleComments;
             foreach (Article article in articles)
@@ -61,7 +62,7 @@ namespace MyFirstProject
                 Console.WriteLine("Artcle " + article.Title + ": ");
                 Console.WriteLine();
                 articleComments = new List<IComment>();
-                articleComments = facade.FilterCommentsByArticle(repository, article);
+                articleComments = facade.FilterCommentsByArticle(article);
                 foreach (IComment comment in articleComments)
                 {
                     comment.Display();

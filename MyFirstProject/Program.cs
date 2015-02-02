@@ -14,13 +14,13 @@ namespace MyFirstProject
             Repository repository = new Repository();
             repository.Initialize();
 
-            report.PrintArticleTitles(repository);
+            report.PrintArticleTitles();
 
-            report.PrintAverageRatingForArticle(repository);
+            report.PrintAverageRatingForArticle();
 
-            report.PrintListOfPrivilegies(repository);
+            report.PrintListOfPrivilegies();
 
-            report.PrintListOfCommentsForArticles(repository);
+            report.PrintListOfCommentsForArticles();
 
             Console.ReadLine();
         }
