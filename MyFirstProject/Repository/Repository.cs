@@ -12,7 +12,7 @@ namespace MyFirstProject
         private List<User> users;
         private List<Admin> admins;
         private List<Author> authors;
-        private List<IComment> comments;        
+        private List<BaseComment> comments;        
 
         public Repository()
         {
@@ -20,7 +20,7 @@ namespace MyFirstProject
             users = new List<User>();
             admins = new List<Admin>();
             authors = new List<Author>();
-            comments = new List<IComment>();            
+            comments = new List<BaseComment>();            
         }
 
         public void SaveArticle(Article article)
@@ -73,7 +73,7 @@ namespace MyFirstProject
             return authors;
         }
 
-        public List<IComment> GetComments()
+        public List<BaseComment> GetComments()
         {
             return comments;
         }
@@ -98,7 +98,7 @@ namespace MyFirstProject
             authors.Remove(author);
         }
 
-        public void DeleteComment(IComment comment)
+        public void DeleteComment(BaseComment comment)
         {
             comments.Remove(comment);
         }
@@ -175,7 +175,7 @@ namespace MyFirstProject
             review.Article = article;
             review.User = user;                        
             bool flag = false;
-            List<IComment> reviews = (from comment in GetComments()
+            List<BaseComment> reviews = (from comment in GetComments()
                                         where comment.IsReview()
                                     select comment).ToList();
             foreach (Review mreview in reviews)

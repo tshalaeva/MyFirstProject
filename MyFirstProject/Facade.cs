@@ -16,10 +16,10 @@ namespace MyFirstProject
             Repository.Initialize();
         }
 
-        public List<IComment> FilterCommentsByArticle(Article article)
+        public List<BaseComment> FilterCommentsByArticle(Article article)
         {
             var comments = Repository.GetComments();
-            List<IComment> result = (from comment in comments
+            List<BaseComment> result = (from comment in comments
                                      where comment.Article.Id == article.Id
                                      select comment).ToList();
             return result;

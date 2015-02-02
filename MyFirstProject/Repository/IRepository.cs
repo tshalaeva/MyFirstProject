@@ -26,7 +26,7 @@ namespace MyFirstProject
 
         List<Author> GetAuthors();
 
-        List<IComment> GetComments();
+        List<BaseComment> GetComments();
 
         void DeleteArticle(Article article);
 
@@ -36,7 +36,7 @@ namespace MyFirstProject
 
         void DeleteAuthor(Author author);
 
-        void DeleteComment(IComment comment);
+        void DeleteComment(BaseComment comment);
 
         void Initialize();      
     }

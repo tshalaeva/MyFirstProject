@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MyFirstProject
 {
-    public class Article : Entity
+    public class Article : IEntity
     {        
         public string Title {get; set;}
         
@@ -14,10 +14,13 @@ namespace MyFirstProject
                 
         public Author Author {get; set;}
 
-        public List<Rating> Rating { get; private set; }        
+        public List<Rating> Rating { get; private set; }
 
-        public Article(int id) : base(id)
-        {            
+        public int Id { get; set; }
+
+        public Article(int id)
+        {
+            Id = id;
             Rating = new List<Rating>();             
         }
 

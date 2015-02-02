@@ -54,16 +54,16 @@ namespace MyFirstProject
         public void PrintListOfCommentsForArticles()
         {
             List<Article> articles = facade.Repository.GetArticles();
-            List<IComment> comments = facade.Repository.GetComments();
+            List<BaseComment> comments = facade.Repository.GetComments();
             Console.WriteLine("List of comments for each article:");
-            List<IComment> articleComments;
+            List<BaseComment> articleComments;
             foreach (Article article in articles)
             {
                 Console.WriteLine("Artcle " + article.Title + ": ");
                 Console.WriteLine();
-                articleComments = new List<IComment>();
+                articleComments = new List<BaseComment>();
                 articleComments = facade.FilterCommentsByArticle(article);
-                foreach (IComment comment in articleComments)
+                foreach (BaseComment comment in articleComments)
                 {
                     comment.Display();
                     Console.WriteLine();
