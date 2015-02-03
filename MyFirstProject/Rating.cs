@@ -1,19 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MyFirstProject
+﻿namespace MyFirstProject
 {
     public class Rating
-    {        
-        public int Value {get; private set;}                        
-        
+    {
         public Rating(int value)
         {
-            this.Value = value;         
+            Value = value;
         }
+
+        public int Value { get; private set; }                                        
 
         public void SetRating(int value)
         {
@@ -21,11 +15,13 @@ namespace MyFirstProject
             {
                 value = 5;
             }
+
             if (value < 1)
             {
                 value = 1;
             }
-            this.Value = value;            
+
+            Value = value;            
         }
     }
 }

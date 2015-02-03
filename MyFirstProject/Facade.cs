@@ -1,25 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using MyFirstProject.Entity;
+using MyFirstProject.Repository;
 
 namespace MyFirstProject
 {
     public class Facade
     {
-        public IRepository Repository {get; private set;}
-
         public Facade(IRepository repository)
         {
             Repository = repository;
             Repository.Initialize();
         }
 
+        public IRepository Repository { get; private set; }
+       
         public List<BaseComment> FilterCommentsByArticle(Article article)
         {
             var comments = Repository.GetComments();
-            List<BaseComment> result = (from comment in comments
+            var result = (from comment in comments
                                      where comment.Article.Id == article.Id
                                      select comment).ToList();
             return result;
@@ -28,7 +27,7 @@ namespace MyFirstProject
         public List<Article> FilterArticlesByAuthor(Author author)
         {
             var articles = Repository.GetArticles();
-            List<Article> result = (from article in articles
+            var result = (from article in articles
                                     where article.Author.Id == author.Id
                                     select article).ToList();
             return result;

@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MyFirstProject;
 using System.Collections.Generic;
+using MyFirstProject.Entity;
 
 namespace Tests
 {
@@ -11,16 +12,16 @@ namespace Tests
         [TestMethod]
         public void TestCommentsExist()
         {
-            Facade facade = new Facade(new FacadeRepository());            
-            List<BaseComment> after = facade.FilterCommentsByArticle(new Article(0));
+            var facade = new Facade(new FacadeRepository());            
+            var after = facade.FilterCommentsByArticle(new Article(0));
             Assert.AreEqual(2, after.Count);
         }
 
         [TestMethod]
         public void TestCommentsDoNotExist()
         {
-            Facade facade = new Facade(new FacadeRepository());            
-            List<BaseComment> after = facade.FilterCommentsByArticle(new Article(5));
+            var facade = new Facade(new FacadeRepository());            
+            var after = facade.FilterCommentsByArticle(new Article(5));
             Assert.AreEqual(0, after.Count);
         }
     }

@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MyFirstProject;
+using MyFirstProject.Entity;
+using MyFirstProject.Repository;
 
 namespace Tests
 {
@@ -26,7 +28,7 @@ namespace Tests
 
         public void Initialize()
         {            
-            for (int i = 0; i < 5; i++)
+            for (var i = 0; i < 5; i++)
             {
                 if (i == 4)
                 {

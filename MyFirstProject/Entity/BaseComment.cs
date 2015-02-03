@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace MyFirstProject
+namespace MyFirstProject.Entity
 {
     public abstract class BaseComment 
     {        
@@ -28,7 +24,7 @@ namespace MyFirstProject
 
         public virtual bool IsReview()
         {
-            return true; //
+            return true; 
         }
     }
 }

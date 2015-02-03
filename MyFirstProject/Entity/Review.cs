@@ -1,19 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MyFirstProject
+﻿namespace MyFirstProject.Entity
 {
-    class Review : BaseComment, IEntity
-    {       
-        public Rating Rating { get; set; }
-
+    public class Review : BaseComment, IEntity
+    {
         public Review(int id)
         {
             Id = id;
         }
+
+        public Rating Rating { get; set; }        
 
         public override string ToString()
         {
