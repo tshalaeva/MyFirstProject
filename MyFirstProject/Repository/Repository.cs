@@ -177,7 +177,7 @@ namespace MyFirstProject.Repository
             review.User = user;                        
             var flag = false;
             var reviews = (from comment in GetComments()
-                                        where comment.IsReview()
+                                        where comment is Review
                                     select comment).ToList();
             foreach (Review mreview in reviews)
             {
@@ -212,7 +212,7 @@ namespace MyFirstProject.Repository
             review.User = user;
             var flag = false;
             var reviews = (from comment in GetComments()
-                           where comment.IsReview()
+                           where comment is Review
                            select comment).ToList();
             foreach (Review mreview in reviews)
             {

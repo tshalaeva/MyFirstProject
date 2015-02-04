@@ -6,10 +6,5 @@
         {
             Id = id;
         }
-
-        public override bool IsReview()
-        {
-            return false;
-        }
     }
 }

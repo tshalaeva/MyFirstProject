@@ -17,10 +17,10 @@ namespace MyFirstProject
        
         public List<BaseComment> FilterCommentsByArticle(Article article)
         {
-            var comments = Repository.GetComments();
+            var comments = Repository.GetComments();            
             var result = (from comment in comments
                                      where comment.Article.Id == article.Id
-                                     select comment).ToList();
+                                     select comment).ToList();            
             return result;
         }
 

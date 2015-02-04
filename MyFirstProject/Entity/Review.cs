@@ -15,10 +15,5 @@
         {
             return base.ToString() + "\n" + "Rating: " + Rating.Value.ToString();
         }
-
-        public override bool IsReview()
-        {
-            return true;
-        }
     }
 }

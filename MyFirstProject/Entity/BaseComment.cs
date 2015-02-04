@@ -21,10 +21,5 @@ namespace MyFirstProject.Entity
         {
             Console.WriteLine(ToString());
         }
-
-        public virtual bool IsReview()
-        {
-            return true; 
-        }
     }
 }
