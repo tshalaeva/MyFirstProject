@@ -7,6 +7,8 @@
             Id = id;
         }
 
+        public Review() { }
+
         public Rating Rating { get; set; }        
 
         public override string ToString()

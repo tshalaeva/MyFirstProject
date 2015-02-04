@@ -46,6 +46,7 @@
     <Compile Include="Author.cs" />
     <Compile Include="Entity\Comment.cs" />
     <Compile Include="Entity\IEntity.cs" />
+    <Compile Include="Entity\ReviewText.cs" />
     <Compile Include="Facade.cs" />
     <Compile Include="Entity\BaseComment.cs" />
     <Compile Include="Repository\IRepository.cs" />

@@ -158,7 +158,7 @@ namespace MyFirstProject.Repository
             m_comments.Add(CreateReview(2, "Review 2", new Rating(6), m_users[0], m_articles[1]));
             m_comments.Add(CreateReview(3, "Review 3", new Rating(-1), m_users[2], m_articles[1]));
             m_comments.Add(CreateReview(4, "Review 4", new Rating(1), m_users[0], m_articles[2]));
-            m_comments.Add(CreateReview(5, "Review 5", new Rating(0), m_users[2], m_articles[3]));
+            m_comments.Add(CreateReviewText(5, "Review Text 5", new Rating(0), m_users[2], m_articles[3]));
         }
 
         private Comment CreateComment(int id, string content, User user, Article article)
@@ -179,6 +179,41 @@ namespace MyFirstProject.Repository
             var reviews = (from comment in GetComments()
                                         where comment.IsReview()
                                     select comment).ToList();
+            foreach (Review mreview in reviews)
+            {
+                if (mreview.Article == article)
+                {
+                    foreach (var mrating in article.Rating)
+                    {
+                        if (mreview.User.Id == user.Id)
+                        {
+                            mrating.SetRating(rating.Value);
+                            flag = true;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            if (flag == false)
+            {
+                article.AddRating(rating);
+            }
+
+            review.Content = content;
+            review.Rating = rating;
+            return review;
+        }
+
+        private ReviewText CreateReviewText(int id, string content, Rating rating, User user, Article article)
+        {
+            var review = new ReviewText(id);
+            review.Article = article;
+            review.User = user;
+            var flag = false;
+            var reviews = (from comment in GetComments()
+                           where comment.IsReview()
+                           select comment).ToList();
             foreach (Review mreview in reviews)
             {
                 if (mreview.Article == article)
