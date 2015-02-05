@@ -49,7 +49,6 @@
     <Compile Include="Entity\ReviewText.cs" />
     <Compile Include="Facade.cs" />
     <Compile Include="Entity\BaseComment.cs" />
-    <Compile Include="Repository\IBaseRepository.cs" />
     <Compile Include="Repository\IRepository.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

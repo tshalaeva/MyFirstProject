@@ -1,15 +1,17 @@
 ﻿using System;
 using System.Linq;
+using MyFirstProject.Entity;
+using MyFirstProject.Repository;
 
 namespace MyFirstProject
 {
     public class Report
     {
-        private readonly Facade m_facade = new Facade(new Repository.Repository());
+        private readonly Facade<Repository.Repository> m_facade = new Facade<Repository.Repository>(new Repository.Repository());
         
         public void PrintArticleTitles()
         {
-            var articles = m_facade.Repository.GetArticles();
+            var articles = ((IRepository<Article>)m_facade.Repository).Get();
             for (var i = 0; i < articles.Count; i++)
             {
                 Console.WriteLine("Title of article " + (i + 1) + ": " + articles[i].Title);
@@ -20,7 +22,7 @@ namespace MyFirstProject
 
         public void PrintAverageRatingForArticle()
         {
-            var articles = m_facade.Repository.GetArticles();
+            var articles = ((IRepository<Article>)m_facade.Repository).Get();
             for (var i = 0; i < articles.Count; i++)
             {
                 Console.WriteLine("Average rating of article" + (i + 1) + ": " + articles[i].GetAverageRating());
@@ -31,7 +33,7 @@ namespace MyFirstProject
 
         public void PrintListOfPrivilegies()
         {
-            var admins = m_facade.Repository.GetAdmins();
+            var admins = ((IRepository<Admin>)m_facade.Repository).Get();
             foreach (var admin in admins)
             {
                 Console.Write("List of " + admin.FirstName + " " + admin.LastName + " privilegies: ");
@@ -52,8 +54,7 @@ namespace MyFirstProject
 
         public void PrintListOfCommentsForArticles()
         {
-            var articles = m_facade.Repository.GetArticles();
-            m_facade.Repository.GetComments();
+            var articles = ((IRepository<Article>)m_facade.Repository).Get();            
             Console.WriteLine("List of comments for each article:");
             foreach (var article in articles)
             {

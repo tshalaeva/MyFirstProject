@@ -5,32 +5,32 @@ using MyFirstProject.Repository;
 
 namespace MyFirstProject
 {
-    public class Facade
+    public class Facade<T> where T : Repository.Repository
     {
-        public Facade(IBaseRepository repository)
-        {
-            Repository = repository;
-            Repository.Initialize();
-        }
-
-        public IBaseRepository Repository { get; private set; }
-       
-        public List<BaseComment> FilterCommentsByArticle(Article article)
-        {
-            var comments = Repository.GetComments();            
-            var result = (from comment in comments
-                                     where comment.Article.Id == article.Id
-                                     select comment).ToList();            
-            return result;
-        }
-
-        public List<Article> FilterArticlesByAuthor(Author author)
-        {
-            var articles = Repository.GetArticles();
-            var result = (from article in articles
-                                    where article.Author.Id == author.Id
-                                    select article).ToList();
-            return result;
-        }
+    public Facade(T repository)
+    {
+        Repository = repository;
+        Repository.Initialize();
     }
+
+    public T Repository { get; private set; }
+
+    public List<BaseComment> FilterCommentsByArticle(Article article)
+    {
+        List<BaseComment> comments = ((IRepository<BaseComment>)Repository).Get();
+        var result = (from comment in comments
+            where comment.Article.Id == article.Id
+            select comment).ToList();
+        return result;
+    }
+
+    public List<Article> FilterArticlesByAuthor(Author author)
+    {
+        List<Article> articles = ((IRepository<Article>)Repository).Get();
+        var result = (from article in articles
+            where article.Author.Id == author.Id
+            select article).ToList();
+        return result;
+    }
+}
 }

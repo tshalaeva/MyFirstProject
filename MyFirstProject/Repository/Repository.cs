@@ -4,167 +4,163 @@ using MyFirstProject.Entity;
 
 namespace MyFirstProject.Repository
 {
-    public class Repository : IRepository<Article>, IRepository<User>, IRepository<Admin>, IRepository<Author>, IRepository<BaseComment>
+    public class Repository : IRepository<Article>, IRepository<User>, IRepository<Admin>, IRepository<Author>,
+        IRepository<BaseComment>
     {
-        private readonly List<Article> m_articles;
-        private readonly List<User> m_users;
-        private readonly List<Admin> m_admins;
-        private readonly List<Author> m_authors;
-        private readonly List<BaseComment> m_comments;        
+        protected List<Article> Articles;
+        protected List<User> Users;
+        protected List<Admin> Admins;
+        protected List<Author> Authors;
+        protected List<BaseComment> Comments;
 
         public Repository()
         {
-            m_articles = new List<Article>();
-            m_users = new List<User>();
-            m_admins = new List<Admin>();
-            m_authors = new List<Author>();
-            m_comments = new List<BaseComment>();            
+            Articles = new List<Article>();
+            Users = new List<User>();
+            Admins = new List<Admin>();
+            Authors = new List<Author>();
+            Comments = new List<BaseComment>();
         }
 
         public void Save(Article article)
         {
-            m_articles.Add(article);
+            Articles.Add(article);
         }
 
         public void Save(User user)
         {
-            m_users.Add(user);
+            Users.Add(user);
         }
 
         public void Save(Admin admin)
         {
-            m_admins.Add(admin);
+            Admins.Add(admin);
         }
 
         public void Save(Author author)
         {
-            m_authors.Add(author);
+            Authors.Add(author);
         }
 
         public void Save(BaseComment comment)
         {
-            m_comments.Add(comment);
-        }
-
-        public void Save(Review review)
-        {
-            m_comments.Add(review);
-        }
-
-        public List<Article> GetArticles()
-        {
-            return m_articles;
-        }
-
-        public List<Admin> GetAdmins()
-        {
-            return m_admins;
-        }
-
-        public List<Author> GetAuthors()
-        {
-            return m_authors;
-        }
-
-        public List<BaseComment> GetComments()
-        {
-            return m_comments;
-        }
-
-        public List<User> GetUsers()
-        {
-            return m_users;
+            Comments.Add(comment);
         }
 
         public void Delete(Article article)
         {
-            m_articles.Remove(article);
+            Articles.Remove(article);
         }
 
         public void Delete(User user)
         {
-            m_users.Remove(user);
+            Users.Remove(user);
         }
 
         public void Delete(Admin admin)
         {
-            m_admins.Remove(admin);
+            Admins.Remove(admin);
         }
 
         public void Delete(Author author)
         {
-            m_authors.Remove(author);
+            Authors.Remove(author);
         }
 
         public void Delete(BaseComment comment)
         {
-            m_comments.Remove(comment);
+            Comments.Remove(comment);
         }
 
-        public void Initialize()
+        List<Article> IRepository<Article>.Get()
+        {
+            return Articles;
+        }
+
+        List<User> IRepository<User>.Get()
+        {
+            return Users;
+        }
+
+        List<Admin> IRepository<Admin>.Get()
+        {
+            return Admins;
+        }
+
+        List<Author> IRepository<Author>.Get()
+        {
+            return Authors;
+        }
+
+        List<BaseComment> IRepository<BaseComment>.Get()
+        {
+            return Comments;
+        }
+
+    public virtual void Initialize()
         {
             for (var i = 0; i < 3; i++)
             {
-                m_authors.Add(new Author(i + 1));
+                Authors.Add(new Author(i + 1));
             }
 
-            for (var i = 0; i < m_authors.Count; i++)
+            for (var i = 0; i < Authors.Count; i++)
             {
-                m_authors[i].FirstName = "Author";
-                m_authors[i].LastName = (i + 1).ToString();
-                m_authors[i].Age = 50 + i;
-                m_authors[i].NickName = "Author" + (i + 1).ToString();
-                m_authors[i].Popularity = i + 0.5;
+                Authors[i].FirstName = "Author";
+                Authors[i].LastName = (i + 1).ToString();
+                Authors[i].Age = 50 + i;
+                Authors[i].NickName = "Author" + (i + 1).ToString();
+                Authors[i].Popularity = i + 0.5;
             }
 
-            m_admins.Add(new Admin(4));
-            m_admins[0].FirstName = "Admin";
-            m_admins[0].LastName = "User";
-            m_admins[0].Age = 58;
-            m_admins[0].Privilegies = new List<string> { "edit", "read", "delete" };
+            Admins.Add(new Admin(4));
+            Admins[0].FirstName = "Admin";
+            Admins[0].LastName = "User";
+            Admins[0].Age = 58;
+            Admins[0].Privilegies = new List<string> { "edit", "read", "delete" };
 
             for (var i = 0; i < 3; i++)
             {
-                m_users.Add(new User(i + 5));
+                Users.Add(new User(i + 5));
             }
 
-            for (var i = 0; i < m_users.Count; i++)
+            for (var i = 0; i < Users.Count; i++)
             {
-                m_users[i].FirstName = "User";
-                m_users[i].LastName = (i + 1).ToString();
-                m_users[i].Age = 30 + i;
+                Users[i].FirstName = "User";
+                Users[i].LastName = (i + 1).ToString();
+                Users[i].Age = 30 + i;
             }
 
             for (var i = 0; i < 4; i++)
             {
-                m_articles.Add(new Article(i + 1));
+                Articles.Add(new Article(i + 1));
             }
 
-            for (var i = 0; i < m_articles.Count; i++)
+            for (var i = 0; i < Articles.Count; i++)
             {
-                m_articles[i].Content = "Text" + (i + 1).ToString();
-                m_articles[i].Title = "Title" + (i + 1).ToString();
-                if (i == m_articles.Count - 1)
+                Articles[i].Content = "Text" + (i + 1).ToString();
+                Articles[i].Title = "Title" + (i + 1).ToString();
+                if (i == Articles.Count - 1)
                 {
-                    m_articles[i].Author = m_authors[0];
+                    Articles[i].Author = Authors[0];
                     break;
                 }
 
-                m_articles[i].Author = m_authors[i];
+                Articles[i].Author = Authors[i];
             }
 
-            m_comments.Add(CreateReview(1, "Review 1", new Rating(3), m_users[1], m_articles[0]));
-            m_comments.Add(new Comment(2, "Comment 1", m_users[2], m_articles[1]));
-            m_comments.Add(CreateReview(2, "Review 2", new Rating(6), m_users[0], m_articles[1]));
-            m_comments.Add(CreateReview(3, "Review 3", new Rating(-1), m_users[2], m_articles[1]));
-            m_comments.Add(CreateReview(4, "Review 4", new Rating(1), m_users[0], m_articles[2]));
-            m_comments.Add(CreateReviewText(5, "Review Text 5", new Rating(0), m_users[2], m_articles[3]));
+            Comments.Add(CreateReview(1, "Review 1", new Rating(3), Users[1], Articles[0]));
+            Comments.Add(new Comment(2, "Comment 1", Users[2], Articles[1]));
+            Comments.Add(CreateReview(2, "Review 2", new Rating(6), Users[0], Articles[1]));
+            Comments.Add(CreateReview(3, "Review 3", new Rating(-1), Users[2], Articles[1]));
+            Comments.Add(CreateReview(4, "Review 4", new Rating(1), Users[0], Articles[2]));
+            Comments.Add(CreateReviewText(5, "Review Text 5", new Rating(0), Users[2], Articles[3]));
         }
 
         private void UpdateRating(Rating rating, Article article, User user)
         {
             var flag = false;
-            var reviews = (from comment in GetComments()
+            var reviews = (from comment in Comments
                            where comment is Review
                            select comment).ToList();
             foreach (Review mreview in reviews)

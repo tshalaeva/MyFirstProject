@@ -11,7 +11,7 @@ namespace Tests
         [TestMethod]
         public void TestCommentsExist()
         {
-            var facade = new Facade(new FacadeRepository());            
+            var facade = new Facade<FacadeRepository>(new FacadeRepository());            
             var after = facade.FilterCommentsByArticle(new Article(0));
             Assert.AreEqual(2, after.Count);
         }
@@ -19,7 +19,7 @@ namespace Tests
         [TestMethod]
         public void TestCommentsDoNotExist()
         {
-            var facade = new Facade(new FacadeRepository());            
+            var facade = new Facade<FacadeRepository>(new FacadeRepository());            
             var after = facade.FilterCommentsByArticle(new Article(5));
             Assert.AreEqual(0, after.Count);
         }

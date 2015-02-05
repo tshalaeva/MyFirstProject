@@ -6,9 +6,7 @@ namespace MyFirstProject
     {
         private static void Main()
         {
-            var report = new Report();
-            var repository = new Repository.Repository();
-            repository.Initialize();
+            var report = new Report();            
 
             report.PrintArticleTitles();
 
