@@ -41,14 +41,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Admin.cs" />
+    <Compile Include="Entity\Admin.cs" />
     <Compile Include="Entity\Article.cs" />
-    <Compile Include="Author.cs" />
+    <Compile Include="Entity\Author.cs" />
     <Compile Include="Entity\Comment.cs" />
     <Compile Include="Entity\IEntity.cs" />
     <Compile Include="Entity\ReviewText.cs" />
     <Compile Include="Facade.cs" />
     <Compile Include="Entity\BaseComment.cs" />
+    <Compile Include="Repository\IBaseRepository.cs" />
     <Compile Include="Repository\IRepository.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -56,7 +57,7 @@
     <Compile Include="Report.cs" />
     <Compile Include="Repository\Repository.cs" />
     <Compile Include="Entity\Review.cs" />
-    <Compile Include="User.cs" />
+    <Compile Include="Entity\User.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

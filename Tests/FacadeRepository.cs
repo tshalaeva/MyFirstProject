@@ -9,7 +9,7 @@ using MyFirstProject.Repository;
 
 namespace Tests
 {
-    class FacadeRepository : IRepository
+    class FacadeRepository : IRepository<Article>, IRepository<User>, IRepository<Admin>, IRepository<Author>, IRepository<BaseComment>
     {
         private List<Article> articles;
         private List<User> users;
@@ -41,15 +41,15 @@ namespace Tests
             }
         }
 
-        public void DeleteComment(BaseComment comment) { }
+        public void Delete(BaseComment comment) { }
 
-        public void DeleteAuthor(Author author) { }
+        public void Delete(Author author) { }
 
-        public void DeleteAdmin(Admin admin) { }
+        public void Delete(Admin admin) { }
 
-        public void DeleteUser(User user) { }
+        public void Delete(User user) { }
 
-        public void DeleteArticle(Article article) { }
+        public void Delete(Article article) { }
 
         public List<BaseComment> GetComments() 
         {
@@ -76,14 +76,14 @@ namespace Tests
             return articles;
         }
 
-        public void SaveComment(Comment comment) { }
+        public void Save(BaseComment comment) { }
 
-        public void SaveAuthor(Author author) { }
+        public void Save(Author author) { }
 
-        public void SaveAdmin(Admin admin) { }
+        public void Save(Admin admin) { }
 
-        public void SaveUser(User user) { }
+        public void Save(User user) { }
 
-        public void SaveArticle(Article article) { }
+        public void Save(Article article) { }
     }
 }

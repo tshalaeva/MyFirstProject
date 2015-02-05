@@ -7,13 +7,13 @@ namespace MyFirstProject
 {
     public class Facade
     {
-        public Facade(IRepository repository)
+        public Facade(IBaseRepository repository)
         {
             Repository = repository;
             Repository.Initialize();
         }
 
-        public IRepository Repository { get; private set; }
+        public IBaseRepository Repository { get; private set; }
        
         public List<BaseComment> FilterCommentsByArticle(Article article)
         {

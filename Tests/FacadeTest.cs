@@ -1,7 +1,6 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MyFirstProject;
-using System.Collections.Generic;
 using MyFirstProject.Entity;
 
 namespace Tests

@@ -4,7 +4,7 @@ using MyFirstProject.Entity;
 
 namespace MyFirstProject.Repository
 {
-    public class Repository : IRepository
+    public class Repository : IRepository<Article>, IRepository<User>, IRepository<Admin>, IRepository<Author>, IRepository<BaseComment>
     {
         private readonly List<Article> m_articles;
         private readonly List<User> m_users;
@@ -21,32 +21,32 @@ namespace MyFirstProject.Repository
             m_comments = new List<BaseComment>();            
         }
 
-        public void SaveArticle(Article article)
+        public void Save(Article article)
         {
             m_articles.Add(article);
         }
 
-        public void SaveUser(User user)
+        public void Save(User user)
         {
             m_users.Add(user);
         }
 
-        public void SaveAdmin(Admin admin)
+        public void Save(Admin admin)
         {
             m_admins.Add(admin);
         }
 
-        public void SaveAuthor(Author author)
+        public void Save(Author author)
         {
             m_authors.Add(author);
         }
 
-        public void SaveComment(Comment comment)
+        public void Save(BaseComment comment)
         {
             m_comments.Add(comment);
         }
 
-        public void SaveReview(Review review)
+        public void Save(Review review)
         {
             m_comments.Add(review);
         }
@@ -54,11 +54,6 @@ namespace MyFirstProject.Repository
         public List<Article> GetArticles()
         {
             return m_articles;
-        }
-
-        public List<User> GetUsers()
-        {
-            return m_users;
         }
 
         public List<Admin> GetAdmins()
@@ -76,27 +71,32 @@ namespace MyFirstProject.Repository
             return m_comments;
         }
 
-        public void DeleteArticle(Article article)
+        public List<User> GetUsers()
+        {
+            return m_users;
+        }
+
+        public void Delete(Article article)
         {
             m_articles.Remove(article);
         }
 
-        public void DeleteUser(User user)
+        public void Delete(User user)
         {
             m_users.Remove(user);
         }
 
-        public void DeleteAdmin(Admin admin)
+        public void Delete(Admin admin)
         {
             m_admins.Remove(admin);
         }
 
-        public void DeleteAuthor(Author author)
+        public void Delete(Author author)
         {
             m_authors.Remove(author);
         }
 
-        public void DeleteComment(BaseComment comment)
+        public void Delete(BaseComment comment)
         {
             m_comments.Remove(comment);
         }

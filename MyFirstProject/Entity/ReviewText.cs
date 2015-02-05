@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace MyFirstProject.Entity
 {
-    class ReviewText : Review
+    public class ReviewText : Review
     {
-        public ReviewText(int id) : base(id){}
+        public ReviewText(int id) : base(id) { }
 
         public ReviewText(int id, string content, User user, Article article, Rating rating) : base(id, content, user, article, rating) { }
 
@@ -27,27 +27,32 @@ namespace MyFirstProject.Entity
                         rating = "Very bad";
                         break;
                     }
+
                 case 2:
                     {
                         rating = "Bad";
                         break;
                     }
+
                 case 3:
                     {
                         rating = "Satisfactorily";
                         break;
                     }
+
                 case 4:
                     {
                         rating = "Good";
                         break;
                     }
+
                 case 5:
                     {
                         rating = "Fine";
                         break;
                     }
             }
+
             return rating;
         }
     }
