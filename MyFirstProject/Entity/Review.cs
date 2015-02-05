@@ -9,6 +9,15 @@
 
         public Review() { }
 
+        public Review(int id, string content, User user, Article article, Rating rating)
+        {
+            Id = id;
+            Article = article;
+            User = user;            
+            Content = content;
+            Rating = rating;       
+        }
+
         public Rating Rating { get; set; }        
 
         public override string ToString()

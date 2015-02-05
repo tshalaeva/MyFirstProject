@@ -2,6 +2,11 @@
 {
     public class Rating
     {
+        public Rating()
+        {
+            
+        }
+
         public Rating(int value)
         {
             Value = value;

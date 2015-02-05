@@ -9,6 +9,9 @@ namespace MyFirstProject.Entity
     class ReviewText : Review
     {
         public ReviewText(int id) : base(id){}
+
+        public ReviewText(int id, string content, User user, Article article, Rating rating) : base(id, content, user, article, rating) { }
+
         public override string ToString()
         {
             return User.FirstName + " " + User.LastName + ":\n" + Content + " " + ConvertRatingValue();
