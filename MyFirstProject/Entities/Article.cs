@@ -1,14 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace MyFirstProject.Entity
+namespace MyFirstProject.Entities
 {
-    public class Article : IEntity
+    public class Article:IEntity
     {
         public Article(int id)
         {
             Id = id;
-            Rating = new List<Rating>();
+            Ratings = new List<Rating>();
         }
 
         public string Title { get; set; }
@@ -17,22 +17,22 @@ namespace MyFirstProject.Entity
                 
         public Author Author { get; set; }
 
-        public List<Rating> Rating { get; private set; }
+        public List<Rating> Ratings { get; private set; }
 
-        public int Id { get; set; }        
+        public int Id { get; private set; }        
 
         public void AddRating(Rating rating)
         {
             rating.SetRating(rating.Value);
-            Rating.Add(rating);
+            Ratings.Add(rating);
         }
 
         public int GetAverageRating()
         {
-            var sum = Rating.Aggregate(0, (current, rating) => current + rating.Value);
-            if (Rating.Count != 0)
+            var sum = Ratings.Aggregate(0, (current, rating) => current + rating.Value);
+            if (Ratings.Count != 0)
             {
-                return sum / Rating.Count;
+                return sum / Ratings.Count;
             }
             else
             {

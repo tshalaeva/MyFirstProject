@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace MyFirstProject
+namespace MyFirstProject.Entities
 {
     public class Admin : User
     {

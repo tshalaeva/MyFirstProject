@@ -1,6 +1,6 @@
-﻿namespace MyFirstProject.Entity
+﻿namespace MyFirstProject.Entities
 {
-    public class Review : BaseComment, IEntity
+    public class Review : BaseComment
     {
         public Review(int id)
         {

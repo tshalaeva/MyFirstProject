@@ -1,15 +1,15 @@
 ﻿using System.Collections.Generic;
-using MyFirstProject.Entity;
+using MyFirstProject.Entities;
 
 namespace MyFirstProject.Repository
 {
-    public interface IRepository<T>
+    public interface IRepository
     {
-        List<T> Get();       
+        List<T> Get<T>() where T : IEntity;
 
-        void Save(T entity);       
+        void Save<T>(T entity) where T : IEntity;
 
-        void Delete(T entity);
+        void Delete<T>(T entity) where T : IEntity;
 
         void Initialize();
     }

@@ -1,4 +1,4 @@
-﻿namespace MyFirstProject.Entity
+﻿namespace MyFirstProject.Entities
 {
     public class Comment : BaseComment, IEntity
     {   

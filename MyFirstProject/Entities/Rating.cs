@@ -1,4 +1,4 @@
-﻿namespace MyFirstProject
+﻿namespace MyFirstProject.Entities
 {
     public class Rating
     {

@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace MyFirstProject.Entity
+namespace MyFirstProject.Entities
 {
-    public abstract class BaseComment 
+    public abstract class BaseComment:IEntity
     {        
         public string Content { get; set; }
 
@@ -10,7 +10,7 @@ namespace MyFirstProject.Entity
 
         public Article Article { get; set; }
 
-        public int Id { get; set; }
+        public int Id { get; protected set; }
 
         public override string ToString()
         {

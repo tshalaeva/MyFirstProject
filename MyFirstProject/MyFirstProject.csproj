@@ -41,22 +41,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Entity\Admin.cs" />
-    <Compile Include="Entity\Article.cs" />
-    <Compile Include="Entity\Author.cs" />
-    <Compile Include="Entity\Comment.cs" />
-    <Compile Include="Entity\IEntity.cs" />
-    <Compile Include="Entity\ReviewText.cs" />
+    <Compile Include="Entities\Admin.cs" />
+    <Compile Include="Entities\Article.cs" />
+    <Compile Include="Entities\Author.cs" />
+    <Compile Include="Entities\Comment.cs" />
+    <Compile Include="Entities\IEntity.cs" />
+    <Compile Include="Entities\ReviewText.cs" />
     <Compile Include="Facade.cs" />
-    <Compile Include="Entity\BaseComment.cs" />
+    <Compile Include="Entities\BaseComment.cs" />
     <Compile Include="Repository\IRepository.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Rating.cs" />
+    <Compile Include="Entities\Rating.cs" />
     <Compile Include="Report.cs" />
     <Compile Include="Repository\Repository.cs" />
-    <Compile Include="Entity\Review.cs" />
-    <Compile Include="Entity\User.cs" />
+    <Compile Include="Entities\Review.cs" />
+    <Compile Include="Entities\User.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

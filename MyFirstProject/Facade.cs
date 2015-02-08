@@ -1,36 +1,47 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using MyFirstProject.Entity;
-using MyFirstProject.Repository;
+using MyFirstProject.Entities;
 
 namespace MyFirstProject
 {
-    public class Facade<T> where T : Repository.Repository
+    public class Facade<T> where T : IEntity
     {
-    public Facade(T repository)
-    {
-        Repository = repository;
-        Repository.Initialize();
-    }
+        public Facade()
+        {
+            Repository = new Repository.Repository();
+            Repository.Initialize();
+        }
 
-    public T Repository { get; private set; }
+        public Facade(Repository.Repository repository)
+        {
+            Repository = repository;
+            Repository.Initialize();
+        }
 
-    public List<BaseComment> FilterCommentsByArticle(Article article)
-    {
-        List<BaseComment> comments = ((IRepository<BaseComment>)Repository).Get();
-        var result = (from comment in comments
-            where comment.Article.Id == article.Id
-            select comment).ToList();
-        return result;
-    }
+        private Repository.Repository Repository { get; set; }
 
-    public List<Article> FilterArticlesByAuthor(Author author)
-    {
-        List<Article> articles = ((IRepository<Article>)Repository).Get();
-        var result = (from article in articles
-            where article.Author.Id == author.Id
-            select article).ToList();
-        return result;
+        public void Save(T entity)
+        {
+            Repository.Save(entity);
+        }
+
+        public List<T> Get()
+        {
+            return Repository.Get<T>();
+        }
+
+        public void Delete(T entity)
+        {
+            Repository.Delete(entity);
+        }
+
+        public List<BaseComment> FilterCommentsByArticle(Article article)
+        {            
+            var comments = Repository.Get<BaseComment>();
+            var result = (from comment in comments
+                where comment.Article.Id == article.Id
+                select comment).ToList();
+            return result;
+        }
     }
-}
 }
