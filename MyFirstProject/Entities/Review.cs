@@ -22,7 +22,7 @@
 
         public override string ToString()
         {
-            return base.ToString() + "\n" + "Rating: " + Rating.Value.ToString();
+            return string.Format("{0} \nRating: {1}", base.ToString(), Rating.Value.ToString());
         }
     }
 }

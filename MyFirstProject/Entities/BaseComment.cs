@@ -14,7 +14,7 @@ namespace MyFirstProject.Entities
 
         public override string ToString()
         {
-            return User.FirstName + " " + User.LastName + ":\n" + Content;
+            return string.Format("{0} {1}:\n{2}", User.FirstName, User.LastName, Content);
         }
 
         public void Display()

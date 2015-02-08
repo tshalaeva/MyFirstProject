@@ -8,7 +8,7 @@ namespace Tests
     [TestClass]
     public class FacadeTest
     {
-        private FacadeRepository m_facadeRepository = new FacadeRepository();
+        private Mock m_facadeRepository = new Mock();
         [TestMethod]
         public void TestCommentsExist()
         {

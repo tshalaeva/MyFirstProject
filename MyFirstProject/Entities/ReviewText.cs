@@ -1,53 +1,25 @@
-﻿namespace MyFirstProject.Entities
+﻿using System.Collections.Generic;
+
+namespace MyFirstProject.Entities
 {
     public class ReviewText : Review
     {
+        private static readonly Dictionary<int, string> s_ratingTexts = new Dictionary<int, string> { { 1, "Very bad" }, { 2, "Bad" }, { 3, "Satisfactorily" }, { 4, "Good" }, { 5, "Fine" } };
+
         public ReviewText(int id) : base(id) { }
 
-        public ReviewText(int id, string content, User user, Article article, Rating rating) : base(id, content, user, article, rating) { }
+        public ReviewText(int id, string content, User user, Article article, Rating rating) : base(id, content, user, article, rating) { }        
 
         public override string ToString()
         {
-            return User.FirstName + " " + User.LastName + ":\n" + Content + " " + ConvertRatingValue();
+            return string.Format("{0} {1}:\n{2}\nRating: {3}", User.FirstName, User.LastName, Content, ConvertRatingValue());
         }
 
         private string ConvertRatingValue()
         {
-            string rating = "";
-            switch (Rating.Value)
-            {
-                case 1:
-                    {
-                        rating = "Very bad";
-                        break;
-                    }
-
-                case 2:
-                    {
-                        rating = "Bad";
-                        break;
-                    }
-
-                case 3:
-                    {
-                        rating = "Satisfactorily";
-                        break;
-                    }
-
-                case 4:
-                    {
-                        rating = "Good";
-                        break;
-                    }
-
-                case 5:
-                    {
-                        rating = "Fine";
-                        break;
-                    }
-            }
-
-            return rating;
+            string result;
+            s_ratingTexts.TryGetValue(Rating.Value, out result);
+            return result;
         }
     }
 }

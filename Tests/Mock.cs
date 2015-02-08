@@ -3,7 +3,7 @@ using MyFirstProject.Repository;
 
 namespace Tests
 {
-    public class FacadeRepository : Repository
+    public class Mock : Repository
     {
         public override void Initialize()
         {            

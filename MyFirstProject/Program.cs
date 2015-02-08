@@ -8,6 +8,12 @@ namespace MyFirstProject
         {
             var report = new Report();            
 
+            report.CreateAticles();
+
+            report.CreateComments();
+
+            report.CreateReviews();
+
             report.PrintArticleTitles();
 
             report.PrintAverageRatingForArticle();
