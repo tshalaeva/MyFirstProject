@@ -24,5 +24,10 @@
         {
             return string.Format("{0} \nRating: {1}", base.ToString(), Rating.Value.ToString());
         }
+
+        public new int GetEntityCode()
+        {
+            return 1;
+        }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using MyFirstProject.Entities;
+using System.Collections.Generic;
 
 namespace MyFirstProject
 {
@@ -9,7 +10,9 @@ namespace MyFirstProject
         private readonly Facade<Article> m_articleFacade = new Facade<Article>();        
         private readonly Facade<Admin> m_adminFacade = new Facade<Admin>(); 
         private readonly Facade<Author> m_authorFacade = new Facade<Author>(); 
-        private readonly Facade<BaseComment> m_commentFacade = new Facade<BaseComment>(); 
+        private readonly Facade<Comment> m_commentFacade = new Facade<Comment>();
+        private readonly Facade<ReviewText> m_reviewTextFacade = new Facade<ReviewText>();
+        private readonly Facade<Review> m_reviewFacade = new Facade<Review>();
         private readonly Facade<User> m_userFacade = new Facade<User>(); 
         
         public void PrintArticleTitles()
@@ -61,10 +64,16 @@ namespace MyFirstProject
             Console.WriteLine("List of comments for each article:");
             foreach (var article in articles)
             {
-                Console.WriteLine(string.Format("Artcle {0}: ", article.Title));
+                Console.WriteLine(string.Format("Article {0}: ", article.Title));
                 Console.WriteLine();
                 var articleComments = m_commentFacade.FilterCommentsByArticle(article);
-                foreach (var comment in articleComments)
+                var articleReviews = m_reviewFacade.FilterCommentsByArticle(article);
+                var articleReviewTexts = m_reviewTextFacade.FilterCommentsByArticle(article);
+                var allArticleComments = new List<BaseComment>(articleComments.Count + articleReviews.Count + articleReviewTexts.Count);
+                allArticleComments.AddRange(articleComments);
+                allArticleComments.AddRange(articleReviews);
+                allArticleComments.AddRange(articleReviewTexts);
+                foreach (var comment in allArticleComments)
                 {
                     comment.Display();
                     Console.WriteLine();
@@ -82,24 +91,52 @@ namespace MyFirstProject
 
         public void CreateComments()
         {
-            m_commentFacade.CreateComment(2, m_articleFacade.Get()[1], m_userFacade.Get()[2], "Test comment 0");
-            //m_commentFacade.CreateComment(1, m_articleFacade.Get()[1], m_userFacade.Get()[1], "Test comment 1");
-            //m_commentFacade.CreateComment(2, m_articleFacade.Get()[1], m_userFacade.Get()[0], "Test comment 2");
+            m_commentFacade.CreateComment(1, m_articleFacade.Get()[1], m_userFacade.Get()[2], "Test comment 0");
+            m_commentFacade.CreateComment(2, m_articleFacade.Get()[1], m_userFacade.Get()[1], "Test comment 1");
+            m_commentFacade.CreateComment(3, m_articleFacade.Get()[1], m_userFacade.Get()[0], "Test comment 2");
         }
 
         public void CreateReviews()
         {
-            m_commentFacade.CreateReview(1, "Test Review 0", new Rating(3), m_userFacade.Get()[1], m_articleFacade.Get()[0]);
-            m_commentFacade.CreateReview(2, "Test Review 1", new Rating(6), m_userFacade.Get()[0],
+            m_reviewFacade.CreateReview(1, "Test Review 0", new Rating(3), m_userFacade.Get()[1], m_articleFacade.Get()[0]);
+            m_reviewFacade.CreateReview(2, "Test Review 1", new Rating(6), m_userFacade.Get()[0],
                 m_articleFacade.Get()[1]);
-            m_commentFacade.CreateReview(3, "Test Review 2", new Rating(-1), m_userFacade.Get()[2],
+            m_reviewFacade.CreateReview(3, "Test Review 2", new Rating(-1), m_userFacade.Get()[2],
                 m_articleFacade.Get()[1]);
-            m_commentFacade.CreateReview(4, "Test Review 3", new Rating(1), m_userFacade.Get()[0],
+            m_reviewFacade.CreateReview(4, "Test Review 3", new Rating(1), m_userFacade.Get()[0],
                 m_articleFacade.Get()[2]);
-            m_commentFacade.CreateReviewText(5, "Test Review Text 0", new Rating(4), m_userFacade.Get()[2],
+            m_reviewTextFacade.CreateReviewText(5, "Test Review Text 0", new Rating(4), m_userFacade.Get()[2],
                 m_articleFacade.Get()[3]);
-            m_commentFacade.CreateReviewText(6, "Test Review Text 1", new Rating(3), m_userFacade.Get()[2],
+            m_reviewTextFacade.CreateReviewText(6, "Test Review Text 1", new Rating(3), m_userFacade.Get()[2],
                 m_articleFacade.Get()[5]);
         }     
+
+        public void PrintEntityCodeForEachComment()
+        {
+            Console.WriteLine("Entity Codes:");
+
+            Console.WriteLine();
+
+            foreach (var comment in m_commentFacade.Get())
+            {
+                Console.WriteLine(string.Format("{0}: {1}", comment.Content, comment.GetEntityCode()));
+
+                Console.WriteLine();
+            }
+
+            foreach (var comment in m_reviewFacade.Get())
+            {
+                Console.WriteLine(string.Format("{0}: {1}", comment.Content, comment.GetEntityCode()));
+
+                Console.WriteLine();
+            }
+
+            foreach (var comment in m_reviewTextFacade.Get())
+            {
+                Console.WriteLine(string.Format("{0}: {1}", comment.Content, comment.GetEntityCode()));
+
+                Console.WriteLine();
+            }
+        }
     }
 }

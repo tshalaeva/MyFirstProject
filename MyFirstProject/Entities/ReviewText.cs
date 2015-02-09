@@ -21,5 +21,10 @@ namespace MyFirstProject.Entities
             s_ratingTexts.TryGetValue(Rating.Value, out result);
             return result;
         }
+
+        public new int GetEntityCode()
+        {
+            return 2;
+        }
     }
 }

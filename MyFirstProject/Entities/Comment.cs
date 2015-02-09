@@ -14,5 +14,10 @@
             User = user;
             Content = content;
         }
+
+        public new int GetEntityCode()
+        {
+            return 0;
+        }
     }
 }

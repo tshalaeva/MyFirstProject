@@ -10,7 +10,7 @@ namespace MyFirstProject.Entities
 
         public Article Article { get; set; }
 
-        public int Id { get; protected set; }
+        public int Id { get; protected set; }        
 
         public override string ToString()
         {
@@ -20,6 +20,11 @@ namespace MyFirstProject.Entities
         public void Display()
         {
             Console.WriteLine(ToString());
+        }
+
+        public int GetEntityCode()
+        {
+            return 0;
         }
     }
 }

@@ -22,6 +22,8 @@ namespace MyFirstProject
 
             report.PrintListOfCommentsForArticles();
 
+            report.PrintEntityCodeForEachComment();
+
             Console.ReadLine();
         }
     }
