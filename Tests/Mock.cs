@@ -13,12 +13,19 @@ namespace Tests
                 {
                     Save(new Comment(i));
                     Get<BaseComment>()[i].Article = new Article(0);
+                    Save(Get<BaseComment>()[i].Article);
                     break;
                 }
 
                 Save(new Comment(i));
                 Get<BaseComment>()[i].Article = new Article(i);
+                Save(Get<BaseComment>()[i].Article);
             }
+
+            Save(new User(0));
+
+            Save(new Review(1, "Test", Get<User>()[0], Get<Article>()[1], new Rating(3)));
+            Get<Article>()[1].AddRating(Get<Review>()[0].Rating);
         }
     }
 }
