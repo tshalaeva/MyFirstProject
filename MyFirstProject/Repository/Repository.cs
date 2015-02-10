@@ -11,6 +11,7 @@ namespace MyFirstProject.Repository
         public Repository()
         {
             m_data = new List<IEntity>();
+            Initialize();
         }
 
         public List<T> Get<T>() where T : IEntity
@@ -28,7 +29,7 @@ namespace MyFirstProject.Repository
             m_data.Remove(entity);
         }
        
-        public virtual void Initialize()
+        protected virtual void Initialize()
         {
             for (var i = 0; i < 3; i++)
             {

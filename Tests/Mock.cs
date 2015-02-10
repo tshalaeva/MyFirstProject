@@ -5,7 +5,7 @@ namespace Tests
 {
     public class Mock : Repository
     {
-        public override void Initialize()
+        protected override void Initialize()
         {            
             for (var i = 0; i < 5; i++)
             {

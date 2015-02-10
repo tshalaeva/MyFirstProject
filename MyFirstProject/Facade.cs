@@ -6,38 +6,31 @@ namespace MyFirstProject
 {
     public class Facade<T> where T : IEntity
     {
-        public Facade()
-        {
-            Repository = new Repository.Repository();
-            Repository.Initialize();
-        }
+        private readonly Repository.Repository m_repository;
 
         public Facade(Repository.Repository repository)
         {
-            Repository = repository;
-            Repository.Initialize();
+            this.m_repository = repository;           
         }
-
-        private Repository.Repository Repository { get; set; }
 
         public void Save(T entity)
         {
-            Repository.Save(entity);
+            m_repository.Save(entity);
         }
 
         public List<T> Get()
         {
-            return Repository.Get<T>();
+            return m_repository.Get<T>();
         }
 
         public void Delete(T entity)
         {
-            Repository.Delete(entity);
+            m_repository.Delete(entity);
         }
 
         public List<BaseComment> FilterCommentsByArticle(Article article)
-        {            
-            var comments = Repository.Get<BaseComment>();
+        {
+            var comments = m_repository.Get<BaseComment>();
             var result = (from comment in comments
                 where comment.Article.Id == article.Id
                 select comment).ToList();
@@ -46,22 +39,38 @@ namespace MyFirstProject
 
         public Article CreateArticle(int id, Author author, string title, string content)
         {
-            var article = new Article(id) {Author = author, Title = title, Content = content};
-            Repository.Save(article);
+            var article = new Article(id) { Author = author, Title = title, Content = content };
+            m_repository.Save(article);
             return article;
         }
 
         public Comment CreateComment(int id, Article article, User user, string content)
         {
             Comment comment = new Comment(id, content, user, article);
-            Repository.Save(comment);
+            m_repository.Save(comment);
             return comment;
+        }
+
+        public Review CreateReview(int id, string content, Rating rating, User user, Article article)
+        {
+            var review = new Review(id, content, user, article, rating);
+            UpdateRating(rating, article, user);
+            m_repository.Save(review);
+            return review;
+        }
+
+        public ReviewText CreateReviewText(int id, string content, Rating rating, User user, Article article)
+        {
+            var review = new ReviewText(id, content, user, article, rating);
+            UpdateRating(rating, article, user);
+            m_repository.Save(review);
+            return review;
         }
 
         private void UpdateRating(Rating rating, Article article, User user)
         {
             var flag = false;
-            var reviews = (from comment in Repository.Get<BaseComment>()
+            var reviews = (from comment in m_repository.Get<BaseComment>()
                            where comment is Review
                            select comment).ToList();
             foreach (var mreview in reviews)
@@ -84,22 +93,6 @@ namespace MyFirstProject
             {
                 article.AddRating(rating);
             }
-        }
-
-        public Review CreateReview(int id, string content, Rating rating, User user, Article article)
-        {
-            var review = new Review(id, content, user, article, rating);
-            UpdateRating(rating, article, user);
-            Repository.Save(review);
-            return review;
-        }
-
-        public ReviewText CreateReviewText(int id, string content, Rating rating, User user, Article article)
-        {
-            var review = new ReviewText(id, content, user, article, rating);
-            UpdateRating(rating, article, user);
-            Repository.Save(review);
-            return review;
-        }
+        }        
     }
 }

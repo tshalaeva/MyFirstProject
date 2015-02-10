@@ -15,16 +15,16 @@ namespace MyFirstProject.Entities
             return string.Format("{0} {1}:\n{2}\nRating: {3}", User.FirstName, User.LastName, Content, ConvertRatingValue());
         }
 
+        public new int GetEntityCode()
+        {
+            return 2;
+        }
+
         private string ConvertRatingValue()
         {
             string result;
             s_ratingTexts.TryGetValue(Rating.Value, out result);
             return result;
-        }
-
-        public new int GetEntityCode()
-        {
-            return 2;
         }
     }
 }

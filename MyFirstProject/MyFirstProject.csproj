@@ -54,7 +54,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Entities\Rating.cs" />
     <Compile Include="Report.cs" />
-    <Compile Include="Repository\Repository.cs" />
+    <Compile Include="Repository\Repository.cs">
+      <ExcludeFromStyleCop>True</ExcludeFromStyleCop>
+    </Compile>
     <Compile Include="Entities\Review.cs" />
     <Compile Include="Entities\User.cs" />
   </ItemGroup>

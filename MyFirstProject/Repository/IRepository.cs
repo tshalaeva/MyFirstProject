@@ -9,8 +9,6 @@ namespace MyFirstProject.Repository
 
         void Save<T>(T entity) where T : IEntity;
 
-        void Delete<T>(T entity) where T : IEntity;
-
-        void Initialize();
+        void Delete<T>(T entity) where T : IEntity;        
     }
 }
