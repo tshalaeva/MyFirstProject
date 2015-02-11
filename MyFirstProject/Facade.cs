@@ -10,7 +10,8 @@ namespace MyFirstProject
 
         public Facade(Repository.Repository repository)
         {
-            this.m_repository = repository;           
+            m_repository = repository;
+            m_repository.Initialize();       
         }
 
         public void Save(T entity)
