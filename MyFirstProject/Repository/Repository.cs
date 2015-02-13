@@ -7,7 +7,7 @@ namespace MyFirstProject.Repository
     public class Repository : IRepository
     {
         private List<IEntity> m_data;
-        private bool m_initialized = false;
+        protected bool m_initialized = false;
 
         public Repository()
         {

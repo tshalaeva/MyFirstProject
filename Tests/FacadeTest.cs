@@ -10,7 +10,8 @@ namespace Tests
     {
         private Mock m_facadeRepository = new Mock();
         [TestMethod]
-        public void TestCommentsExist()
+        [Description("Test: Filter comments by existing article")] 
+        public void FilterCommentsByExistingArticle()
         {
             var facade = new Facade<Article>(m_facadeRepository);
             var after = facade.FilterCommentsByArticle(new Article(0));
@@ -18,7 +19,8 @@ namespace Tests
         }
 
         [TestMethod]
-        public void TestCommentsDoNotExist()
+        [Description("Test: Filter comments by non-existing artickle")]
+        public void FilterCommentsByNonExistingArticle()
         {
             var facade = new Facade<Article>(m_facadeRepository);
             var after = facade.FilterCommentsByArticle(new Article(5));
@@ -26,7 +28,8 @@ namespace Tests
         }
 
         [TestMethod]
-        public void TestCreationOfArticle()
+        [Description("Test: Creation of new article")]
+        public void CreationOfArticle()
         {
             var articleFacade = new Facade<Article>(m_facadeRepository);
             var article = articleFacade.CreateArticle(10, new Author(10), "Test Title", "Test Content");
@@ -35,7 +38,8 @@ namespace Tests
         }
 
         [TestMethod]
-        public void TestCreationOfComment()
+        [Description("Test: Creation of new comment")]
+        public void CreationOfComment()
         {
             var articleFacade = new Facade<Article>(m_facadeRepository);
             var comment = articleFacade.CreateComment(10, articleFacade.Get()[0], new User(10), "CommentTest");
@@ -44,7 +48,8 @@ namespace Tests
         }
 
         [TestMethod]
-        public void TestCreationOfNewReview()
+        [Description("Test: Creation of new review")]
+        public void CreationOfReview()
         {
             var articleFacade = new Facade<Article>(m_facadeRepository);
             var review = articleFacade.CreateReview(
@@ -57,7 +62,8 @@ namespace Tests
         }
 
         [TestMethod]
-        public void TestUpdatingOfRating()
+        [Description("Test: Updating of rating")]
+        public void UpdateRating()
         {
             var articleFacade = new Facade<Article>(m_facadeRepository);
             var userFacade = new Facade<User>(m_facadeRepository);
@@ -72,7 +78,8 @@ namespace Tests
         }
 
         [TestMethod]
-        public void TestCreationOfReviewText()
+        [Description("Test: Creation of new review text")]
+        public void CreationOfReviewText()
         {
             var articleFacade = new Facade<Article>(m_facadeRepository);
             var review = articleFacade.CreateReviewText(

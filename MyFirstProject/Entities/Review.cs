@@ -15,7 +15,8 @@
             Article = article;
             User = user;            
             Content = content;
-            Rating = rating;       
+            Rating = rating;
+            Article.AddRating(Rating);
         }
 
         public Rating Rating { get; set; }        

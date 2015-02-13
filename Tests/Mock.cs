@@ -7,24 +7,29 @@ namespace Tests
     public class Mock : Repository
     {
         public override void Initialize()
-        {            
-            for (var i = 0; i < 5; i++)
+        {
+            if (m_initialized == false)
             {
-                if (i == 4)
+                for (var i = 0; i < 5; i++)
                 {
-                    var lastComment = SaveNewComment(i);
-                    SaveNewArticle(lastComment, 0);
-                    break;
+                    if (i == 4)
+                    {
+                        var lastComment = SaveNewComment(i);
+                        SaveNewArticle(lastComment, 0);
+                        break;
+                    }
+
+                    var currentComment = SaveNewComment(i);
+                    SaveNewArticle(currentComment, i);
                 }
 
-                var currentComment = SaveNewComment(i);
-                SaveNewArticle(currentComment, i);
+                Save(new User(0));
+
+                Save(new Review(1, "Test", Get<User>()[0], Get<Article>()[1], new Rating(3)));
+                Get<Article>()[1].AddRating(Get<Review>()[0].Rating);
+
+                m_initialized = true;
             }
-
-            Save(new User(0));
-
-            Save(new Review(1, "Test", Get<User>()[0], Get<Article>()[1], new Rating(3)));
-            Get<Article>()[1].AddRating(Get<Review>()[0].Rating);
         }
 
         private BaseComment SaveNewComment(int id)
