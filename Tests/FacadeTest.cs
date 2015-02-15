@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MyFirstProject;
 using MyFirstProject.Entities;
@@ -89,6 +90,36 @@ namespace Tests
                 new User(10),
                 articleFacade.Get()[0]);
             Assert.IsTrue((review.Content == "Test Review") && (review.Rating.Value == 5));
+        }
+
+        [TestMethod]
+        [Description("Save new article")]
+        public void SaveNewArticle()
+        {
+            m_facadeRepository.Initialize();
+            m_facadeRepository.Save(new Article(8));
+            int numberOfArticles = m_facadeRepository.Get<Article>().Count;
+            Assert.AreEqual(6, numberOfArticles);
+        }
+
+        [TestMethod]
+        [Description("Get last article")]
+        public void GetLastArticle()
+        {
+            m_facadeRepository.Initialize();
+            Article article = m_facadeRepository.Get<Article>().Last();
+            Assert.AreEqual(4, article.Id);
+        }
+
+        [TestMethod]
+        [Description("Test deleting of article")]
+        public void DeleteArticle()
+        {
+            m_facadeRepository.Initialize();
+            Article article = m_facadeRepository.Get<Article>()[3];
+            m_facadeRepository.Delete(article);
+            int numberOfArticles = m_facadeRepository.Get<Article>().Count;
+            Assert.AreEqual(4, numberOfArticles);
         }
     }
 }

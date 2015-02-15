@@ -15,7 +15,7 @@ namespace Tests
                     if (i == 4)
                     {
                         var lastComment = SaveNewComment(i);
-                        SaveNewArticle(lastComment, 0);
+                        SaveNewArticle(lastComment, 4);
                         break;
                     }
 
@@ -27,6 +27,8 @@ namespace Tests
 
                 Save(new Review(1, "Test", Get<User>()[0], Get<Article>()[1], new Rating(3)));
                 Get<Article>()[1].AddRating(Get<Review>()[0].Rating);
+
+                Save(new ReviewText(0, "Review Content", Get<User>()[0], Get<Article>()[0], new Rating(5)));
 
                 m_initialized = true;
             }

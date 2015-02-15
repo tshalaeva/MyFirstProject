@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MyFirstProject;
 using MyFirstProject.Entities;
@@ -34,6 +35,17 @@ namespace Tests
             Article article = m_articleRepository.Get<Article>()[2];
             int avgRating = article.GetAverageRating();
             Assert.AreEqual(0, avgRating);
+        }
+
+        [TestMethod]
+        [Description("Add rating for article")]
+        public void AddingNewRating()
+        {
+            m_articleRepository.Initialize();
+            Rating rating = new Rating(1);
+            Article article = m_articleRepository.Get<Article>()[0];
+            article.AddRating(rating);
+            Assert.AreEqual(1, article.Ratings.Last().Value);
         }
     }
 }
