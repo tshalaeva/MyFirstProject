@@ -1,50 +1,19 @@
 ﻿using System.Linq;
 using MyFirstProject.Entities;
+using System.Collections.Generic;
 using MyFirstProject.Repository;
 
 namespace Tests
 {
     public class Mock : Repository
-    {
-        public override void Initialize()
+    {    
+        public Mock()
         {
-            if (m_initialized == false)
-            {
-                for (var i = 0; i < 5; i++)
-                {
-                    if (i == 4)
-                    {
-                        var lastComment = SaveNewComment(i);
-                        SaveNewArticle(lastComment, 4);
-                        break;
-                    }
-
-                    var currentComment = SaveNewComment(i);
-                    SaveNewArticle(currentComment, i);
-                }
-
-                Save(new User(0));
-
-                Save(new Review(1, "Test", Get<User>()[0], Get<Article>()[1], new Rating(3)));
-                Get<Article>()[1].AddRating(Get<Review>()[0].Rating);
-
-                Save(new ReviewText(0, "Review Content", Get<User>()[0], Get<Article>()[0], new Rating(5)));
-
-                m_initialized = true;
-            }
-        }
-
-        private BaseComment SaveNewComment(int id)
-        {
-            Save(new Comment(id));
-            var comments = Get<BaseComment>();
-            return comments.Last();
-        }
-
-        private void SaveNewArticle(BaseComment comment, int id)
-        {
-            comment.Article = new Article(id);            
-            Save(comment.Article);
+            m_data = new List<IEntity>() { new Article(0), new Article(1), new Article(2), new Article(2), new User(0), new User(1) };
+            Save(new Comment(0, "Content 0", Get<User>().First(), Get<Article>().First()));
+            Save(new Comment(1, "Content 1", Get<User>()[1], Get<Article>()[0]));
+            Save(new Review(0, "Review 0", Get<User>().First(), Get<Article>().First(), new Rating(5)));
+            Save(new ReviewText(0, "Review Text 0", Get<User>().First(), Get<Article>().First(), new Rating(1)));
         }
     }
 }

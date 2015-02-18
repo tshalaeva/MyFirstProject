@@ -8,10 +8,76 @@ namespace MyFirstProject
     {
         private readonly Repository.Repository m_repository;
 
+        private void Initialize()
+        {
+            for (var i = 0; i < 3; i++)
+            {
+                m_repository.Save(new Author(i + 1));
+            }
+
+            var authors = m_repository.Get<Author>();
+
+            for (var i = 0; i < authors.Count; i++)
+            {
+                authors[i].FirstName = "Author";
+                authors[i].LastName = (i + 1).ToString();
+                authors[i].Age = 50 + i;
+                authors[i].NickName = "Author" + (i + 1).ToString();
+                authors[i].Popularity = i + 0.5;
+            }
+
+            for (var i = 0; i < 3; i++)
+            {
+                m_repository.Save(new User(i + 5));
+            }
+
+            var users = m_repository.Get<User>();
+
+            for (var i = 0; i < users.Count; i++)
+            {
+                users[i].FirstName = "User";
+                users[i].LastName = string.Format("{0}", i + 1);
+                users[i].Age = 30 + i;
+            }
+
+            m_repository.Save(new Admin(4));
+            m_repository.Get<Admin>()[0].FirstName = "Admin";
+            m_repository.Get<Admin>()[0].LastName = "User";
+            m_repository.Get<Admin>()[0].Age = 58;
+            m_repository.Get<Admin>()[0].Privilegies = new List<string> { "edit", "read", "delete" };
+
+            for (var i = 0; i < 4; i++)
+            {
+                m_repository.Save(new Article(i + 1));
+            }
+
+            var articles = m_repository.Get<Article>();
+
+            for (var i = 0; i < articles.Count; i++)
+            {
+                articles[i].Content = string.Format("Text {0}", i + 1);
+                articles[i].Title = string.Format("Title {0}", i + 1);
+                if (i == articles.Count - 1)
+                {
+                    articles[i].Author = authors[0];
+                    break;
+                }
+
+                articles[i].Author = authors[i];
+            }
+        }
+
         public Facade(Repository.Repository repository)
         {
-            m_repository = repository;
-            m_repository.Initialize();       
+            m_repository = new Repository.Repository();
+            if (!repository.Initialized)
+            {
+                Initialize();
+            }
+            else
+            {
+                m_repository = repository;   
+            }            
         }
 
         public void Save(T entity)
@@ -33,8 +99,8 @@ namespace MyFirstProject
         {
             var comments = m_repository.Get<BaseComment>();
             var result = (from comment in comments
-                where comment.Article.Id == article.Id
-                select comment).ToList();
+                          where comment.Article.Id == article.Id
+                          select comment).ToList();
             return result;
         }
 
@@ -68,6 +134,11 @@ namespace MyFirstProject
             return review;
         }
 
+        public void Update(T oldEntity, T newEntity)
+        {
+            m_repository.Update(oldEntity, newEntity);
+        }
+
         private void UpdateRating(Rating rating, Article article, User user)
         {
             var flag = false;
@@ -94,6 +165,6 @@ namespace MyFirstProject
             {
                 article.AddRating(rating);
             }
-        }        
+        }
     }
 }
