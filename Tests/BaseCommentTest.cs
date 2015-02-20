@@ -9,14 +9,13 @@ namespace Tests
     [TestClass]
     public class BaseCommentTest
     {
-        private Mock m_baseCommentRepository = new Mock();
+        private readonly Mock m_baseCommentRepository = new Mock();
         [TestMethod]
         [Description("Test ToString method")]
         public void TestToStringForComment()
         {            
             Article article = m_baseCommentRepository.Get<Article>()[0];
             User user = new User(4) { FirstName = "Test", LastName = "User" };
-            m_baseCommentRepository.Save(user);
             m_baseCommentRepository.Save(new Comment(2, "Test content", user, article));
             string result = m_baseCommentRepository.Get<Comment>().Last().ToString();
             Assert.AreEqual("Test User:\nTest content", result);
@@ -39,10 +38,9 @@ namespace Tests
         [Description("Test ToString method")]
         public void TestToStringForReviewText()
         {
-            var articleFacade = new Facade<Article>(m_baseCommentRepository);
-            var userFacade = new Facade<User>(m_baseCommentRepository);
-            var article = articleFacade.Get().First();
-            var user = userFacade.Get().Last();
+            var facade = new Facade(m_baseCommentRepository);           
+            var article = facade.Get<Article>().First();
+            var user = facade.Get<User>().Last();
             user.FirstName = "Test";
             user.LastName = "User";
             m_baseCommentRepository.Save(new ReviewText(0, "Review Content", user, article, new Rating(4)));
@@ -54,13 +52,11 @@ namespace Tests
         [Description("Test GetEntityCode method")]
         public void IfEntityIsCommentReturn0()
         {
-            var userFacade = new Facade<User>(m_baseCommentRepository);
-            var articleFacade = new Facade<Article>(m_baseCommentRepository);
-            var article = articleFacade.Get().First();
-            var commentFacade = new Facade<Comment>(m_baseCommentRepository);
-            commentFacade.Save(new Comment(0, "Comment 1", userFacade.Get().First(), article));
-            commentFacade.Save(new Comment(1, "Comment 2", userFacade.Get().First(), article));            
-            var comment = commentFacade.Get().First();
+            var facade = new Facade(m_baseCommentRepository);           
+            var article = facade.Get<Article>().First();            
+            facade.Save(new Comment(0, "Comment 1", facade.Get<User>().First(), article));
+            facade.Save(new Comment(1, "Comment 2", facade.Get<User>().First(), article));
+            var comment = facade.Get<Comment>().First();
             Assert.IsTrue(comment.GetEntityCode() == 0);
         }
 

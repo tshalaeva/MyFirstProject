@@ -4,7 +4,7 @@ using MyFirstProject.Entities;
 
 namespace MyFirstProject
 {
-    public class Facade<T> where T : IEntity
+    public class Facade
     {
         private readonly Repository.Repository m_repository;
 
@@ -17,13 +17,13 @@ namespace MyFirstProject
 
             var authors = m_repository.Get<Author>();
 
-            for (var i = 0; i < authors.Count; i++)
+            foreach (var author in authors)
             {
-                authors[i].FirstName = "Author";
-                authors[i].LastName = (i + 1).ToString();
-                authors[i].Age = 50 + i;
-                authors[i].NickName = "Author" + (i + 1).ToString();
-                authors[i].Popularity = i + 0.5;
+                author.FirstName = "Author";
+                author.LastName = string.Format("{0}", author.Id + 1);
+                author.Age = 50 + author.Id;
+                author.NickName = string.Format("Author{0}", author.Id);
+                author.Popularity = author.Id + 0.5;
             }
 
             for (var i = 0; i < 3; i++)
@@ -76,28 +76,28 @@ namespace MyFirstProject
             }
             else
             {
-                m_repository = repository;   
-            }            
+                m_repository = repository;
+            }
         }
 
-        public void Save(T entity)
+        public void Save<T>(T entity) where T : IEntity
         {
             m_repository.Save(entity);
         }
 
-        public List<T> Get()
+        public List<T> Get<T>() where T : IEntity
         {
             return m_repository.Get<T>();
         }
 
-        public void Delete(T entity)
+        public void Delete<T>(T entity) where T : IEntity
         {
             m_repository.Delete(entity);
         }
 
-        public List<BaseComment> FilterCommentsByArticle(Article article)
+        public List<T> FilterCommentsByArticle<T>(Article article) where T : BaseComment
         {
-            var comments = m_repository.Get<BaseComment>();
+            var comments = m_repository.Get<T>();
             var result = (from comment in comments
                           where comment.Article.Id == article.Id
                           select comment).ToList();
@@ -134,7 +134,7 @@ namespace MyFirstProject
             return review;
         }
 
-        public void Update(T oldEntity, T newEntity)
+        public void Update<T>(T oldEntity, T newEntity) where T : IEntity
         {
             m_repository.Update(oldEntity, newEntity);
         }
@@ -145,6 +145,7 @@ namespace MyFirstProject
             var reviews = (from comment in m_repository.Get<BaseComment>()
                            where comment is Review
                            select comment).ToList();
+            
             foreach (var mreview in reviews)
             {
                 if (mreview.Article == article)
