@@ -62,7 +62,7 @@ namespace MyFirstProject
                 Console.WriteLine("Article {0}: ", article.Title);
                 Console.WriteLine();
                 var articleComments = m_facade.FilterCommentsByArticle<Comment>(article);
-                var articleReviews = m_facade.FilterCommentsByArticle<Review>(article);
+                var articleReviews = m_facade.FilterCommentsByArticle<Review>(article);                
                 var articleReviewTexts = m_facade.FilterCommentsByArticle<ReviewText>(article);
                 var allArticleComments = new List<BaseComment>(articleComments.Count + articleReviews.Count + articleReviewTexts.Count);
                 allArticleComments.AddRange(articleComments);
@@ -166,6 +166,11 @@ namespace MyFirstProject
 
                 Console.WriteLine();
             }
+        }
+
+        public void PrintRandomArticleId()
+        {
+            Console.WriteLine("Random article id = {0}", m_facade.GetRandomArticle().Id);
         }
     }
 }

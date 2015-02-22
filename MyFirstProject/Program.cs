@@ -24,6 +24,8 @@ namespace MyFirstProject
 
             report.PrintEntityCodeForEachComment();
 
+            report.PrintRandomArticleId();
+
             Console.ReadLine();
         }
     }

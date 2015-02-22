@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MyFirstProject;
 using MyFirstProject.Entities;
@@ -9,7 +8,7 @@ namespace Tests
     [TestClass]
     public class FacadeTest
     {
-        private readonly Mock m_facadeRepository = new Mock();
+        private Mock m_facadeRepository = new Mock();
         [TestMethod]
         [Description("Test: Filter comments by existing article")]
         public void FilterCommentsByExistingArticle()
@@ -34,9 +33,8 @@ namespace Tests
         public void CreationOfArticle()
         {            
             var articleFacade = new Facade(m_facadeRepository);
-            var article = articleFacade.CreateArticle(10, new Author(10), "Test Title", "Test Content");
-            Assert.AreEqual(article.Title, "Test Title");
-            Assert.AreEqual("Test Content", article.Content);
+            articleFacade.CreateArticle(10, new Author(10), "Test Title", "Test Content");
+            Assert.AreEqual(10, articleFacade.Get<Article>().Last().Id);
         }
 
         [TestMethod]
@@ -44,9 +42,8 @@ namespace Tests
         public void CreationOfComment()
         {
             var facade = new Facade(m_facadeRepository);
-            var comment = facade.CreateComment(10, facade.Get<Article>().First(), new User(10), "CommentTest");
-            Assert.AreEqual(facade.Get<Article>().First().Id, comment.Article.Id);
-            Assert.AreEqual("CommentTest", comment.Content);
+            facade.CreateComment(10, facade.Get<Article>().First(), new User(10), "CommentTest");
+            Assert.AreEqual(10, facade.Get<Comment>().Last().Id);            
         }
 
         [TestMethod]
@@ -54,28 +51,27 @@ namespace Tests
         public void CreationOfReview()
         {
             var facade = new Facade(m_facadeRepository);
-            var review = facade.CreateReview(
+            facade.CreateReview(
                 10,
                 "Test Review",
                 new Rating(7),
                 new User(10),
                 facade.Get<Article>().First());
-            Assert.IsTrue((review.Content == "Test Review") && (review.Rating.Value == 5));
+            Assert.AreEqual(10, facade.Get<Review>().Last().Id);            
         }
 
         [TestMethod]
         [Description("Test: Updating of rating")]
         public void UpdateRating()
         {
-            var facade = new Facade(m_facadeRepository);
-            Assert.AreEqual(facade.Get<Article>().First().Ratings.First().Value, 5);
-            var review = facade.CreateReview(
+            var facade = new Facade(m_facadeRepository);            
+            facade.CreateReview(
                 11,
                 "Test Review",
                 new Rating(1),
                 facade.Get<User>().First(),
                 facade.Get<Article>()[1]);
-            Assert.IsTrue((review.Content == "Test Review") && (review.Rating.Value == 1));
+            Assert.AreEqual(1, facade.GetById<Review>(11).Rating.Value);
         }
 
         [TestMethod]
@@ -83,22 +79,22 @@ namespace Tests
         public void CreationOfReviewText()
         {
             var facade = new Facade(m_facadeRepository);
-            var review = facade.CreateReviewText(
+            facade.CreateReviewText(
                 10,
                 "Test Review",
                 new Rating(7),
                 new User(10),
                 facade.Get<Article>().First());
-            Assert.IsTrue((review.Content == "Test Review") && (review.Rating.Value == 5));
+            Assert.AreEqual(10, facade.Get<Review>().Last().Id);
         }
 
         [TestMethod]
         [Description("Save new article")]
         public void SaveNewArticle()
-        {            
-            m_facadeRepository.Save(new Article(8));
-            int numberOfArticles = m_facadeRepository.Get<Article>().Count;
-            Assert.AreEqual(5, numberOfArticles);
+        {
+            var facade = new Facade(m_facadeRepository);     
+            facade.Save(new Article(8));
+            Assert.IsTrue(m_facadeRepository.MethodIsCalled(m_facadeRepository.Get<Article>().Last()));
         }
 
         [TestMethod]
@@ -115,10 +111,41 @@ namespace Tests
         public void DeleteArticle()
         {
             var facade = new Facade(m_facadeRepository);
-            Article article = facade.Get<Article>()[3];
+            var article = facade.Get<Article>()[3];
             facade.Delete(article);
-            int numberOfArticles = facade.Get<Article>().Count;
-            Assert.AreEqual(3, numberOfArticles);
+            Assert.IsTrue(m_facadeRepository.MethodIsCalled(article));
+        }
+
+        [TestMethod]
+        [Description("Test Update method")]
+        public void UpdateArticle()
+        {
+            var facade = new Facade(m_facadeRepository);
+            var newArticle = facade.Get<Article>().First();
+            newArticle.Title = "Updated title";
+            facade.Update(facade.Get<Article>().First(), newArticle);
+            Assert.IsTrue(m_facadeRepository.MethodIsCalled(newArticle));
+        }
+
+        [TestMethod]
+        [Description("Test GetById method")]
+        public void GetById()
+        {
+            var facade = new Facade(m_facadeRepository);
+            var comment = facade.GetById<Comment>(0);
+            Assert.AreEqual(0, comment.Id);
+        }
+
+        [TestMethod]
+        [Description("Test GetRandomArticle method")]
+        public void GetRandom()
+        {
+            var facade = new Facade(m_facadeRepository);
+            var article0 = facade.GetRandomArticle();
+            var id0 = article0.Id;
+            facade.Delete(article0);
+            var article1 = facade.GetRandomArticle();
+            Assert.AreNotEqual(id0, article1.Id);
         }
     }
 }

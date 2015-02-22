@@ -14,10 +14,10 @@ namespace Tests
         [Description("Test ToString method")]
         public void TestToStringForComment()
         {            
-            Article article = m_baseCommentRepository.Get<Article>()[0];
-            User user = new User(4) { FirstName = "Test", LastName = "User" };
-            m_baseCommentRepository.Save(new Comment(2, "Test content", user, article));
-            string result = m_baseCommentRepository.Get<Comment>().Last().ToString();
+            var article = m_baseCommentRepository.Get<Article>().First();
+            var user = new User(4) { FirstName = "Test", LastName = "User" };
+            var comment = new Comment(0, "Test content", user, article);            
+            var result = comment.ToString();
             Assert.AreEqual("Test User:\nTest content", result);
         }
 
@@ -25,12 +25,10 @@ namespace Tests
         [Description("Test ToString method")]
         public void TestToStringForReview()
         {
-            var article = m_baseCommentRepository.Get<Article>()[0];
-            var user = m_baseCommentRepository.Get<User>().Last();
-            user.FirstName = "Test";
-            user.LastName = "User";
-            m_baseCommentRepository.Save(new Review(0, "Review Content", user, article, new Rating(4)));
-            string result = m_baseCommentRepository.Get<Review>().Last().ToString();
+            var article = m_baseCommentRepository.Get<Article>().First();
+            var user = new User(4) { FirstName = "Test", LastName = "User" };
+            var review = new Review(0, "Review Content", user, article, new Rating(4));                
+            var result = review.ToString();
             Assert.AreEqual("Test User:\nReview Content \nRating: 4", result);
         }
 
@@ -38,13 +36,10 @@ namespace Tests
         [Description("Test ToString method")]
         public void TestToStringForReviewText()
         {
-            var facade = new Facade(m_baseCommentRepository);           
-            var article = facade.Get<Article>().First();
-            var user = facade.Get<User>().Last();
-            user.FirstName = "Test";
-            user.LastName = "User";
-            m_baseCommentRepository.Save(new ReviewText(0, "Review Content", user, article, new Rating(4)));
-            string result = m_baseCommentRepository.Get<Review>().Last().ToString();
+            var article = m_baseCommentRepository.Get<Article>().First();
+            var user = new User(4) { FirstName = "Test", LastName = "User" };
+            var review = new ReviewText(0, "Review Content", user, article, new Rating(4));
+            var result = review.ToString();
             Assert.AreEqual("Test User:\nReview Content\nRating: Good", result);
         }
 
@@ -52,10 +47,7 @@ namespace Tests
         [Description("Test GetEntityCode method")]
         public void IfEntityIsCommentReturn0()
         {
-            var facade = new Facade(m_baseCommentRepository);           
-            var article = facade.Get<Article>().First();            
-            facade.Save(new Comment(0, "Comment 1", facade.Get<User>().First(), article));
-            facade.Save(new Comment(1, "Comment 2", facade.Get<User>().First(), article));
+            var facade = new Facade(m_baseCommentRepository); 
             var comment = facade.Get<Comment>().First();
             Assert.IsTrue(comment.GetEntityCode() == 0);
         }
@@ -63,16 +55,18 @@ namespace Tests
         [TestMethod]
         [Description("Test GetEntityCode method")]
         public void IfEntityIsReviewReturn1()
-        {            
-            Review review = m_baseCommentRepository.Get<Review>().First();
+        {
+            var facade = new Facade(m_baseCommentRepository);         
+            var review = facade.Get<Review>().First();
             Assert.IsTrue(review.GetEntityCode() == 1);
         }
 
         [TestMethod]
         [Description("Test GetEntityCode method")]
         public void IfEntityIsReviewTextReturn2()
-        {            
-            ReviewText reviewText = m_baseCommentRepository.Get<ReviewText>()[0];
+        {
+            var facade = new Facade(m_baseCommentRepository);        
+            var reviewText = facade.Get<ReviewText>().First();
             Assert.IsTrue(reviewText.GetEntityCode() == 2);
         }
     }

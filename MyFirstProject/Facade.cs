@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using MyFirstProject.Entities;
 
@@ -104,39 +105,47 @@ namespace MyFirstProject
             return result;
         }
 
-        public Article CreateArticle(int id, Author author, string title, string content)
+        public void CreateArticle(int id, Author author, string title, string content)
         {
             var article = new Article(id) { Author = author, Title = title, Content = content };
             m_repository.Save(article);
-            return article;
         }
 
-        public Comment CreateComment(int id, Article article, User user, string content)
+        public void CreateComment(int id, Article article, User user, string content)
         {
-            Comment comment = new Comment(id, content, user, article);
-            m_repository.Save(comment);
-            return comment;
+            var comment = new Comment(id, content, user, article);
+            m_repository.Save(comment);            
         }
 
-        public Review CreateReview(int id, string content, Rating rating, User user, Article article)
+        public void CreateReview(int id, string content, Rating rating, User user, Article article)
         {
             var review = new Review(id, content, user, article, rating);
             UpdateRating(rating, article, user);
-            m_repository.Save(review);
-            return review;
+            m_repository.Save(review);            
         }
 
-        public ReviewText CreateReviewText(int id, string content, Rating rating, User user, Article article)
+        public void CreateReviewText(int id, string content, Rating rating, User user, Article article)
         {
             var review = new ReviewText(id, content, user, article, rating);
             UpdateRating(rating, article, user);
-            m_repository.Save(review);
-            return review;
+            m_repository.Save(review);            
         }
 
         public void Update<T>(T oldEntity, T newEntity) where T : IEntity
         {
             m_repository.Update(oldEntity, newEntity);
+        }
+
+        public T GetById<T>(int id) where T : IEntity
+        {
+            return m_repository.GetById<T>(id);
+        }
+
+        public Article GetRandomArticle()
+        {
+            var random = new Random();
+            var articles = Get<Article>();
+            return articles[random.Next(0, articles.Count)];
         }
 
         private void UpdateRating(Rating rating, Article article, User user)

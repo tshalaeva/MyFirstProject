@@ -27,19 +27,27 @@ namespace MyFirstProject.Repository
             return m_data.OfType<T>().ToList();
         }
 
-        public void Save<T>(T entity) where T : IEntity
+        public virtual void Save<T>(T entity) where T : IEntity
         {
             m_data.Add(entity);
         }
 
-        public void Delete<T>(T entity) where T : IEntity
+        public virtual void Delete<T>(T entity) where T : IEntity
         {
             m_data.Remove(entity);
         }
 
-        public void Update<T>(T existingEntity, T newEntity) where T : IEntity
+        public virtual void Update<T>(T existingEntity, T newEntity) where T : IEntity
         {
             m_data[m_data.IndexOf(existingEntity)] = newEntity;
+        }
+
+        public T GetById<T>(int id) where T : IEntity
+        {
+            var result = (from entity in m_data
+                where entity.Id == id && entity is T
+                select entity);
+            return (T)result.First();
         }
     }
 }
