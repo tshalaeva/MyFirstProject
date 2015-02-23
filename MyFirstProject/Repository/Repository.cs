@@ -9,7 +9,7 @@ namespace MyFirstProject.Repository
     {
         protected List<IEntity> m_data;
 
-        public bool Initialized
+        public virtual bool Initialized
         {
             get
             {
@@ -22,7 +22,7 @@ namespace MyFirstProject.Repository
             m_data = new List<IEntity>();
         }
 
-        public List<T> Get<T>() where T : IEntity
+        public virtual List<T> Get<T>() where T : IEntity
         {
             return m_data.OfType<T>().ToList();
         }

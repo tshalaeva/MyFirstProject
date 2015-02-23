@@ -70,15 +70,15 @@ namespace MyFirstProject
 
         public Facade(Repository.Repository repository)
         {
-            m_repository = new Repository.Repository();
-            if (!repository.Initialized)
+            m_repository = repository;
+            if (!m_repository.Initialized)
             {
                 Initialize();
             }
-            else
-            {
-                m_repository = repository;
-            }
+//            else
+//            {
+//                m_repository = repository;
+//            }
         }
 
         public void Save<T>(T entity) where T : IEntity
