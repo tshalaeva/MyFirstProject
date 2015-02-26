@@ -11,8 +11,10 @@ namespace Tests
         [Description("Test SetRating method")]
         public void Set5()
         {
-            Rating rating = new Rating(9);
+            var rating = new Rating(9);
+
             rating.SetRating(9);
+
             Assert.AreEqual(5, rating.Value);
         }
 
@@ -20,8 +22,10 @@ namespace Tests
         [Description("Test SetRating method")]
         public void Set0()
         {
-            Rating rating = new Rating(-1);
+            var rating = new Rating(-1);
+
             rating.SetRating(-1);
+
             Assert.AreEqual(1, rating.Value);
         }
     }

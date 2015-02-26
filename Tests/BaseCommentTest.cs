@@ -14,10 +14,12 @@ namespace Tests
         [Description("Test ToString method")]
         public void TestToStringForComment()
         {            
-            var article = m_baseCommentRepository.Get<Article>().First();
+            var article = new Article(0);
             var user = new User(4) { FirstName = "Test", LastName = "User" };
-            var comment = new Comment(0, "Test content", user, article);            
+            var comment = new Comment(0, "Test content", user, article);  
+                      
             var result = comment.ToString();
+
             Assert.AreEqual("Test User:\nTest content", result);
         }
 
@@ -25,10 +27,12 @@ namespace Tests
         [Description("Test ToString method")]
         public void TestToStringForReview()
         {
-            var article = m_baseCommentRepository.Get<Article>().First();
+            var article = new Article(0);
             var user = new User(4) { FirstName = "Test", LastName = "User" };
-            var review = new Review(0, "Review Content", user, article, new Rating(4));                
+            var review = new Review(0, "Review Content", user, article, new Rating(4));             
+               
             var result = review.ToString();
+
             Assert.AreEqual("Test User:\nReview Content \nRating: 4", result);
         }
 
@@ -36,38 +40,46 @@ namespace Tests
         [Description("Test ToString method")]
         public void TestToStringForReviewText()
         {
-            var article = m_baseCommentRepository.Get<Article>().First();
+            var article = new Article(0);
             var user = new User(4) { FirstName = "Test", LastName = "User" };
             var review = new ReviewText(0, "Review Content", user, article, new Rating(4));
+
             var result = review.ToString();
+
             Assert.AreEqual("Test User:\nReview Content\nRating: Good", result);
         }
 
         [TestMethod]
         [Description("Test GetEntityCode method")]
         public void IfEntityIsCommentReturn0()
-        {
-            var facade = new Facade(m_baseCommentRepository); 
-            var comment = facade.Get<Comment>().First();
-            Assert.IsTrue(comment.GetEntityCode() == 0);
+        {            
+            var comment = new Comment(0);
+
+            var code = comment.GetEntityCode();
+
+            Assert.IsTrue(code == 0);
         }
 
         [TestMethod]
         [Description("Test GetEntityCode method")]
         public void IfEntityIsReviewReturn1()
         {
-            var facade = new Facade(m_baseCommentRepository);         
-            var review = facade.Get<Review>().First();
-            Assert.IsTrue(review.GetEntityCode() == 1);
+            var review = new Review(0);
+
+            var code = review.GetEntityCode();
+
+            Assert.IsTrue(code == 1);
         }
 
         [TestMethod]
         [Description("Test GetEntityCode method")]
         public void IfEntityIsReviewTextReturn2()
         {
-            var facade = new Facade(m_baseCommentRepository);        
-            var reviewText = facade.Get<ReviewText>().First();
-            Assert.IsTrue(reviewText.GetEntityCode() == 2);
+            var reviewText = new ReviewText(0);
+
+            var code = reviewText.GetEntityCode();
+
+            Assert.IsTrue(code == 2);
         }
     }
 }

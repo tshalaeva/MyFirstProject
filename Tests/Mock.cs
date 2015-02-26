@@ -40,9 +40,9 @@ namespace Tests
             m_flag = true;
         }
 
-        public bool MethodIsCalled<T>(T entity) where T : IEntity
+        public bool MethodIsCalled<T>(int id) where T : IEntity
         {
-            if (m_flag && m_entity.Id == entity.Id)
+            if (m_flag && m_entity.Id == id)
             {
                 m_flag = false;
                 return true;
