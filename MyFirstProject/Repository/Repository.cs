@@ -7,47 +7,52 @@ namespace MyFirstProject.Repository
 {
     public class Repository : IRepository
     {
-        protected List<IEntity> m_data;
+        protected List<IEntity> Data;
+
+        public Repository()
+        {
+            Data = new List<IEntity>();
+        }
 
         public virtual bool Initialized
         {
             get
             {
-                return m_data.Count != 0;
+                return Data.Count != 0;
             }
-        }
-
-        public Repository()
-        {
-            m_data = new List<IEntity>();
         }
 
         public virtual List<T> Get<T>() where T : IEntity
         {
-            return m_data.OfType<T>().ToList();
+            return Data.OfType<T>().ToList();
         }
 
         public virtual void Save<T>(T entity) where T : IEntity
         {
-            m_data.Add(entity);
+            Data.Add(entity);
         }
 
         public virtual void Delete<T>(T entity) where T : IEntity
         {
-            m_data.Remove(entity);
+            Data.Remove(entity);
         }
 
         public virtual void Update<T>(T existingEntity, T newEntity) where T : IEntity
         {
-            m_data[m_data.IndexOf(existingEntity)] = newEntity;
+            Data[Data.IndexOf(existingEntity)] = newEntity;
         }
 
         public T GetById<T>(int id) where T : IEntity
         {
-            var result = (from entity in m_data
-                where entity.Id == id && entity is T
-                select entity);
+            var result = Data.Where(entity => entity.Id == id && entity is T);
             return (T)result.First();
+        }
+
+        public T GetRandom<T>() where T : IEntity
+        {
+            var random = new Random();
+            var entities = Get<T>();
+            return entities[random.Next(0, entities.Count)];
         }
     }
 }

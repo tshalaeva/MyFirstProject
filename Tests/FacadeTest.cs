@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MyFirstProject;
 using MyFirstProject.Entities;
@@ -8,7 +9,14 @@ namespace Tests
     [TestClass]
     public class FacadeTest
     {
-        private Mock m_facadeRepository = new Mock();
+        private readonly Mock m_facadeRepository = new Mock(new List<Article>() { new Article(0), new Article(1), new Article(2), new Article(3) }, 
+        new List<Comment>() {new Comment(0, "Comment 0", new User(2), new Article(4))}, 
+        new List<Review>(), 
+        new List<ReviewText>(), 
+        new List<Author>(), 
+        new List<Admin>(),
+        new List<User>() { new User(0), new User(1) });
+
         [TestMethod]
         [Description("Test: Filter comments by existing article")]
         public void FilterCommentsByExistingArticle()
@@ -22,7 +30,7 @@ namespace Tests
             facade.Save(article);
             facade.Save(comment0);
             facade.Save(comment1);
-            var count = facade.FilterCommentsByArticle<BaseComment>(article).Count;
+            var count = facade.FilterCommentsByArticle<Comment>(article).Count;
 
             Assert.AreEqual(2, count);
         }
@@ -128,7 +136,7 @@ namespace Tests
 
             var article = facade.Get<Article>().Last();
 
-            Assert.AreEqual(2, article.Id);
+            Assert.AreEqual(3, article.Id);
         }
 
         [TestMethod]
@@ -175,10 +183,10 @@ namespace Tests
         {
             var facade = new Facade(m_facadeRepository);
 
-            var article0 = facade.GetRandomArticle();
+            var article0 = facade.GetRandom<Article>();
             var id0 = article0.Id;
             facade.Delete(article0);
-            var article1 = facade.GetRandomArticle();
+            var article1 = facade.GetRandom<Article>();
 
             Assert.AreNotEqual(id0, article1.Id);
         }

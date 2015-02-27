@@ -9,7 +9,6 @@ namespace Tests
     [TestClass]
     public class BaseCommentTest
     {
-        private readonly Mock m_baseCommentRepository = new Mock();
         [TestMethod]
         [Description("Test ToString method")]
         public void TestToStringForComment()

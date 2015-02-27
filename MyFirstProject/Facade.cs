@@ -141,11 +141,9 @@ namespace MyFirstProject
             return m_repository.GetById<T>(id);
         }
 
-        public Article GetRandomArticle()
+        public T GetRandom<T>() where T : IEntity
         {
-            var random = new Random();
-            var articles = Get<Article>();
-            return articles[random.Next(0, articles.Count)];
+            return m_repository.GetRandom<T>();
         }
 
         private void UpdateRating(Rating rating, Article article, User user)

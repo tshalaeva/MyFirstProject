@@ -170,7 +170,7 @@ namespace MyFirstProject
 
         public void PrintRandomArticleId()
         {
-            Console.WriteLine("Random article id = {0}", m_facade.GetRandomArticle().Id);
+            Console.WriteLine("Random article id = {0}", m_facade.GetRandom<Article>().Id);
         }
     }
 }
