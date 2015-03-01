@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using MyFirstProject.Entities;
 using MyFirstProject.Repository;
 
@@ -7,7 +6,7 @@ namespace Tests
 {
     public class Mock : Repository
     {
-        private bool m_flag = false;
+        private bool m_flag;
         private IEntity m_entity;
 
         public Mock(List<Article> articles, List<Comment> comments, List<Review> reviews, List<ReviewText> reviewTexts, List<Author> authors, List<Admin> admins, List<User> users)
@@ -43,7 +42,7 @@ namespace Tests
             m_flag = true;
         }
 
-        public bool MethodIsCalled<T>(int id) where T : IEntity
+        public bool MethodIsCalled(int id)
         {
             if (m_flag && m_entity.Id == id)
             {

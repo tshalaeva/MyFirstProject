@@ -42,13 +42,13 @@ namespace MyFirstProject.Repository
             Data[Data.IndexOf(existingEntity)] = newEntity;
         }
 
-        public T GetById<T>(int id) where T : IEntity
+        public virtual T GetById<T>(int id) where T : IEntity
         {
             var result = Data.Where(entity => entity.Id == id && entity is T);
             return (T)result.First();
         }
 
-        public T GetRandom<T>() where T : IEntity
+        public virtual T GetRandom<T>() where T : IEntity
         {
             var random = new Random();
             var entities = Get<T>();

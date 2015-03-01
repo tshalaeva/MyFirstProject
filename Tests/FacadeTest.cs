@@ -54,7 +54,7 @@ namespace Tests
 
             articleFacade.CreateArticle(10, new Author(10), "Test Title", "Test Content");            
 
-            Assert.IsTrue(m_facadeRepository.MethodIsCalled<Article>(10));
+            Assert.IsTrue(m_facadeRepository.MethodIsCalled(10));
         }
 
         [TestMethod]
@@ -65,7 +65,7 @@ namespace Tests
 
             facade.CreateComment(10, facade.Get<Article>().First(), new User(10), "CommentTest");
 
-            Assert.IsTrue(m_facadeRepository.MethodIsCalled<Comment>(10));
+            Assert.IsTrue(m_facadeRepository.MethodIsCalled(10));
         }
 
         [TestMethod]
@@ -81,7 +81,7 @@ namespace Tests
                 new User(10),
                 facade.Get<Article>().First());
 
-            Assert.IsTrue(m_facadeRepository.MethodIsCalled<Review>(10));
+            Assert.IsTrue(m_facadeRepository.MethodIsCalled(10));
         }
 
         [TestMethod]
@@ -97,7 +97,7 @@ namespace Tests
                 facade.Get<User>().First(),
                 facade.Get<Article>()[1]);
 
-            Assert.IsTrue(m_facadeRepository.MethodIsCalled<Review>(11));
+            Assert.IsTrue(m_facadeRepository.MethodIsCalled(11));
         }
 
         [TestMethod]
@@ -113,7 +113,7 @@ namespace Tests
                 new User(10),
                 facade.Get<Article>().First());
 
-            Assert.IsTrue(m_facadeRepository.MethodIsCalled<ReviewText>(10));
+            Assert.IsTrue(m_facadeRepository.MethodIsCalled(10));
         }
 
         [TestMethod]
@@ -125,7 +125,7 @@ namespace Tests
 
             facade.Save(article);
 
-            Assert.IsTrue(m_facadeRepository.MethodIsCalled<Article>(8));
+            Assert.IsTrue(m_facadeRepository.MethodIsCalled(8));
         }
 
         [TestMethod]
@@ -148,7 +148,7 @@ namespace Tests
             var article = facade.Get<Article>()[3];
             facade.Delete(article);
 
-            Assert.IsTrue(m_facadeRepository.MethodIsCalled<Article>(article.Id));
+            Assert.IsTrue(m_facadeRepository.MethodIsCalled(article.Id));
         }
 
         [TestMethod]
@@ -163,7 +163,7 @@ namespace Tests
             newArticle.Title = "Updated title";
             facade.Update(article, newArticle);
 
-            Assert.IsTrue(m_facadeRepository.MethodIsCalled<Article>(0));
+            Assert.IsTrue(m_facadeRepository.MethodIsCalled(0));
         }
 
         [TestMethod]

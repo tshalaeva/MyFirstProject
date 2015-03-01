@@ -75,10 +75,6 @@ namespace MyFirstProject
             {
                 Initialize();
             }
-//            else
-//            {
-//                m_repository = repository;
-//            }
         }
 
         public void Save<T>(T entity) where T : IEntity
