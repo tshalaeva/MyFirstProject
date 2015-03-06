@@ -13,6 +13,7 @@ namespace NmockTests
     public class FacadeNmockTests
     {
         [TestMethod]
+        [Description("Add new rating fot article")]
         public void NmAddingNewRating()
         {
             var mocks = new MockFactory();
@@ -34,6 +35,7 @@ namespace NmockTests
         }
 
         [TestMethod]
+        [Description("Test of CreateArticle method")]
         public void NmCreationOfArticle()
         {
             var mocks = new MockFactory();
@@ -50,6 +52,7 @@ namespace NmockTests
         }
 
         [TestMethod]
+        [Description("Test of CreateComment method")]
         public void NmCreationOfComment()
         {
             var mocks = new MockFactory();
@@ -67,6 +70,7 @@ namespace NmockTests
         }
 
         [TestMethod]
+        [Description("Test of CreateReview method")]
         public void NmCreationOfReview()
         {
             var mocks = new MockFactory();
@@ -91,6 +95,7 @@ namespace NmockTests
         }
 
         [TestMethod]
+        [Description("Test of CreateReviewText method")]
         public void NmCreationOfReviewText()
         {
             var mocks = new MockFactory();
@@ -115,6 +120,7 @@ namespace NmockTests
         }
 
         [TestMethod]
+        [Description("Test Delete method was called")]
         public void NmDeleteArticle()
         {
             var mocks = new MockFactory();
@@ -130,6 +136,7 @@ namespace NmockTests
         }
 
         [TestMethod]
+        [Description("Test FilterCommentsByArticle method: there are comments for article")]
         public void NmFilterCommentsByArticle()
         {
             var mocks = new MockFactory();
@@ -151,6 +158,7 @@ namespace NmockTests
         }
 
         [TestMethod]
+        [Description("Test FilterCommentsByArticle method: there are no comments for article")]
         public void NmFilterCommentsByNonExistingArticle()
         {
             var mocks = new MockFactory();
@@ -171,6 +179,7 @@ namespace NmockTests
         }
 
         [TestMethod]
+        [Description("Test GetById method")]
         public void NmGetById()
         {
             var mocks = new MockFactory();
@@ -188,6 +197,7 @@ namespace NmockTests
         }
 
         [TestMethod]
+        [Description("Test Get method: get last article")]
         public void NmGetLastArticle()
         {
             var mocks = new MockFactory();
@@ -204,6 +214,7 @@ namespace NmockTests
         }
 
         [TestMethod]
+        [Description("Test GetRandom method")]
         public void NmGetRandom()
         {
             var mocks = new MockFactory();
@@ -212,7 +223,7 @@ namespace NmockTests
             var facade = new Facade(mockRepository.MockObject);
             var article0 = new Article(10);
             var article1 = new Article(11);
-
+            
             mockRepository.Expects.One.Method(r => r.GetRandom<Article>()).WillReturn(article0);
             var id0 = facade.GetRandom<Article>().Id;
             mockRepository.Expects.One.Method(r => r.GetRandom<Article>()).WillReturn(article1);
@@ -223,6 +234,7 @@ namespace NmockTests
         }
 
         [TestMethod]
+        [Description("Test Save method was called")]
         public void NmSaveArticle()
         {
             var mocks = new MockFactory();
@@ -238,6 +250,7 @@ namespace NmockTests
         }
 
         [TestMethod]
+        [Description("Test Update method was called")]
         public void NmUpdateArticle()
         {
             var mocks = new MockFactory();
@@ -246,17 +259,16 @@ namespace NmockTests
             var facade = new Facade(mockRepository.MockObject);
             var article = new Article(10);
             var newArticle = article;
-            newArticle.Title = "Updated title";
-            mockRepository.Expects.One.Method(r => r.Save(article)).WithAnyArguments().Will();
+            newArticle.Title = "Updated title";            
             mockRepository.Expects.One.Method(r => r.Update(article, newArticle)).WithAnyArguments().Will();
-
-            facade.Save(article);
+           
             facade.Update(article, newArticle);
 
             mocks.VerifyAllExpectationsHaveBeenMet();
         }
 
         [TestMethod]
+        [Description("Test UpdateRating method: new rating value will replace existing value, if User has already created review")]
         public void NmUpdateRating()
         {
             var mocks = new MockFactory();

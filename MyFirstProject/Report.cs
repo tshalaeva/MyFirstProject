@@ -2,12 +2,26 @@
 using System.Collections.Generic;
 using System.Linq;
 using MyFirstProject.Entities;
+using MyFirstProject.Repository;
+using StructureMap;
+using StructureMap.Configuration;
+using StructureMap.Configuration.DSL;
+using StructureMap.Graph;
 
 namespace MyFirstProject
 {
     public class Report
     {        
-        private readonly Facade m_facade = new Facade(new Repository.Repository());
+        //private readonly Facade m_facade = new Facade(new Repository.Repository());
+        private readonly Facade m_facade;
+
+        public Report()
+        {
+            var container = new Container();
+            container.Configure(x => x.For<IRepository>().Use<Repository.Repository>());
+            var repository = container.GetInstance<Repository.Repository>();            
+            m_facade = new Facade(repository);
+        }
 
         public void PrintArticleTitles()
         {

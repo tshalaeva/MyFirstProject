@@ -7,7 +7,7 @@ namespace MyFirstProject
 {
     public class Facade
     {
-        private readonly Repository.Repository m_repository;
+        private readonly Repository.IRepository m_repository;
 
         private void Initialize()
         {
@@ -68,7 +68,7 @@ namespace MyFirstProject
             }
         }
 
-        public Facade(Repository.Repository repository)
+        public Facade(Repository.IRepository repository)
         {
             m_repository = repository;
             if (!m_repository.Initialized)
