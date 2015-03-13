@@ -63,6 +63,7 @@
     </Compile>
     <Compile Include="Entities\Review.cs" />
     <Compile Include="Entities\User.cs" />
+    <Compile Include="Repository\Singleton.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

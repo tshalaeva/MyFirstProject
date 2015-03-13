@@ -16,11 +16,9 @@ namespace MyFirstProject
         private readonly Facade m_facade;
 
         public Report()
-        {
-            var container = new Container();
-            container.Configure(x => x.For<IRepository>().Use<Repository.Repository>());
-            var repository = container.GetInstance<Repository.Repository>();            
-            m_facade = new Facade(repository);
+        {                       
+            var singleton = new Singleton();
+            m_facade = new Facade(singleton);
         }
 
         public void PrintArticleTitles()

@@ -7,9 +7,9 @@ namespace MyFirstProject.Repository
 {
     public class Repository : IRepository
     {
-        protected List<IEntity> Data;
+        protected List<IEntity> Data;        
 
-        public Repository()
+        protected Repository()
         {
             Data = new List<IEntity>();
         }
