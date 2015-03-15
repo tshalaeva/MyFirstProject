@@ -10,22 +10,30 @@ using StructureMap.Graph;
 
 namespace MyFirstProject.Repository
 {
-    class Singleton : Repository
+    public class Singleton
     {
-        private static Singleton instance;
+        private static Singleton s_instance;
+        private readonly IContainer m_container;
 
         public static Singleton Instance
         {
             get
             {
-                if(instance == null)
-                {
-                    var container = new Container();
-                    container.Configure(x => x.For<IRepository>().Use<Repository>());
-                    instance = container.GetInstance<Singleton>(); 
-                }
-                return instance;
+                return s_instance ?? (s_instance = new Singleton());
             }
         }
-    }
+
+        public IContainer Container
+        {
+            get { return m_container; }
+        }
+
+        private Singleton()
+        {
+            m_container = new Container();
+            m_container.Configure(x => x.For<IRepository>().Use<Repository>());
+            m_container.Configure(x => x.For<Repository>().Use<Repository>());
+        }
+        
+    }      
 }

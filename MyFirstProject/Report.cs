@@ -16,9 +16,9 @@ namespace MyFirstProject
         private readonly Facade m_facade;
 
         public Report()
-        {                       
-            var singleton = new Singleton();
-            m_facade = new Facade(singleton);
+        {
+            var repository = Singleton.Instance.Container.GetInstance<Repository.Repository>();
+            m_facade = new Facade(repository);
         }
 
         public void PrintArticleTitles()

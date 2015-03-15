@@ -9,7 +9,7 @@ namespace MyFirstProject.Repository
     {
         protected List<IEntity> Data;        
 
-        protected Repository()
+        public Repository()
         {
             Data = new List<IEntity>();
         }
