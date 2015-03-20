@@ -221,15 +221,12 @@ namespace NmockTests
             var mockRepository = mocks.CreateMock<Repository>();
             mockRepository.Stub.Out.GetProperty(r => r.Initialized).WillReturn(true);
             var facade = new Facade(mockRepository.MockObject);
-            var article0 = new Article(10);
-            var article1 = new Article(11);
+            var article0 = new Article(10);            
             
             mockRepository.Expects.One.Method(r => r.GetRandom<Article>()).WillReturn(article0);
             var id0 = facade.GetRandom<Article>().Id;
-            mockRepository.Expects.One.Method(r => r.GetRandom<Article>()).WillReturn(article1);
-            var id1 = facade.GetRandom<Article>().Id;
 
-            Assert.AreNotEqual(id0, id1);
+            Assert.AreEqual(id0, 10);
             mocks.VerifyAllExpectationsHaveBeenMet();
         }
 

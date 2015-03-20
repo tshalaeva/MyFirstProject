@@ -13,13 +13,13 @@ namespace MyFirstProject.Repository
     public class Singleton
     {
         private static Singleton s_instance;
-        private readonly IContainer m_container;
+        private static IContainer m_container;
 
         public static Singleton Instance
         {
             get
             {
-                return s_instance ?? (s_instance = new Singleton());
+                return s_instance ?? (s_instance = new Singleton());                
             }
         }
 
@@ -31,8 +31,7 @@ namespace MyFirstProject.Repository
         private Singleton()
         {
             m_container = new Container();
-            m_container.Configure(x => x.For<IRepository>().Use<Repository>());
-            m_container.Configure(x => x.For<Repository>().Use<Repository>());
+            m_container.Configure(x => x.For<IRepository>().Use<Repository>());            
         }
         
     }      
