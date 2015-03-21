@@ -123,7 +123,7 @@
     </Compile>
     <Compile Include="Entities\Review.cs" />
     <Compile Include="Entities\User.cs" />
-    <Compile Include="Repository\Singleton.cs" />
+    <Compile Include="Repository\IocContainer.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5">

@@ -11,14 +11,12 @@ using StructureMap.Graph;
 namespace MyFirstProject
 {
     public class Report
-    {        
-        //private readonly Facade m_facade = new Facade(new Repository.Repository());
+    {                
         private readonly Facade m_facade;
 
         public Report()
-        {
-            var repository = Singleton.Instance.Container.GetInstance<Repository.Repository>();
-            m_facade = new Facade(repository);
+        {           
+            m_facade = IocContainer.Container.GetInstance<Facade>();
         }
 
         public void PrintArticleTitles()
