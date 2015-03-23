@@ -1,8 +1,31 @@
-﻿@{
+﻿@using MVCProject.Models
+@{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Article Index</h2>
+<h2>Article Listing</h2>
 
-@Html.ActionLink("Back", "GoBack") 
+<table class="Articles">
+    <thead>
+    <tr class="header">
+        <td class="article-title-header">
+            <b>Article</b>
+        </td>
+        <td class="article-author-header">
+            <b>Author</b>
+        </td>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (ArticleModel article in Model)
+    {
+        <tr>
+            <td class="article-title">@Html.ActionLink(@article.Title, "OpenDetails", new {id = article.Id})</td>            
+            <td class="article-author">@article.Author</td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+@Html.ActionLink("Go Home", "GoBack") 
