@@ -9,4 +9,12 @@
 
 <h3>Articele title: @Model.Title</h3>
 
-<p>Article author: @Model.Author</p>
+<p><b>Article author: </b>@Model.Author</p>
+
+<p>@Model.Content</p>
+
+<h3>Comments and reviews:</h3>
+@foreach (var comment in @Model.Comments)
+{
+    <p>@comment.Show()</p>
+}

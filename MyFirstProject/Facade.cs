@@ -65,6 +65,10 @@ namespace MyFirstProject
 
                 articles[i].Author = authors[i];
             }
+
+            m_repository.Save(new Comment(0, "Content 0", users[0], articles[0]));
+            m_repository.Save(new Review(1, "Review Content 1", users[0], articles[0], new Rating(4)));
+            m_repository.Save(new ReviewText(2, "Review text 2", users[1], articles[0], new Rating(4)));
         }
 
         public Facade(Repository.Repository repository)

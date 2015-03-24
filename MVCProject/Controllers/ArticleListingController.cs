@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using MVCProject.Models;
 using MyFirstProject;
@@ -31,8 +29,15 @@ namespace MVCProject.Controllers
 
         public ActionResult OpenDetails(int id)
         {
-            var article = new ArticleModel(m_facade.GetById<Article>(id));
-            return View(article);
+            var article = m_facade.GetById<Article>(id);
+            var articleModel = new ArticleModel(article);
+            var comments = m_facade.FilterCommentsByArticle<BaseComment>(article);
+            articleModel.Comments = new List<CommentModel>();
+            foreach (var comment in comments)
+            {
+                articleModel.Comments.Add(new CommentModel(comment));
+            }
+            return View(articleModel);
         }
     }
 }

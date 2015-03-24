@@ -10,6 +10,8 @@ namespace MVCProject.Models
     {
         private readonly Article m_article;
 
+        public List<CommentModel> Comments { get; set; }
+
         public ArticleModel(Article article)
         {
             m_article = article;
@@ -41,6 +43,6 @@ namespace MVCProject.Models
         public int Id
         {
             get { return m_article.Id; }
-        }
+        } 
     }
 }
