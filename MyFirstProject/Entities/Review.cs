@@ -7,8 +7,6 @@
             Id = id;
         }
 
-        public Review() { }
-
         public Review(int id, string content, User user, Article article, Rating rating)
         {
             Id = id;
@@ -19,7 +17,7 @@
             Article.AddRating(Rating);
         }
 
-        public Rating Rating { get; set; }        
+        protected Rating Rating { get; private set; }        
 
         public override string ToString()
         {

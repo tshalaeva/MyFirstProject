@@ -1,12 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using StructureMap;
-using StructureMap.Configuration;
-using StructureMap.Configuration.DSL;
-using StructureMap.Graph;
 
 namespace MyFirstProject.Repository
 {
@@ -20,6 +13,10 @@ namespace MyFirstProject.Repository
             {
                 return s_containerLazy.Value;
             }
+        }
+
+        private IocContainer()
+        {
         }
 
         static IocContainer()

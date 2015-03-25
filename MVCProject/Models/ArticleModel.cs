@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Collections.Generic;
 using MyFirstProject.Entities;
 
 namespace MVCProject.Models
@@ -19,25 +16,17 @@ namespace MVCProject.Models
 
         public string Title
         {
-            get { return m_article.Title; }
-            set { throw new NotImplementedException(); }
+            get { return m_article.Title; }            
         }
 
         public string Author
         {
-            get { return m_article.Author.NickName; }             
-            set {}
+            get { return m_article.Author.NickName; }                         
         }
 
         public string Content
         {
-            get { return m_article.Content; }
-            set {}
-        }
-
-        public string AverageRating
-        {
-            get { return m_article.GetAverageRating().ToString(); }
+            get { return m_article.Content; }            
         }
 
         public int Id

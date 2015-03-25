@@ -113,21 +113,21 @@ namespace MyFirstProject
         public void CreateComment(int id, Article article, User user, string content)
         {
             var comment = new Comment(id, content, user, article);
-            m_repository.Save(comment);            
+            m_repository.Save(comment);
         }
 
         public void CreateReview(int id, string content, Rating rating, User user, Article article)
         {
             var review = new Review(id, content, user, article, rating);
             UpdateRating(rating, article, user);
-            m_repository.Save(review);            
+            m_repository.Save(review);
         }
 
         public void CreateReviewText(int id, string content, Rating rating, User user, Article article)
         {
             var review = new ReviewText(id, content, user, article, rating);
             UpdateRating(rating, article, user);
-            m_repository.Save(review);            
+            m_repository.Save(review);
         }
 
         public void Update<T>(T oldEntity, T newEntity) where T : IEntity
@@ -145,13 +145,19 @@ namespace MyFirstProject
             return m_repository.GetRandom<T>();
         }
 
+        public bool Exists<T>(int id) where T : IEntity
+        {
+            var elements = m_repository.Get<T>();
+            return elements.Any(element => element.Id == id);
+        }
+
         private void UpdateRating(Rating rating, Article article, User user)
         {
             var flag = false;
             var reviews = (from comment in m_repository.Get<BaseComment>()
                            where comment is Review
                            select comment).ToList();
-            
+
             foreach (var mreview in reviews)
             {
                 if (mreview.Article == article)

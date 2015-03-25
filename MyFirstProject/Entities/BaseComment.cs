@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace MyFirstProject.Entities
+﻿namespace MyFirstProject.Entities
 {
     public abstract class BaseComment:IEntity
     {        

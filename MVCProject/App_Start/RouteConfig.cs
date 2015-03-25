@@ -18,6 +18,11 @@ namespace MVCProject
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
             );
+
+            routes.MapRoute(
+                name: "ArticleListing",
+                url: "{controller}/{action}/{id}",
+                defaults: new { controller = "ArticleListing", action = "OpenDetails", id = UrlParameter.Optional });
         }
     }
 }

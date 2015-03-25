@@ -7,7 +7,7 @@ namespace MyFirstProject.Repository
 {
     public class Repository : IRepository
     {
-        protected List<IEntity> Data;        
+        protected List<IEntity> Data;
 
         public Repository()
         {
@@ -44,8 +44,8 @@ namespace MyFirstProject.Repository
 
         public virtual T GetById<T>(int id) where T : IEntity
         {
-            var result = Data.Where(entity => entity.Id == id && entity is T);
-            return (T)result.First();
+            var result = Data.First(entity => entity.Id == id && entity is T);
+            return (T)result;
         }
 
         public virtual T GetRandom<T>() where T : IEntity

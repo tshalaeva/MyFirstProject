@@ -56,7 +56,7 @@ namespace MyFirstProject
                         break;
                     }
 
-                    Console.Write(string.Format("{0}, ", privilegy));
+                    Console.Write("{0}, ", privilegy);
                 }
             }
 

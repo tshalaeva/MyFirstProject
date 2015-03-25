@@ -13,18 +13,13 @@ namespace MVCProject.Controllers
         //
         // GET: /ArticleDetails/
 
-        private Facade m_facade = IocContainer.Container.GetInstance<Facade>();
-
         public ActionResult Index()
         {
             return View();
         }
 
-        public ActionResult ShowComments(Article article)
+        public ActionResult ShowComments()
         {            
-            var articleComments = m_facade.FilterCommentsByArticle<Comment>(article);
-            var commentModels = new List<CommentModel>(articleComments.Count);
-            commentModels.AddRange(articleComments.Select(comment => new CommentModel(comment)));
             return View("Index");
         }
     }

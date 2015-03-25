@@ -29,6 +29,7 @@ namespace MVCProject.Controllers
 
         public ActionResult OpenDetails(int id)
         {
+            if (!m_facade.Exists<Article>(id)) return Redirect("~/ArticleListing/Index");
             var article = m_facade.GetById<Article>(id);
             var articleModel = new ArticleModel(article);
             var comments = m_facade.FilterCommentsByArticle<BaseComment>(article);
