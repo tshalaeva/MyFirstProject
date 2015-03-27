@@ -14,7 +14,7 @@ namespace NmockTests
     {
         [TestMethod]
         [Description("Add new rating fot article")]
-        public void NmAddingNewRating()
+        public void AddingNewRating()
         {
             var mocks = new MockFactory();
             var mockRepository = mocks.CreateMock<Repository>();
@@ -36,7 +36,7 @@ namespace NmockTests
 
         [TestMethod]
         [Description("Test of CreateArticle method")]
-        public void NmCreationOfArticle()
+        public void CreationOfArticle()
         {
             var mocks = new MockFactory();
             var mockRepository = mocks.CreateMock<Repository>();
@@ -53,7 +53,7 @@ namespace NmockTests
 
         [TestMethod]
         [Description("Test of CreateComment method")]
-        public void NmCreationOfComment()
+        public void CreationOfComment()
         {
             var mocks = new MockFactory();
             var mockRepository = mocks.CreateMock<Repository>();
@@ -71,7 +71,7 @@ namespace NmockTests
 
         [TestMethod]
         [Description("Test of CreateReview method")]
-        public void NmCreationOfReview()
+        public void CreationOfReview()
         {
             var mocks = new MockFactory();
             var mockRepository = mocks.CreateMock<Repository>();
@@ -96,7 +96,7 @@ namespace NmockTests
 
         [TestMethod]
         [Description("Test of CreateReviewText method")]
-        public void NmCreationOfReviewText()
+        public void CreationOfReviewText()
         {
             var mocks = new MockFactory();
             var mockRepository = mocks.CreateMock<Repository>();
@@ -121,7 +121,7 @@ namespace NmockTests
 
         [TestMethod]
         [Description("Test Delete method was called")]
-        public void NmDeleteArticle()
+        public void DeleteArticle()
         {
             var mocks = new MockFactory();
             var mockRepository = mocks.CreateMock<Repository>();
@@ -137,7 +137,7 @@ namespace NmockTests
 
         [TestMethod]
         [Description("Test FilterCommentsByArticle method: there are comments for article")]
-        public void NmFilterCommentsByArticle()
+        public void FilterCommentsByArticle()
         {
             var mocks = new MockFactory();
             var mockRepository = mocks.CreateMock<Repository>();
@@ -159,7 +159,7 @@ namespace NmockTests
 
         [TestMethod]
         [Description("Test FilterCommentsByArticle method: there are no comments for article")]
-        public void NmFilterCommentsByNonExistingArticle()
+        public void FilterCommentsByNonExistingArticle()
         {
             var mocks = new MockFactory();
             var mockRepository = mocks.CreateMock<Repository>();
@@ -180,7 +180,7 @@ namespace NmockTests
 
         [TestMethod]
         [Description("Test GetById method")]
-        public void NmGetById()
+        public void GetById()
         {
             var mocks = new MockFactory();
             var mockRepository = mocks.CreateMock<Repository>();
@@ -198,7 +198,7 @@ namespace NmockTests
 
         [TestMethod]
         [Description("Test Get method: get last article")]
-        public void NmGetLastArticle()
+        public void GetLastArticle()
         {
             var mocks = new MockFactory();
             var mockRepository = mocks.CreateMock<Repository>();
@@ -215,7 +215,7 @@ namespace NmockTests
 
         [TestMethod]
         [Description("Test GetRandom method")]
-        public void NmGetRandom()
+        public void GetRandom()
         {
             var mocks = new MockFactory();
             var mockRepository = mocks.CreateMock<Repository>();
@@ -232,7 +232,7 @@ namespace NmockTests
 
         [TestMethod]
         [Description("Test Save method was called")]
-        public void NmSaveArticle()
+        public void SaveArticle()
         {
             var mocks = new MockFactory();
             var mockRepository = mocks.CreateMock<Repository>();
@@ -248,7 +248,7 @@ namespace NmockTests
 
         [TestMethod]
         [Description("Test Update method was called")]
-        public void NmUpdateArticle()
+        public void UpdateArticle()
         {
             var mocks = new MockFactory();
             var mockRepository = mocks.CreateMock<Repository>();
@@ -266,7 +266,7 @@ namespace NmockTests
 
         [TestMethod]
         [Description("Test UpdateRating method: new rating value will replace existing value, if User has already created review")]
-        public void NmUpdateRating()
+        public void UpdateRating()
         {
             var mocks = new MockFactory();
             var mockRepository = mocks.CreateMock<Repository>();

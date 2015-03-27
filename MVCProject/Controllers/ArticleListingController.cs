@@ -27,7 +27,7 @@ namespace MVCProject.Controllers
             return Redirect("~/Home/Index");
         }
 
-        public ActionResult OpenDetails(int id)
+        public ActionResult OpenDetails(int? id)
         {
             if (!m_facade.Exists<Article>(id)) return Redirect("~/ArticleListing/Index");
             var article = m_facade.GetById<Article>(id);

@@ -135,7 +135,7 @@ namespace MyFirstProject
             m_repository.Update(oldEntity, newEntity);
         }
 
-        public T GetById<T>(int id) where T : IEntity
+        public T GetById<T>(int? id) where T : IEntity
         {
             return m_repository.GetById<T>(id);
         }
@@ -145,7 +145,7 @@ namespace MyFirstProject
             return m_repository.GetRandom<T>();
         }
 
-        public bool Exists<T>(int id) where T : IEntity
+        public bool Exists<T>(int? id) where T : IEntity
         {
             var elements = m_repository.Get<T>();
             return elements.Any(element => element.Id == id);

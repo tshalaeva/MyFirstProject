@@ -42,7 +42,7 @@ namespace MyFirstProject.Repository
             Data[Data.IndexOf(existingEntity)] = newEntity;
         }
 
-        public virtual T GetById<T>(int id) where T : IEntity
+        public virtual T GetById<T>(int? id) where T : IEntity
         {
             var result = Data.First(entity => entity.Id == id && entity is T);
             return (T)result;

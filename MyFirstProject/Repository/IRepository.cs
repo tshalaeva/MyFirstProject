@@ -15,7 +15,7 @@ namespace MyFirstProject.Repository
 
         void Update<T>(T existingEntity, T newEntity) where T : IEntity;
 
-        T GetById<T>(int id) where T : IEntity;
+        T GetById<T>(int? id) where T : IEntity;
 
         T GetRandom<T>() where T : IEntity;
     }
