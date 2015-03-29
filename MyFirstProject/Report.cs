@@ -3,10 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using MyFirstProject.Entities;
 using MyFirstProject.Repository;
-using StructureMap;
-using StructureMap.Configuration;
-using StructureMap.Configuration.DSL;
-using StructureMap.Graph;
 
 namespace MyFirstProject
 {

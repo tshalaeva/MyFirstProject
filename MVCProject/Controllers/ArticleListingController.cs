@@ -40,5 +40,11 @@ namespace MVCProject.Controllers
             }
             return View(articleModel);
         }
+
+        public ActionResult OpenReports()
+        {
+            var webReportModel = new WebReportModel();
+            return View(webReportModel);
+        }
     }
 }

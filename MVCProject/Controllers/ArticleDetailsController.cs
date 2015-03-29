@@ -1,10 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
-using MVCProject.Models;
-using MyFirstProject;
-using MyFirstProject.Entities;
-using MyFirstProject.Repository;
+﻿using System.Web.Mvc;
 
 namespace MVCProject.Controllers
 {

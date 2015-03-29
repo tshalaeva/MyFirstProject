@@ -19,10 +19,11 @@
     </tr>
     </thead>
     <tbody>
+    <p>@Html.ActionLink("Reports", "OpenReports")</p>
     @foreach (ArticleModel article in Model)
     {
         <tr>
-            <td class="article-title">@Html.ActionLink(@article.Title, "OpenDetails", new {id = article.Id})</td>            
+            <td class="article-title">@Html.ActionLink(@article.Title, "OpenDetails", new {id = article.Id})</td>
             <td class="article-author">@article.Author</td>
         </tr>
     }
