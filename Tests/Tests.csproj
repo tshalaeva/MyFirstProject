@@ -52,7 +52,9 @@
   <ItemGroup>
     <Compile Include="BaseCommentTest.cs" />
     <Compile Include="Mock.cs" />
-    <Compile Include="FacadeTest.cs" />
+    <Compile Include="FacadeTest.cs">
+      <ExcludeFromStyleCop>False</ExcludeFromStyleCop>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ArticleTest.cs" />
     <Compile Include="RatingTest.cs" />

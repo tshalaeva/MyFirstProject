@@ -1,0 +1,33 @@
+﻿@using System.Web.Mvc.Html
+@{
+    ViewBag.Title = "WebReport";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model MVCProject.Models.WebReportModel
+
+<body>
+    @RenderBody()
+    <h2>WebReport</h2>
+    @using (@Html.BeginForm("Submit", "WebReport"))
+    {
+        <table>
+            <thead></thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <p class="select-method">@Html.DropDownList("dropdownlist", @Model.Options)</p>
+                    </td>
+                    <td>
+                        @Html.Hidden("returnUrl", Request.Url.ToString())
+                        <button type="submit">Submit</button>
+
+                    </td>
+                </tr>
+                <tr class="result">
+                    <td>
+                        <textarea>@Model.Content</textarea>
+                    </td>
+                </tr>
+            </tbody>
+        </table>}
+</body>
