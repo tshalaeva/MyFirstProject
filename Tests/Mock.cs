@@ -50,20 +50,6 @@ namespace Tests
             m_entity = entity;
         }
 
-        //public void SaveUser(User entity)
-        //{
-        //    UserRepository.Save(entity);
-        //    m_flag = true;
-        //    m_entity = entity;
-        //}
-
-        //public void SaveComment(BaseComment entity)
-        //{
-        //    CommentRepository.Save(entity);
-        //    m_flag = true;
-        //    m_entity = entity;
-        //}
-
         public override void Update(IEntity oldEntity, IEntity newEntity)
         {
             //ArticleRepository.Update(oldEntity, newEntity);

@@ -30,7 +30,7 @@ namespace MyFirstProject.Repository
             container.Configure(x => x.For<IRepository>().Use<Repository>());                
             container.Configure(x => x.For<ArticleRepository>().Use<ArticleRepository>()); 
             container.Configure(y => y.For<UserRepository>().Use<UserRepository>());
-            container.Configure(z => z.For<CommentRepository>().Use<CommentRepository>());
+            container.Configure(z => z.For<CommentRepository>().Use<CommentRepository>());            
             container.Configure(facade => facade.For<Facade>().Use<Facade>());
             return container;
         }
