@@ -17,7 +17,7 @@ namespace MVCProject.Controllers
 
         public ActionResult Index()
         {
-            var articles = m_facade.GetArticles();
+            var articles = m_facade.Get<Article>();
             var articleModels = articles.Select(article => new ArticleModel(article)).ToList();
             return View(articleModels);
         }

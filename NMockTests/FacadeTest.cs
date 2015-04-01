@@ -42,7 +42,7 @@ namespace NmockTests
             mockRepository.Expects.One.GetProperty(r => r.Initialized).WillReturn(true);
             var author = new Author(0);
             var article = new Article(0);
-            mockRepository.Expects.One.Method(r => r.ArticleRepository.Save(article)).WithAnyArguments().Will();
+            mockRepository.Expects.One.Method(r => r.Save(article)).WithAnyArguments().Will();
             var facade = new Facade(mockRepository.MockObject);
 
             facade.CreateArticle(0, author, "Title NMock Test", "Content NMock Test");
@@ -56,11 +56,11 @@ namespace NmockTests
         {
             var mocks = new MockFactory();
             var mockRepository = mocks.CreateMock<Repository>();
-            mockRepository.Expects.One.GetProperty(r => r.CommentRepository.Initialized).WillReturn(true);
+            mockRepository.Expects.One.GetProperty(r => r.Initialized).WillReturn(true);
             var article = new Article(0);
             var user = new User(0);
             var comment = new Comment(10, "CommentTest", user, article);
-            mockRepository.Expects.One.Method(r => r.CommentRepository.Save(comment)).WithAnyArguments().Will();
+            mockRepository.Expects.One.Method(r => r.Save(comment)).WithAnyArguments().Will();
             var facade = new Facade(mockRepository.MockObject);
 
             facade.CreateComment(10, article, user, "CommentTest");
@@ -74,13 +74,13 @@ namespace NmockTests
         {
             var mocks = new MockFactory();
             var mockRepository = mocks.CreateMock<Repository>();
-            mockRepository.Expects.One.GetProperty(r => r.CommentRepository.Initialized).WillReturn(true);
+            mockRepository.Expects.One.GetProperty(r => r.Initialized).WillReturn(true);
             var user = new User(0);
             var article = new Article(0);
             var rating = new Rating(7);
             var review = new Review(10, "Test Review", user, article, rating);
-            mockRepository.Expects.One.Method(r => r.CommentRepository.Save(review)).WithAnyArguments().Will();
-            mockRepository.Expects.One.Method(r => r.CommentRepository.GetComments()).WillReturn(new List<BaseComment>() { review });
+            mockRepository.Expects.One.Method(r => r.Save(review)).WithAnyArguments().Will();
+            mockRepository.Expects.One.Method(r => r.Get<Review>()).WillReturn(new List<Review>() { review });
             var facade = new Facade(mockRepository.MockObject);
 
             facade.CreateReview(
@@ -99,13 +99,13 @@ namespace NmockTests
         {
             var mocks = new MockFactory();
             var mockRepository = mocks.CreateMock<Repository>();
-            mockRepository.Expects.One.GetProperty(r => r.CommentRepository.Initialized).WillReturn(true);
+            mockRepository.Expects.One.GetProperty(r => r.Initialized).WillReturn(true);
             var user = new User(0);
             var article = new Article(0);
             var rating = new Rating(7);
             var review = new ReviewText(10, "Test Review", user, article, rating);
-            mockRepository.Expects.One.Method(r => r.CommentRepository.Save(review)).WithAnyArguments().Will();
-            mockRepository.Expects.One.Method(r => r.CommentRepository.GetComments()).WillReturn(new List<BaseComment>() { review });
+            mockRepository.Expects.One.Method(r => r.Save(review)).WithAnyArguments().Will();
+            mockRepository.Expects.One.Method(r => r.Get<Review>()).WillReturn(new List<Review>() { review });
             var facade = new Facade(mockRepository.MockObject);
 
             facade.CreateReviewText(
@@ -125,11 +125,11 @@ namespace NmockTests
             var mocks = new MockFactory();
             var mockRepository = mocks.CreateMock<Repository>();
             var article = new Article(0);
-            mockRepository.Expects.One.GetProperty(r => r.ArticleRepository.Initialized).WillReturn(true);
-            mockRepository.Expects.One.Method(r => r.ArticleRepository.Delete(article)).WithAnyArguments().Will();
+            mockRepository.Expects.One.GetProperty(r => r.Initialized).WillReturn(true);
+            mockRepository.Expects.One.Method(r => r.Delete(article)).WithAnyArguments().Will();
             var facade = new Facade(mockRepository.MockObject);
 
-            facade.DeleteArticle(article);
+            facade.Delete(article);
 
             mocks.VerifyAllExpectationsHaveBeenMet();
         }
@@ -145,8 +145,8 @@ namespace NmockTests
             var comment0 = new Comment(0, "Comment 0", user, article);
             var comment1 = new Comment(1, "Comment 1", user, article);
             var comment2 = new Comment(2, "Comment 2", user, new Article(11));
-            mockRepository.Stub.Out.GetProperty(r => r.CommentRepository.Initialized).WillReturn(true);
-            mockRepository.Stub.Out.Method(r => r.CommentRepository.GetComments())
+            mockRepository.Stub.Out.GetProperty(r => r.Initialized).WillReturn(true);
+            mockRepository.Stub.Out.Method(r => r.Get<BaseComment>())
                 .WillReturn(new List<BaseComment>() { comment0, comment1, comment2 });
             var facade = new Facade(mockRepository.MockObject);
 
@@ -166,8 +166,8 @@ namespace NmockTests
             var user = new User(0);
             var comment0 = new Comment(0, "Comment 0", user, article);
             var comment1 = new Comment(1, "Comment 1", user, article);
-            mockRepository.Stub.Out.GetProperty(r => r.CommentRepository.Initialized).WillReturn(true);
-            mockRepository.Stub.Out.Method(r => r.CommentRepository.GetComments())
+            mockRepository.Stub.Out.GetProperty(r => r.Initialized).WillReturn(true);
+            mockRepository.Stub.Out.Method(r => r.Get<BaseComment>())
                 .WillReturn(new List<BaseComment>() { comment0, comment1 });
             var facade = new Facade(mockRepository.MockObject);
 
@@ -183,9 +183,9 @@ namespace NmockTests
         {
             var mocks = new MockFactory();
             var mockRepository = mocks.CreateMock<Repository>();
-            mockRepository.Stub.Out.GetProperty(r => r.CommentRepository.Initialized).WillReturn(true);
+            mockRepository.Stub.Out.GetProperty(r => r.Initialized).WillReturn(true);
             var comment = new Comment(10, "content", new User(10), new Article(10));
-            mockRepository.Stub.Out.Method(r => r.CommentRepository.GetById(10)).WithAnyArguments().WillReturn(comment);
+            mockRepository.Stub.Out.Method(r => r.GetById<BaseComment>(10)).WithAnyArguments().WillReturn(comment);
 
             var facade = new Facade(mockRepository.MockObject);
 
@@ -201,12 +201,12 @@ namespace NmockTests
         {
             var mocks = new MockFactory();
             var mockRepository = mocks.CreateMock<Repository>();
-            mockRepository.Stub.Out.GetProperty(r => r.ArticleRepository.Initialized).WillReturn(true);
+            mockRepository.Stub.Out.GetProperty(r => r.Initialized).WillReturn(true);
             var facade = new Facade(mockRepository.MockObject);
             var article = new Article(10);
-            mockRepository.Stub.Out.Method(r => r.ArticleRepository.GetArticles()).WillReturn(new List<Article>() { article });
+            mockRepository.Stub.Out.Method(r => r.Get<Article>()).WillReturn(new List<Article>() { article });
 
-            var expectedArticle = facade.GetArticles().Last();
+            var expectedArticle = facade.Get<Article>().Last();
 
             Assert.AreEqual(10, expectedArticle.Id);
             mocks.VerifyAllExpectationsHaveBeenMet();
@@ -218,11 +218,11 @@ namespace NmockTests
         {
             var mocks = new MockFactory();
             var mockRepository = mocks.CreateMock<Repository>();
-            mockRepository.Stub.Out.GetProperty(r => r.ArticleRepository.Initialized).WillReturn(true);
+            mockRepository.Stub.Out.GetProperty(r => r.Initialized).WillReturn(true);
             var facade = new Facade(mockRepository.MockObject);
             var article0 = new Article(10);
 
-            mockRepository.Expects.One.Method(r => r.ArticleRepository.GetRandom()).WillReturn(article0);
+            mockRepository.Expects.One.Method(r => r.GetRandom<Article>()).WillReturn(article0);
             var id0 = facade.GetRandomArticle().Id;
 
             Assert.AreEqual(id0, 10);
@@ -235,12 +235,12 @@ namespace NmockTests
         {
             var mocks = new MockFactory();
             var mockRepository = mocks.CreateMock<Repository>();
-            mockRepository.Expects.One.GetProperty(r => r.ArticleRepository.Initialized).WillReturn(true);
+            mockRepository.Expects.One.GetProperty(r => r.Initialized).WillReturn(true);
             var facade = new Facade(mockRepository.MockObject);
             var article = new Article(8);
-            mockRepository.Expects.One.Method(r => r.ArticleRepository.Save(article)).WithAnyArguments().Will();
+            mockRepository.Expects.One.Method(r => r.Save(article)).WithAnyArguments().Will();
 
-            facade.SaveArticle(article);
+            facade.Save(article);
 
             mocks.VerifyAllExpectationsHaveBeenMet();
         }
@@ -251,12 +251,12 @@ namespace NmockTests
         {
             var mocks = new MockFactory();
             var mockRepository = mocks.CreateMock<Repository>();
-            mockRepository.Expects.One.GetProperty(r => r.ArticleRepository.Initialized).WillReturn(true);
+            mockRepository.Expects.One.GetProperty(r => r.Initialized).WillReturn(true);
             var facade = new Facade(mockRepository.MockObject);
             var article = new Article(10);
             var newArticle = article;
             newArticle.Title = "Updated title";
-            mockRepository.Expects.One.Method(r => r.ArticleRepository.Update(article, newArticle)).WithAnyArguments().Will();
+            mockRepository.Expects.One.Method(r => r.Update(article, newArticle)).WithAnyArguments().Will();
            
             facade.UpdateArticle(article, newArticle);
 
@@ -269,14 +269,14 @@ namespace NmockTests
         {
             var mocks = new MockFactory();
             var mockRepository = mocks.CreateMock<Repository>();
-            mockRepository.Expects.One.GetProperty(r => r.CommentRepository.Initialized).WillReturn(true);
+            mockRepository.Expects.One.GetProperty(r => r.Initialized).WillReturn(true);
             var facade = new Facade(mockRepository.MockObject);
             var user = new User(10);
             var article = new Article(11);
             var reivew = new Review(11, "Test Review", user, article, new Rating(1));
-            mockRepository.Expects.One.Method(r => r.CommentRepository.GetComments())
-                .WillReturn(new List<BaseComment> { new Review(10, "Content", user, new Article(10), new Rating(1)) });
-            mockRepository.Expects.One.Method(r => r.CommentRepository.Save(reivew)).WithAnyArguments().Will();            
+            mockRepository.Expects.One.Method(r => r.Get<Review>())
+                .WillReturn(new List<Review> { new Review(10, "Content", user, new Article(10), new Rating(1)) });
+            mockRepository.Expects.One.Method(r => r.Save(reivew)).WithAnyArguments().Will();            
 
             facade.CreateReview(
                 11,

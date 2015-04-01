@@ -35,7 +35,7 @@ namespace MVCProject.Controllers
             {
                 case 1:
                 {
-                    var articles = m_facade.GetArticles();
+                    var articles = m_facade.Get<Article>();
                     model.Content = string.Format("Title of article {0}: {1}", articles.First().Id,
                         articles.First().Title);
                     for (var i = 1; i < articles.Count; i++)
@@ -48,7 +48,7 @@ namespace MVCProject.Controllers
                 }
                 case 2:
                 {
-                    var articles = m_facade.GetArticles();
+                    var articles = m_facade.Get<Article>();
                     foreach (var article in articles)
                     {
                         model.Content = string.Format("{0}\nAverage rating of article {1}: {2}", model.Content,
@@ -59,7 +59,7 @@ namespace MVCProject.Controllers
                 }
                 case 3:
                 {
-                    var admins = m_facade.GetAdmins();
+                    var admins = m_facade.Get<Admin>();
                     foreach (var admin in admins)
                     {
                         var privilegies = admin.Privilegies.First();
@@ -74,7 +74,7 @@ namespace MVCProject.Controllers
                 }
                 case 4:
                 {
-                    var articles = m_facade.GetArticles();
+                    var articles = m_facade.Get<Article>();
                     model.Content = "List of comments for each article:";
                     foreach (var article in articles)
                     {
@@ -98,18 +98,18 @@ namespace MVCProject.Controllers
                 {
                     model.Content = "Entity Codes:";
 
-                    foreach (var comment in m_facade.GetComments())
+                    foreach (var comment in m_facade.Get<Comment>())
                     {
                         model.Content = string.Format("{0}\n{1}: {2}", model.Content, comment.Content, comment.GetEntityCode());
                     }
 
-                    var reviews = m_facade.GetReviews();
+                    var reviews = m_facade.Get<Review>();
                     foreach (var comment in reviews.Where(comment => !(comment is ReviewText)))
                     {
                         model.Content = string.Format("{0}\n{1}: {2}", model.Content, comment.Content, comment.GetEntityCode());
                     }
 
-                    foreach (var comment in m_facade.GetReviewTexts())
+                    foreach (var comment in m_facade.Get<ReviewText>())
                     {
                         model.Content = string.Format("{0}\n{1}: {2}", model.Content, comment.Content, comment.GetEntityCode());
                     }

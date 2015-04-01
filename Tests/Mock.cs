@@ -11,55 +11,34 @@ namespace Tests
 
         public Mock(List<Article> articles, List<Comment> comments, List<Review> reviews, List<ReviewText> reviewTexts, List<Author> authors, List<Admin> admins, List<User> users)
         {
-            //Data = new List<IEntity>(articles.Count + comments.Count + reviews.Count + reviewTexts.Count + admins.Count + authors.Count + users.Count);
-            //Data.AddRange(articles);
-            //Data.AddRange(comments);
-            //Data.AddRange(reviews);
-            //Data.AddRange(reviewTexts);
-            //Data.AddRange(admins);
-            //Data.AddRange(authors);
-            //Data.AddRange(users);
-            foreach (var article in articles)
-            {
-                ArticleRepository.Save(article);
-            }
-
-            var baseComments = new List<BaseComment>(comments.Count + reviews.Count + reviewTexts.Count);
-            baseComments.AddRange(comments);
-            baseComments.AddRange(reviews);
-            baseComments.AddRange(reviewTexts);
-            foreach (var comment in baseComments)
-            {
-                CommentRepository.Save(comment);
-            }
-
-            var userList = new List<User>(authors.Count + admins.Count + users.Count);
-            userList.AddRange(authors);
-            userList.AddRange(admins);
-            userList.AddRange(users);
-            foreach (var user in userList)
-            {
-                UserRepository.Save(user);
-            }
+            Data = new List<IEntity>(articles.Count + comments.Count + reviews.Count + reviewTexts.Count + admins.Count + authors.Count + users.Count);
+            Data.AddRange(articles);
+            Data.AddRange(comments);
+            Data.AddRange(reviews);
+            Data.AddRange(reviewTexts);
+            Data.AddRange(admins);
+            Data.AddRange(authors);
+            Data.AddRange(users);
+            
         }
 
-        public override void Save(IEntity entity)
+        public override void Save<T>(T entity)
         {
-            //ArticleRepository.Save(entity);
+            base.Save(entity);
             m_flag = true;
             m_entity = entity;
         }
 
-        public override void Update(IEntity oldEntity, IEntity newEntity)
+        public void Update(IEntity oldEntity, IEntity newEntity)
         {
-            //ArticleRepository.Update(oldEntity, newEntity);
+            base.Update(oldEntity, newEntity);
             m_entity = newEntity;
             m_flag = true;
         }
 
-        public override void Delete(IEntity entity)
+        public override void Delete<T>(T entity)
         {
-            //ArticleRepository.Delete(entity);
+            base.Delete(entity);
             m_entity = entity;
             m_flag = true;
         }
