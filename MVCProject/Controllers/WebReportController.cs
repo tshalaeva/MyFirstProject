@@ -33,30 +33,30 @@ namespace MVCProject.Controllers
 
             switch (value)
             {
-                //case 1:
-                //{
-                //    var articles = m_facade.Get<Article>();
-                //    model.Content = string.Format("Title of article {0}: {1}", articles.First().Id,
-                //        articles.First().Title);
-                //    for (var i = 1; i < articles.Count; i++)
-                //    {
-                //        model.Content = string.Format("{0}\nTitle of article {1}: {2}", model.Content, articles[i].Id,
-                //            articles[i].Title);                            
-                //    }
-                //    model.Options.Find(item => item.Value.Equals("1")).Selected = true;               
-                //    break;
-                //}
-                //case 2:
-                //{
-                //    var articles = m_facade.Get<Article>();
-                //    foreach (var article in articles)
-                //    {
-                //        model.Content = string.Format("{0}\nAverage rating of article {1}: {2}", model.Content,
-                //            article.Id, article.GetAverageRating());
-                //    }
-                //    model.Options.Find(item => item.Value.Equals("2")).Selected = true;
-                //    break;
-                //}
+                case 1:
+                    {
+                        var articles = m_facade.GetArticles();
+                        model.Content = string.Format("Title of article {0}: {1}", articles.First().Id,
+                            articles.First().Title);
+                        for (var i = 1; i < articles.Count; i++)
+                        {
+                            model.Content = string.Format("{0}\nTitle of article {1}: {2}", model.Content, articles[i].Id,
+                                articles[i].Title);
+                        }
+                        model.Options.Find(item => item.Value.Equals("1")).Selected = true;
+                        break;
+                    }
+                case 2:
+                    {
+                        var articles = m_facade.GetArticles();
+                        foreach (var article in articles)
+                        {
+                            model.Content = string.Format("{0}\nAverage rating of article {1}: {2}", model.Content,
+                                article.Id, article.GetAverageRating());
+                        }
+                        model.Options.Find(item => item.Value.Equals("2")).Selected = true;
+                        break;
+                    }
                 case 3:
                 {
                     var admins = m_facade.GetAdmins();
