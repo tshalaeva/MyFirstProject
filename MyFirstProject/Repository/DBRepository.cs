@@ -7,42 +7,41 @@ using MyFirstProject.Entities;
 
 namespace MyFirstProject.Repository
 {
-    class DbRepository : IRepository
+    class DbUserRepository : IRepository<User>
     {
         private AdoHelper adoHelper;
-
 
         public bool Initialized
         {
             get { throw new NotImplementedException(); }
         }
 
-        public List<T> Get<T>() where T : IEntity
+        public List<User> Get()
+        {
+            return adoHelper.GetUsers();
+        }
+
+        public void Save(User entity)
         {
             throw new NotImplementedException();
         }
 
-        public void Save<T>(T entity) where T : IEntity
+        public void Delete(User entity)
         {
             throw new NotImplementedException();
         }
 
-        public void Delete<T>(T entity) where T : IEntity
+        public void Update(User existingEntity, User newEntity)
         {
             throw new NotImplementedException();
         }
 
-        public void Update<T>(T existingEntity, T newEntity) where T : IEntity
+        public User GetById(int? id)
         {
             throw new NotImplementedException();
         }
 
-        public T GetById<T>(int? id) where T : IEntity
-        {
-            throw new NotImplementedException();
-        }
-
-        public T GetRandom<T>() where T : IEntity
+        public User GetRandom()
         {
             throw new NotImplementedException();
         }

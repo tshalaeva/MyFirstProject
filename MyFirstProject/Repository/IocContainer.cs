@@ -1,5 +1,6 @@
 ﻿using System;
 using StructureMap;
+using MyFirstProject.Entities;
 
 namespace MyFirstProject.Repository
 {
@@ -27,7 +28,9 @@ namespace MyFirstProject.Repository
         private static IContainer InitializeContainer()
         {
             IContainer container = new Container();
-            container.Configure(x => x.For<IRepository>().Use<Repository>());           
+            container.Configure(x => x.For<IRepository<User>>().Use<UserRepository>());
+            container.Configure(y => y.For <IRepository<Article>>().Use<ArticleRepository>());
+            container.Configure(z => z.For<IRepository<BaseComment>>().Use<CommentRepository>());
             container.Configure(facade => facade.For<Facade>().Use<Facade>());
             return container;
         }

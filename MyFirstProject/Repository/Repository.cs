@@ -5,16 +5,16 @@ using MyFirstProject.Entities;
 
 namespace MyFirstProject.Repository
 {
-    public class Repository : IRepository
+    public class UserRepository : IRepository<User>
     {
-        protected List<IEntity> Data;
+        protected List<User> Data;
 
-        public Repository()
+        public UserRepository()
         {
-            Data = new List<IEntity>();
+            Data = new List<User>();
         }
 
-        public virtual bool Initialized
+        public bool Initialized
         {
             get
             {
@@ -22,36 +22,138 @@ namespace MyFirstProject.Repository
             }
         }
 
-        public virtual List<T> Get<T>() where T : IEntity
+        public List<User> Get()
         {
-            return Data.OfType<T>().ToList();
+            return Data;
         }
 
-        public virtual void Save<T>(T entity) where T : IEntity
+        public void Save(User entity)
         {
             Data.Add(entity);
         }
 
-        public virtual void Delete<T>(T entity) where T : IEntity
+        public void Delete(User entity)
         {
             Data.Remove(entity);
         }
 
-        public virtual void Update<T>(T existingEntity, T newEntity) where T : IEntity
+        public void Update(User existingEntity, User newEntity)
         {
             Data[Data.IndexOf(existingEntity)] = newEntity;
         }
 
-        public virtual T GetById<T>(int? id) where T : IEntity
+        public User GetById(int? id)
         {
-            var result = Data.First(entity => entity.Id == id && entity is T);
-            return (T)result;
+            var result = Data.First(entity => entity.Id == id);
+            return result;
         }
 
-        public virtual T GetRandom<T>() where T : IEntity
+        public User GetRandom()
         {
             var random = new Random();
-            var entities = Get<T>();
+            var entities = Get();
+            return entities[random.Next(0, entities.Count)];
+        }
+    }
+
+    public class ArticleRepository : IRepository<Article>
+    {
+        protected List<Article> Data;
+
+        public ArticleRepository()
+        {
+            Data = new List<Article>();
+        }
+
+        public bool Initialized
+        {
+            get
+            {
+                return Data.Count != 0;
+            }
+        }
+
+        public List<Article> Get()
+        {
+            return Data;
+        }
+
+        public void Save(Article entity)
+        {
+            Data.Add(entity);
+        }
+
+        public void Delete(Article entity)
+        {
+            Data.Remove(entity);
+        }
+
+        public void Update(Article existingEntity, Article newEntity)
+        {
+            Data[Data.IndexOf(existingEntity)] = newEntity;
+        }
+
+        public Article GetById(int? id)
+        {
+            var result = Data.First(entity => entity.Id == id);
+            return result;
+        }
+
+        public Article GetRandom()
+        {
+            var random = new Random();
+            var entities = Get();
+            return entities[random.Next(0, entities.Count)];
+        }
+    }
+
+    public class CommentRepository : IRepository<BaseComment>
+    {
+        protected List<BaseComment> Data;
+
+        public CommentRepository()
+        {
+            Data = new List<BaseComment>();
+        }
+
+        public bool Initialized
+        {
+            get
+            {
+                return Data.Count != 0;
+            }
+        }
+
+        public List<BaseComment> Get()
+        {
+            return Data;
+        }
+
+        public virtual void Save(BaseComment entity)
+        {
+            Data.Add(entity);
+        }
+
+        public void Delete(BaseComment entity)
+        {
+            Data.Remove(entity);
+        }
+
+        public void Update(BaseComment existingEntity, BaseComment newEntity)
+        {
+            Data[Data.IndexOf(existingEntity)] = newEntity;
+        }
+
+        public BaseComment GetById(int? id)
+        {
+            var result = Data.First(entity => entity.Id == id);
+            return result;
+        }
+
+        public BaseComment GetRandom()
+        {
+            var random = new Random();
+            var entities = Get();
             return entities[random.Next(0, entities.Count)];
         }
     }    

@@ -33,33 +33,33 @@ namespace MVCProject.Controllers
 
             switch (value)
             {
-                case 1:
-                {
-                    var articles = m_facade.Get<Article>();
-                    model.Content = string.Format("Title of article {0}: {1}", articles.First().Id,
-                        articles.First().Title);
-                    for (var i = 1; i < articles.Count; i++)
-                    {
-                        model.Content = string.Format("{0}\nTitle of article {1}: {2}", model.Content, articles[i].Id,
-                            articles[i].Title);                            
-                    }
-                    model.Options.Find(item => item.Value.Equals("1")).Selected = true;               
-                    break;
-                }
-                case 2:
-                {
-                    var articles = m_facade.Get<Article>();
-                    foreach (var article in articles)
-                    {
-                        model.Content = string.Format("{0}\nAverage rating of article {1}: {2}", model.Content,
-                            article.Id, article.GetAverageRating());
-                    }
-                    model.Options.Find(item => item.Value.Equals("2")).Selected = true;
-                    break;
-                }
+                //case 1:
+                //{
+                //    var articles = m_facade.Get<Article>();
+                //    model.Content = string.Format("Title of article {0}: {1}", articles.First().Id,
+                //        articles.First().Title);
+                //    for (var i = 1; i < articles.Count; i++)
+                //    {
+                //        model.Content = string.Format("{0}\nTitle of article {1}: {2}", model.Content, articles[i].Id,
+                //            articles[i].Title);                            
+                //    }
+                //    model.Options.Find(item => item.Value.Equals("1")).Selected = true;               
+                //    break;
+                //}
+                //case 2:
+                //{
+                //    var articles = m_facade.Get<Article>();
+                //    foreach (var article in articles)
+                //    {
+                //        model.Content = string.Format("{0}\nAverage rating of article {1}: {2}", model.Content,
+                //            article.Id, article.GetAverageRating());
+                //    }
+                //    model.Options.Find(item => item.Value.Equals("2")).Selected = true;
+                //    break;
+                //}
                 case 3:
                 {
-                    var admins = m_facade.Get<Admin>();
+                    var admins = m_facade.GetAdmins();
                     foreach (var admin in admins)
                     {
                         var privilegies = admin.Privilegies.First();
@@ -74,7 +74,7 @@ namespace MVCProject.Controllers
                 }
                 case 4:
                 {
-                    var articles = m_facade.Get<Article>();
+                    var articles = m_facade.GetArticles();
                     model.Content = "List of comments for each article:";
                     foreach (var article in articles)
                     {
@@ -98,18 +98,18 @@ namespace MVCProject.Controllers
                 {
                     model.Content = "Entity Codes:";
 
-                    foreach (var comment in m_facade.Get<Comment>())
+                    foreach (var comment in m_facade.GetComments())
                     {
                         model.Content = string.Format("{0}\n{1}: {2}", model.Content, comment.Content, comment.GetEntityCode());
                     }
 
-                    var reviews = m_facade.Get<Review>();
+                    var reviews = m_facade.GetReviews();
                     foreach (var comment in reviews.Where(comment => !(comment is ReviewText)))
                     {
                         model.Content = string.Format("{0}\n{1}: {2}", model.Content, comment.Content, comment.GetEntityCode());
                     }
 
-                    foreach (var comment in m_facade.Get<ReviewText>())
+                    foreach (var comment in m_facade.GetReviewTexts())
                     {
                         model.Content = string.Format("{0}\n{1}: {2}", model.Content, comment.Content, comment.GetEntityCode());
                     }

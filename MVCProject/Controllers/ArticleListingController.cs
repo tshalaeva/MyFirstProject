@@ -13,11 +13,11 @@ namespace MVCProject.Controllers
         //
         // GET: /ArticleListing/
 
-        private readonly Facade m_facade = IocContainer.Container.GetInstance<Facade>();
+        private readonly Facade m_facade = IocContainer.Container.GetInstance<MyFirstProject.Facade>();
 
         public ActionResult Index()
         {
-            var articles = m_facade.Get<Article>();
+            var articles = m_facade.GetArticles();
             var articleModels = articles.Select(article => new ArticleModel(article)).ToList();
             return View(articleModels);
         }

@@ -3,20 +3,20 @@ using MyFirstProject.Entities;
 
 namespace MyFirstProject.Repository
 {
-    public interface IRepository
+    public interface IRepository<T> where T : IEntity
     {
         bool Initialized { get; }
 
-        List<T> Get<T>() where T : IEntity;
+        List<T> Get();
 
-        void Save<T>(T entity) where T : IEntity;
+        void Save(T entity);
 
-        void Delete<T>(T entity) where T : IEntity;
+        void Delete(T entity);
 
-        void Update<T>(T existingEntity, T newEntity) where T : IEntity;
+        void Update(T existingEntity, T newEntity);
 
-        T GetById<T>(int? id) where T : IEntity;
+        T GetById(int? id);
 
-        T GetRandom<T>() where T : IEntity;
-    }    
+        T GetRandom();
+    }
 }
