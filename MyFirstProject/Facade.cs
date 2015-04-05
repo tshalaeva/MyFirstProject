@@ -6,18 +6,17 @@ namespace MyFirstProject
 {
     public class Facade
     {
-        private readonly Repository.IRepository<User> m_userRepository;
-        private readonly Repository.IRepository<Article> m_articleRepository;
-        private readonly Repository.IRepository<BaseComment> m_commentRepository;
+        private readonly Repository.IRepository<User> _mUserRepository;
+        private readonly Repository.IRepository<Article> _mArticleRepository;
+        private readonly Repository.IRepository<BaseComment> _mCommentRepository;
 
         private void Initialize()
         {
+            var authors = new List<Author>();
             for (var i = 0; i < 3; i++)
             {
-                m_userRepository.Save(new Author(i + 1));
+                authors.Add(new Author(i + 1));
             }
-
-            var authors = m_userRepository.Get().OfType<Author>().ToList();
 
             foreach (var author in authors)
             {
@@ -28,32 +27,43 @@ namespace MyFirstProject
                 author.Popularity = author.Id + 0.5;
             }
 
+            foreach (var author in authors)
+            {
+                _mUserRepository.Save(author);
+            }
+
+            var users = new List<User>();
+
             for (var i = 0; i < 3; i++)
             {
-                m_userRepository.Save(new User(i + 5));
+                users.Add(new User(i));
             }
 
-            var users = m_userRepository.Get();
-
-            for (var i = 0; i < users.Count; i++)
+            var j = 0;
+            foreach (var user in users)
             {
-                users[i].FirstName = "User";
-                users[i].LastName = string.Format("{0}", i + 1);
-                users[i].Age = 30 + i;
+                user.FirstName = "User";
+                user.LastName = string.Format("{0}", j++);
+                user.Age = 30 + j;
+                _mUserRepository.Save(user);
             }
 
-            m_userRepository.Save(new Admin(4));
-            m_userRepository.Get().OfType<Admin>().ToList()[0].FirstName = "Admin";
-            m_userRepository.Get().OfType<Admin>().ToList()[0].LastName = "User";
-            m_userRepository.Get().OfType<Admin>().ToList()[0].Age = 58;
-            m_userRepository.Get().OfType<Admin>().ToList()[0].Privilegies = new List<string> { "edit", "read", "delete" };
+            var admin = new Admin(4)
+            {
+                FirstName = "Admin",
+                LastName = "User",
+                Age = 58,
+                Privilegies = new List<string> {"edit", "read", "delete"}
+            };
+
+            _mUserRepository.Save(admin);
 
             for (var i = 0; i < 4; i++)
             {
-                m_articleRepository.Save(new Article(i + 1));
+                _mArticleRepository.Save(new Article(i + 1));
             }
 
-            var articles = m_articleRepository.Get();
+            var articles = _mArticleRepository.Get();
 
             for (var i = 0; i < articles.Count; i++)
             {
@@ -68,17 +78,17 @@ namespace MyFirstProject
                 articles[i].Author = authors[i];
             }
 
-            m_commentRepository.Save(new Comment(0, "Content 0", users[0], articles[0]));
-            m_commentRepository.Save(new Review(1, "Review Content 1", users[0], articles[0], new Rating(4)));
-            m_commentRepository.Save(new ReviewText(2, "Review text 2", users[1], articles[0], new Rating(4)));            
-        }        
+            _mCommentRepository.Save(new Comment(0, "Content 0", users[0], articles[0]));
+            _mCommentRepository.Save(new Review(1, "Review Content 1", users[0], articles[0], new Rating(4)));
+            _mCommentRepository.Save(new ReviewText(2, "Review text 2", users[1], articles[0], new Rating(4)));
+        }
 
         public Facade(Repository.IRepository<User> userRepository, Repository.IRepository<Article> articleRepository, Repository.IRepository<BaseComment> commentRepository)
         {
-            m_userRepository = userRepository;
-            m_articleRepository = articleRepository;
-            m_commentRepository = commentRepository;
-            if (!m_commentRepository.Initialized)
+            _mUserRepository = userRepository;
+            _mArticleRepository = articleRepository;
+            _mCommentRepository = commentRepository;
+            if (!_mCommentRepository.Initialized)
             {
                 Initialize();
             }
@@ -86,52 +96,52 @@ namespace MyFirstProject
 
         public List<User> GetAllUsers()
         {
-            return m_userRepository.Get();
-        }                
-        
+            return _mUserRepository.Get();
+        }
+
         public List<Author> GetAuthors()
         {
-            return m_userRepository.Get().OfType<Author>().ToList();
+            return _mUserRepository.Get().OfType<Author>().ToList();
         }
 
         public List<Admin> GetAdmins()
         {
-            return m_userRepository.Get().OfType<Admin>().ToList();
+            return _mUserRepository.Get().OfType<Admin>().ToList();
         }
 
         public void DeleteUser(User entity)
         {
-            m_userRepository.Delete(entity);
+            _mUserRepository.Delete(entity);
         }
 
         public void SaveUser(User entity)
         {
-            m_userRepository.Save(entity);
-        }    
-    
+            _mUserRepository.Save(entity);
+        }
+
         public List<Article> GetArticles()
         {
-            return m_articleRepository.Get();
+            return _mArticleRepository.Get();
         }
 
         public List<BaseComment> GetAllComments()
         {
-            return m_commentRepository.Get();
+            return _mCommentRepository.Get();
         }
 
         public List<Comment> GetComments()
         {
-            return m_commentRepository.Get().OfType<Comment>().ToList();
+            return _mCommentRepository.Get().OfType<Comment>().ToList();
         }
 
         public List<Review> GetReviews()
         {
-            return m_commentRepository.Get().OfType<Review>().ToList();
+            return _mCommentRepository.Get().OfType<Review>().ToList();
         }
 
         public List<ReviewText> GetReviewTexts()
         {
-            return m_commentRepository.Get().OfType<ReviewText>().ToList();
+            return _mCommentRepository.Get().OfType<ReviewText>().ToList();
         }
 
         public List<BaseComment> FilterCommentsByArticle(Article article)
@@ -146,73 +156,73 @@ namespace MyFirstProject
         public void CreateArticle(int id, Author author, string title, string content)
         {
             var article = new Article(id) { Author = author, Title = title, Content = content };
-            m_articleRepository.Save(article);
+            _mArticleRepository.Save(article);
         }
 
         public void CreateComment(int id, Article article, User user, string content)
         {
             var comment = new Comment(id, content, user, article);
-            m_commentRepository.Save(comment);
+            _mCommentRepository.Save(comment);
         }
 
         public void CreateReview(int id, string content, Rating rating, User user, Article article)
         {
             var review = new Review(id, content, user, article, rating);
             UpdateRating(rating, article, user);
-            m_commentRepository.Save(review);
+            _mCommentRepository.Save(review);
         }
 
         public void CreateReviewText(int id, string content, Rating rating, User user, Article article)
         {
             var review = new ReviewText(id, content, user, article, rating);
             UpdateRating(rating, article, user);
-            m_commentRepository.Save(review);
+            _mCommentRepository.Save(review);
         }
 
         public void UpdateArticle(Article oldEntity, Article newEntity)
         {
-            m_articleRepository.Update(oldEntity, newEntity);
+            _mArticleRepository.Update(oldEntity, newEntity);
         }
 
         public Article GetArticleById(int? id)
         {
-            return m_articleRepository.GetById(id);
+            return _mArticleRepository.GetById(id);
         }
 
         public BaseComment GetCommentById(int? id)
         {
-            return m_commentRepository.GetById(id);
+            return _mCommentRepository.GetById(id);
         }
 
         public Article GetRandomArticle()
         {
-            return m_articleRepository.GetRandom();
+            return _mArticleRepository.GetRandom();
         }
 
         public bool ArticleExists(int? id)
         {
-            var elements = m_articleRepository.Get();
+            var elements = _mArticleRepository.Get();
             return elements.Any(element => element.Id == id);
         }
 
         public void DeleteArticle(Article entity)
         {
-            m_articleRepository.Delete(entity);
+            _mArticleRepository.Delete(entity);
         }
 
         public void DeleteComment(BaseComment comment)
         {
-            m_commentRepository.Delete(comment);
+            _mCommentRepository.Delete(comment);
         }
 
         public void SaveArticle(Article entity)
         {
-            m_articleRepository.Save(entity);
+            _mArticleRepository.Save(entity);
         }
 
         public void SaveComment(BaseComment comment)
         {
-            m_commentRepository.Save(comment);
+            _mCommentRepository.Save(comment);
         }
 
         private void UpdateRating(Rating rating, Article article, User user)
@@ -244,5 +254,5 @@ namespace MyFirstProject
                 article.AddRating(rating);
             }
         }
-    }        
+    }
 }

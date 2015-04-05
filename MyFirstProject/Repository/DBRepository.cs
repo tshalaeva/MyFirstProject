@@ -9,7 +9,12 @@ namespace MyFirstProject.Repository
 {
     class DbUserRepository : IRepository<User>
     {
-        private AdoHelper adoHelper;
+        private readonly AdoHelper _adoHelper;
+
+        public DbUserRepository()
+        {
+            _adoHelper = new AdoHelper();
+        }
 
         public bool Initialized
         {
@@ -18,12 +23,19 @@ namespace MyFirstProject.Repository
 
         public List<User> Get()
         {
-            return adoHelper.GetUsers();
+            return _adoHelper.GetUsers();
         }
 
         public void Save(User entity)
         {
-            throw new NotImplementedException();
+            if (!(entity is Admin))
+            {
+                _adoHelper.SaveUser(entity);
+            }
+            else
+            {
+                _adoHelper.SaveAdmin((Admin)entity);
+            }
         }
 
         public void Delete(User entity)

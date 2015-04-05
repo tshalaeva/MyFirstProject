@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace MyFirstProject.Entities
 {
@@ -9,6 +10,11 @@ namespace MyFirstProject.Entities
         {
         }
 
-        public List<string> Privilegies { get; set; }        
+        public List<string> Privilegies { get; set; }
+
+        public override string ToString()
+        {
+            return Privilegies.Aggregate("", (current, privilegy) => string.Format("{0}, {1}", current, privilegy));
+        }
     }
 }
