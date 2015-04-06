@@ -18,7 +18,17 @@ namespace MyFirstProject.Repository
 
         public bool Initialized
         {
-            get { throw new NotImplementedException(); }
+            get
+            {
+                if (_adoHelper.GetUsersCount() != 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
         }
 
         public List<User> Get()

@@ -10,11 +10,16 @@ namespace MyFirstProject.Entities
         {
         }
 
+        public Admin()
+        {
+
+        }
+
         public List<string> Privilegies { get; set; }
 
         public override string ToString()
         {
-            return Privilegies.Aggregate("", (current, privilegy) => string.Format("{0}, {1}", current, privilegy));
+            return Privilegies.Aggregate("", (current, privilegy) => string.Format("{0},{1}", current, privilegy));
         }
     }
 }

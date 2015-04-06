@@ -88,7 +88,7 @@ namespace MyFirstProject
             _mUserRepository = userRepository;
             _mArticleRepository = articleRepository;
             _mCommentRepository = commentRepository;
-            if (!_mCommentRepository.Initialized)
+            if (!(_mCommentRepository.Initialized) && !(_mArticleRepository.Initialized) && !(_mUserRepository.Initialized))
             {
                 Initialize();
             }

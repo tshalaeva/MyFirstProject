@@ -3,6 +3,8 @@ using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using MyFirstProject;
+using MyFirstProject.Repository;
 
 namespace MVCProject
 {
@@ -13,6 +15,8 @@ namespace MVCProject
     {
         protected void Application_Start()
         {
+            Application["facade"] = IocContainer.Container.GetInstance<Facade>();
+
             AreaRegistration.RegisterAllAreas();
 
             WebApiConfig.Register(GlobalConfiguration.Configuration);

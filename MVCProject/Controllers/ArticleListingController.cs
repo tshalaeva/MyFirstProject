@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using System.Web.Http;
 using MVCProject.Models;
 using MyFirstProject;
 using MyFirstProject.Entities;
@@ -14,6 +15,8 @@ namespace MVCProject.Controllers
         // GET: /ArticleListing/
 
         private readonly Facade m_facade = IocContainer.Container.GetInstance<MyFirstProject.Facade>();
+
+        //private readonly Facade m_facade = HttpContext.Application["facade"];
 
         public ActionResult Index()
         {

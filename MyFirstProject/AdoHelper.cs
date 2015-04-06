@@ -13,8 +13,7 @@ using MyFirstProject.Entities;
 namespace MyFirstProject
 {
     class AdoHelper
-    {
-        //private readonly SqlConnection _connection = new SqlConnection(@"Data Source=(local)\..\MyDatabase#1.sdf");
+    {       
         protected virtual string ConnectionString
         {
             get
@@ -50,10 +49,22 @@ namespace MyFirstProject
                 var reader = command.ExecuteReader();
                 while (reader.Read())
                 {
-                    users.Add(new User((int)reader[0]));
-                    users.Last().FirstName = reader[1].ToString();
-                    users.Last().LastName = reader[2].ToString();
-                    users.Last().Age = (int)reader[3];
+                    if(!(reader[4] is Guid))
+                    {
+                        users.Add(new User());
+                        users.Last().FirstName = reader[1].ToString();
+                        users.Last().LastName = reader[2].ToString();
+                        users.Last().Age = (int)reader[3];
+                    }
+                    else
+                    {
+                        var admin = new Admin();
+                        admin.FirstName = reader[1].ToString();
+                        admin.LastName = reader[2].ToString();
+                        admin.Age = (int)reader[3];
+                        admin.Privilegies = GetPrivilegies((Guid)reader[4]);
+                        users.Add((User)admin);                        
+                    }
                 }
                 reader.Close();
                 connection.Close();
@@ -92,7 +103,7 @@ namespace MyFirstProject
                 cmdText.AppendFormat(
                     "INSERT INTO [dbo].[User](Id,FirstName,LastName,Age,PrivilegiesId) VALUES (NEWID(),'{0}','{1}',{2},@Privilegies) ",
                     admin.FirstName, admin.LastName, admin.Age);
-                cmdText.AppendFormat("INSERT INTO Privilegies(Id,List) VALUES (@Privilegies, '{0}') ", admin.Privilegies.ToString());
+                cmdText.AppendFormat("INSERT INTO Privilegies(Id,List) VALUES (@Privilegies, '{0}') ", admin.ToString());
                 cmdText.AppendLine("COMMIT");
 
                 using (var command = new SqlCommand(cmdText.ToString(), connection))
@@ -102,6 +113,44 @@ namespace MyFirstProject
                 }
                 connection.Close();
             }
+        }
+
+        private List<string> GetPrivilegies(Guid id)
+        {
+            var result = new List<string>();
+            var privilegiesString = "";
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+                connection.Open();
+                var command = new SqlCommand(string.Format("SELECT List FROM [dbo].[Privilegies] WHERE Id='{0}'", id), connection);
+                var reader = command.ExecuteReader();
+                reader.Read();
+                privilegiesString = reader[0].ToString();
+                reader.Close();
+                connection.Close();
+            }
+
+            var privilegiesArray = privilegiesString.Split(',');
+            foreach (var privilegy in privilegiesArray)
+            {
+                result.Add(privilegy);
+            }
+
+            return result;
+        }
+
+        public int GetUsersCount()
+        {
+            var result = 0;
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+                connection.Open();
+                var command = new SqlCommand("SELECT COUNT(Id) FROM [dbo].[User]", connection);
+                result = (int)command.ExecuteScalar();
+                                
+                connection.Close();
+            }
+            return result;
         }
     }
 }
