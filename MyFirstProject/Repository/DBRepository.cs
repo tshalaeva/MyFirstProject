@@ -50,7 +50,7 @@ namespace MyFirstProject.Repository
 
         public void Delete(User entity)
         {
-            throw new NotImplementedException();
+            _adoHelper.DeleteUser(entity);
         }
 
         public void Update(User existingEntity, User newEntity)

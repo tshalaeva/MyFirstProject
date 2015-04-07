@@ -11,8 +11,8 @@ namespace MVCProject.Controllers
     public class WebReportController : Controller
     {
         //
-        // GET: /WebReport/
-        private readonly Facade m_facade = IocContainer.Container.GetInstance<Facade>();
+        // GET: /WebReport/        
+        private readonly Facade m_facade = MvcApplication.Facade;
 
         public ActionResult Index()
         {

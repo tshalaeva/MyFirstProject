@@ -79,7 +79,7 @@ namespace MyFirstProject
                 connection.Open();
                 var cmdText =
                     string.Format(
-                        "INSERT INTO [dbo].[User](Id,FirstName,LastName,Age) VALUES(NEWID(),'{0}','{1}',{2})",
+                        "INSERT INTO [dbo].[User](FirstName,LastName,Age) VALUES('{0}','{1}',{2})",
                         user.FirstName, user.LastName, user.Age);
 
                 using (var command = new SqlCommand(cmdText, connection))
@@ -101,7 +101,7 @@ namespace MyFirstProject
                 cmdText.AppendLine("DECLARE @Privilegies uniqueidentifier");
                 cmdText.AppendLine("SET @Privilegies=NEWID()");
                 cmdText.AppendFormat(
-                    "INSERT INTO [dbo].[User](Id,FirstName,LastName,Age,PrivilegiesId) VALUES (NEWID(),'{0}','{1}',{2},@Privilegies) ",
+                    "INSERT INTO [dbo].[User](FirstName,LastName,Age,PrivilegiesId) VALUES ('{0}','{1}',{2},@Privilegies) ",
                     admin.FirstName, admin.LastName, admin.Age);
                 cmdText.AppendFormat("INSERT INTO Privilegies(Id,List) VALUES (@Privilegies, '{0}') ", admin.ToString());
                 cmdText.AppendLine("COMMIT");
@@ -151,6 +151,38 @@ namespace MyFirstProject
                 connection.Close();
             }
             return result;
+        }
+
+        public void DeleteUser(User user)
+        {
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+                var cmdText = new StringBuilder();
+                connection.Open();
+                if (!(user is Admin))
+                {
+                    cmdText.AppendFormat(
+                            "DELETE FROM [dbo].[User] WHERE Id='{0}'",
+                            user.Id);
+                }
+                else
+                {                    
+                    cmdText.AppendLine("BEGIN TRANSACTION");
+                    cmdText.AppendLine("DECLARE @Privilegies uniqueidentifier");
+                    cmdText.AppendFormat("SET @Privilegies='{0}' ", user.Id);
+                    cmdText.AppendLine(
+                        "DELETE FROM [dbo].[User] WHERE Id=@Privilegies)");
+                    cmdText.AppendLine("DELETE FROM [dbo].[Privilegies] WHERE Id=@Privilegies");
+                    cmdText.AppendLine("COMMIT");
+                }
+
+                using (var command = new SqlCommand(cmdText.ToString(), connection))
+                {
+                    command.CommandType = CommandType.Text;
+                    command.ExecuteNonQuery();
+                }
+                connection.Close();
+            }
         }
     }
 }

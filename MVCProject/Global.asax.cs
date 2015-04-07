@@ -13,10 +13,16 @@ namespace MVCProject
 
     public class MvcApplication : HttpApplication
     {
+        public static Facade Facade
+        {
+            get
+            {
+                return IocContainer.Container.GetInstance<Facade>();
+            }
+        }
+
         protected void Application_Start()
         {
-            Application["facade"] = IocContainer.Container.GetInstance<Facade>();
-
             AreaRegistration.RegisterAllAreas();
 
             WebApiConfig.Register(GlobalConfiguration.Configuration);

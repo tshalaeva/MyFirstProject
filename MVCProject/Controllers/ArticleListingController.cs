@@ -13,10 +13,8 @@ namespace MVCProject.Controllers
     {
         //
         // GET: /ArticleListing/
-
-        private readonly Facade m_facade = IocContainer.Container.GetInstance<MyFirstProject.Facade>();
-
-        //private readonly Facade m_facade = HttpContext.Application["facade"];
+        
+        private readonly Facade m_facade = MvcApplication.Facade;
 
         public ActionResult Index()
         {
