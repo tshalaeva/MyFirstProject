@@ -53,5 +53,17 @@ namespace MVCProject.Models
                 }
             };
         }
+
+        public string GetSelectedOption()
+        {
+            foreach (var option in Options)
+            {
+                if (option.Selected)
+                {
+                    return option.Value;
+                }
+            }
+            return "";
+        }
     }
 }
