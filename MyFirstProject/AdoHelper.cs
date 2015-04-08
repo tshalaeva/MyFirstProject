@@ -305,21 +305,26 @@ namespace MyFirstProject
                     var article = new Article((int)reader[0]);
                     article.Title = reader[1].ToString();
                     article.Content = reader[2].ToString();
-                    var getAuthorCommand = new SqlCommand(string.Format("SELECT * FROM [dbo].[User] WHERE Id={0}",reader[3]));
-                    var authorReader = getAuthorCommand.ExecuteReader();
-                    var author = new Author();
-                    while (authorReader.Read())
-                    {
-                        author.Id = (int)authorReader[0];
-                        author.FirstName = authorReader[1].ToString();
-                        author.LastName = authorReader[2].ToString();
-                        author.Age = (int)authorReader[3];
-                    }
-                    authorReader.Close();
-                    article.Author = author;
+                    article.Author = (Author)GetUserById((int)reader[3]);
                     articles.Add(article);
                 }
                 reader.Close();
+                var getAuthorCommand = new SqlCommand("SELECT * FROM [dbo].[User]", connection);
+                DataTable table = new DataTable();
+                SqlDataAdapter sda = new SqlDataAdapter();
+                getAuthorCommand.CommandType = CommandType.Text;
+                getAuthorCommand.Connection = connection;
+                sda.SelectCommand = getAuthorCommand;
+                sda.Fill(table);
+                for (int i = 0; i < articles.Count; i++)
+                {
+                    var author = new Author();
+                    author.Id = (int)table.Rows[i]["Id"];
+                    author.FirstName = table.Rows[i]["FirstName"].ToString();
+                    author.LastName = table.Rows[i]["LastName"].ToString();
+                    author.Age = (int)table.Rows[i]["Age"];
+                    articles[i].Author = author;
+                }
                 connection.Close();
             }
             return articles;
@@ -333,12 +338,17 @@ namespace MyFirstProject
                 connection.Open();
                 var cmdText = new StringBuilder();
                 cmdText.AppendFormat(
-                    "INSERT INTO [dbo].[Article](Title,Content,AuthorId) VALUES('{0}','{1}',{2}) ",
+                    "INSERT INTO [dbo].[Article](Title,Content,AuthorId) VALUES('{0}','{1}',{2})",
                     article.Title, article.Content, article.Author.Id);
-                cmdText.AppendLine("SELECT Id");
-
 
                 using (var command = new SqlCommand(cmdText.ToString(), connection))
+                {
+                    command.CommandType = CommandType.Text;
+                    command.ExecuteNonQuery();
+                }
+
+                var getIdCmd = "SELECT TOP 1 Id FROM [dbo].[Article] ORDER BY Id DESC";
+                using (var command = new SqlCommand(getIdCmd, connection))
                 {
                     command.CommandType = CommandType.Text;
                     articleId = (int)command.ExecuteScalar();

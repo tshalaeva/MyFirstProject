@@ -62,19 +62,20 @@ namespace MyFirstProject
 
             for (var i = 0; i < 4; i++)
             {
-                articles[i] = new Article();
-                articles[i].Content = string.Format("Text {0}", i + 1);
-                articles[i].Title = string.Format("Title {0}", i + 1);
+                var article = new Article();
+                article.Content = string.Format("Text {0}", i + 1);
+                article.Title = string.Format("Title {0}", i + 1);
                 if (i == 3)
                 {
-                    articles[i].Author = authors[0];
-                    _mArticleRepository.Save(articles[i]);
+                    article.Author = authors[0];
+                    article.Id = _mArticleRepository.Save(article);
+                    articles.Add(article);
                     break;
                 }
 
-                articles[i].Author = authors[i];
-                _mArticleRepository.Save(articles[i]);
-
+                article.Author = authors[i];
+                article.Id = _mArticleRepository.Save(article);
+                articles.Add(article);
             }
 
             _mCommentRepository.Save(new Comment(0, "Content 0", users[0], articles[0]));

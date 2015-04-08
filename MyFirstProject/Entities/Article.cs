@@ -24,7 +24,7 @@ namespace MyFirstProject.Entities
 
         public List<Rating> Ratings { get; private set; }
 
-        public int Id { get; private set; }        
+        public int Id { get; set; }        
 
         public void AddRating(Rating rating)
         {
