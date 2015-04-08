@@ -9,7 +9,7 @@ namespace MyFirstProject.Repository
 
         List<T> Get();
 
-        void Save(T entity);
+        int Save(T entity);
 
         void Delete(T entity);
 

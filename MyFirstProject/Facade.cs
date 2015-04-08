@@ -29,7 +29,7 @@ namespace MyFirstProject
 
             foreach (var author in authors)
             {
-                _mUserRepository.Save(author);
+                _mUserRepository.Save((User)author);//
             }
 
             var users = new List<User>();
@@ -58,24 +58,23 @@ namespace MyFirstProject
 
             _mUserRepository.Save(admin);
 
+            var articles = new List<Article>();
+
             for (var i = 0; i < 4; i++)
             {
-                _mArticleRepository.Save(new Article(i + 1));
-            }
-
-            var articles = _mArticleRepository.Get();
-
-            for (var i = 0; i < articles.Count; i++)
-            {
+                articles[i] = new Article();
                 articles[i].Content = string.Format("Text {0}", i + 1);
                 articles[i].Title = string.Format("Title {0}", i + 1);
-                if (i == articles.Count - 1)
+                if (i == 3)
                 {
                     articles[i].Author = authors[0];
+                    _mArticleRepository.Save(articles[i]);
                     break;
                 }
 
                 articles[i].Author = authors[i];
+                _mArticleRepository.Save(articles[i]);
+
             }
 
             _mCommentRepository.Save(new Comment(0, "Content 0", users[0], articles[0]));

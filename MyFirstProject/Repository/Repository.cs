@@ -27,9 +27,10 @@ namespace MyFirstProject.Repository
             return Data;
         }
 
-        public void Save(User entity)
+        public int Save(User entity)
         {
             Data.Add(entity);
+            return entity.Id;
         }
 
         public void Delete(User entity)
@@ -78,9 +79,10 @@ namespace MyFirstProject.Repository
             return Data;
         }
 
-        public void Save(Article entity)
+        public int Save(Article entity)
         {
             Data.Add(entity);
+            return entity.Id;
         }
 
         public void Delete(Article entity)
@@ -129,9 +131,10 @@ namespace MyFirstProject.Repository
             return Data;
         }
 
-        public virtual void Save(BaseComment entity)
+        public int Save(BaseComment entity)
         {
             Data.Add(entity);
+            return entity.Id;
         }
 
         public void Delete(BaseComment entity)

@@ -11,6 +11,11 @@ namespace MyFirstProject.Entities
             Ratings = new List<Rating>();
         }
 
+        public Article()
+        {
+            Ratings = new List<Rating>();
+        }
+
         public string Title { get; set; }
         
         public string Content { get; set; }

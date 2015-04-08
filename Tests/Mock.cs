@@ -119,11 +119,12 @@ namespace Tests
             return Data;
         }
 
-        public void Save(Article entity)
+        public int Save(Article entity)
         {
             Data.Add(entity);
             m_flag = true;
             m_entity = entity;
+            return entity.Id;
         }
 
         public void Update(Article oldEntity, Article newEntity)
@@ -187,11 +188,12 @@ namespace Tests
             return Data;
         }
 
-        public void Save(User entity)
+        public int Save(User entity)
         {
             Data.Add(entity);
             m_flag = true;
             m_entity = entity;
+            return entity.Id;
         }
 
         public void Update(User oldEntity, User newEntity)
@@ -255,11 +257,12 @@ namespace Tests
             return Data;
         }
 
-        public void Save(BaseComment entity)
+        public int Save(BaseComment entity)
         {
             Data.Add(entity);
             m_flag = true;
             m_entity = entity;
+            return entity.Id;
         }
 
         public void Update(BaseComment oldEntity, BaseComment newEntity)

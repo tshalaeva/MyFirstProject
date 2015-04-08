@@ -36,15 +36,15 @@ namespace MyFirstProject.Repository
             return _adoHelper.GetUsers();
         }
 
-        public void Save(User entity)
+        public int Save(User entity)
         {
             if (!(entity is Admin))
             {
-                _adoHelper.SaveUser(entity);
+                return _adoHelper.SaveUser(entity);
             }
             else
             {
-                _adoHelper.SaveAdmin((Admin)entity);
+                return _adoHelper.SaveAdmin((Admin)entity);
             }
         }
 
@@ -55,17 +55,72 @@ namespace MyFirstProject.Repository
 
         public void Update(User existingEntity, User newEntity)
         {
-            throw new NotImplementedException();
+            _adoHelper.UpdateUser(existingEntity, newEntity);
         }
 
         public User GetById(int? id)
         {
-            throw new NotImplementedException();
+            return _adoHelper.GetUserById(id);
         }
 
         public User GetRandom()
         {
-            throw new NotImplementedException();
+            return _adoHelper.GetRandomUser();
+        }
+    }
+
+    class DbArticleRepository : IRepository<Article>
+    {
+        private readonly AdoHelper _adoHelper;
+
+        public DbArticleRepository()
+        {
+            _adoHelper = new AdoHelper();
+        }
+
+        public bool Initialized
+        {
+            get
+            {
+                if (_adoHelper.GetArticlesCount() != 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+
+        public List<Article> Get()
+        {
+            return _adoHelper.GetArticles();
+        }
+
+        public int Save(Article entity)
+        {
+            return _adoHelper.SaveArticle(entity);
+        }
+
+        public void Delete(Article entity)
+        {
+            _adoHelper.DeleteArticle(entity);
+        }
+
+        public void Update(Article existingEntity, Article newEntity)
+        {
+            _adoHelper.UpdateArticle(existingEntity, newEntity);
+        }
+
+        public Article GetById(int? id)
+        {
+            return _adoHelper.GetArticleById(id);
+        }
+
+        public Article GetRandom()
+        {
+            return _adoHelper.GetRandomArticle();
         }
     }
 }
