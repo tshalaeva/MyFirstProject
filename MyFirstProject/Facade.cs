@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using MyFirstProject.Entities;
 
@@ -24,12 +25,12 @@ namespace MyFirstProject
                 author.LastName = string.Format("{0}", author.Id + 1);
                 author.Age = 50 + author.Id;
                 author.NickName = string.Format("Author{0}", author.Id);
-                author.Popularity = author.Id + 0.5;
+                author.Popularity = Convert.ToDecimal(author.Id + 0.5);
             }
 
             foreach (var author in authors)
             {
-                _mUserRepository.Save((User)author);//
+                author.Id = _mUserRepository.Save(author);
             }
 
             var users = new List<User>();
@@ -45,7 +46,7 @@ namespace MyFirstProject
                 user.FirstName = "User";
                 user.LastName = string.Format("{0}", j++);
                 user.Age = 30 + j;
-                _mUserRepository.Save(user);
+                user.Id = _mUserRepository.Save(user);
             }
 
             var admin = new Admin(4)
@@ -56,15 +57,17 @@ namespace MyFirstProject
                 Privilegies = new List<string> {"edit", "read", "delete"}
             };
 
-            _mUserRepository.Save(admin);
+            admin.Id = _mUserRepository.Save(admin);
 
             var articles = new List<Article>();
 
             for (var i = 0; i < 4; i++)
             {
-                var article = new Article();
-                article.Content = string.Format("Text {0}", i + 1);
-                article.Title = string.Format("Title {0}", i + 1);
+                var article = new Article
+                {
+                    Content = string.Format("Text {0}", i + 1),
+                    Title = string.Format("Title {0}", i + 1)
+                };
                 if (i == 3)
                 {
                     article.Author = authors[0];

@@ -24,10 +24,7 @@ namespace MyFirstProject.Repository
                 {
                     return true;
                 }
-                else
-                {
-                    return false;
-                }
+                return false;
             }
         }
 
@@ -38,14 +35,15 @@ namespace MyFirstProject.Repository
 
         public int Save(User entity)
         {
-            if (!(entity is Admin))
+            if (!(entity is Admin) && !(entity is Author))
             {
                 return _adoHelper.SaveUser(entity);
             }
-            else
+            if (entity is Admin)
             {
-                return _adoHelper.SaveAdmin((Admin)entity);
+                return _adoHelper.SaveAdmin((Admin) entity);
             }
+            return _adoHelper.SaveAuthor((Author) entity);
         }
 
         public void Delete(User entity)

@@ -11,6 +11,6 @@
 
         public string NickName { get; set; }
         
-        public double Popularity { get; set; }        
+        public decimal Popularity { get; set; }        
     }
 }

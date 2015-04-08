@@ -78,14 +78,14 @@ namespace MyFirstProject
             using (SqlConnection connection = new SqlConnection(ConnectionString))
             {
                 connection.Open();
-                var cmdText = new StringBuilder();            
+                var cmdText = new StringBuilder();
                 cmdText.AppendFormat(
                     "INSERT INTO [dbo].[User](FirstName,LastName,Age) VALUES('{0}','{1}',{2})",
                     user.FirstName, user.LastName, user.Age);
 
                 using (var command = new SqlCommand(cmdText.ToString(), connection))
                 {
-                    command.CommandType = CommandType.Text;                    
+                    command.CommandType = CommandType.Text;
                     command.ExecuteNonQuery();
                 }
 
@@ -115,10 +115,17 @@ namespace MyFirstProject
                     "INSERT INTO [dbo].[User](FirstName,LastName,Age,PrivilegiesId) VALUES ('{0}','{1}',{2},@Privilegies) ",
                     admin.FirstName, admin.LastName, admin.Age);
                 cmdText.AppendFormat("INSERT INTO Privilegies(Id,List) VALUES (@Privilegies, '{0}') ", admin.ToString());
-                cmdText.AppendLine("SELECT Id FROM [dbo].[User]");
+                //cmdText.AppendLine("SELECT Id FROM [dbo].[User]");
                 cmdText.AppendLine("COMMIT");
 
                 using (var command = new SqlCommand(cmdText.ToString(), connection))
+                {
+                    command.CommandType = CommandType.Text;
+                    command.ExecuteNonQuery();
+                }
+
+                var getIdCmd = "SELECT TOP 1 Id FROM [dbo].[User] ORDER BY Id DESC";
+                using (var command = new SqlCommand(getIdCmd, connection))
                 {
                     command.CommandType = CommandType.Text;
                     adminId = (int)command.ExecuteScalar();
@@ -126,6 +133,40 @@ namespace MyFirstProject
                 connection.Close();
             }
             return adminId;
+        }
+
+        public int SaveAuthor(Author author)
+        {
+            int authorId;
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+                connection.Open();
+                var cmdText = new StringBuilder();
+                cmdText.AppendLine("BEGIN TRANSACTION");
+                cmdText.AppendLine("DECLARE @AuthorID uniqueidentifier");
+                cmdText.AppendLine("SET @AuthorID=NEWID()");
+                cmdText.AppendFormat(
+                    "INSERT INTO [dbo].[User](FirstName,LastName,Age,AuthorId) VALUES ('{0}','{1}',{2},@AuthorID); ",
+                    author.FirstName, author.LastName, author.Age);
+                cmdText.AppendFormat("INSERT INTO [dbo].[Author](Id,NickName,Popularity) VALUES (@AuthorID, '{0}', '{1}'); ", author.NickName, author.Popularity);
+                cmdText.AppendLine("SELECT Id FROM [dbo].[User]");
+                cmdText.AppendLine("COMMIT");
+
+                using (var command = new SqlCommand(cmdText.ToString(), connection))
+                {
+                    command.CommandType = CommandType.Text;
+                    authorId = command.ExecuteNonQuery();
+                }
+
+                var getIdCmd = "SELECT TOP 1 Id FROM [dbo].[User] ORDER BY Id DESC";
+                using (var command = new SqlCommand(getIdCmd, connection))
+                {
+                    command.CommandType = CommandType.Text;
+                    authorId = (int)command.ExecuteScalar();
+                }
+                connection.Close();
+            }
+            return authorId;
         }
 
         private List<string> GetPrivilegies(Guid id)
@@ -154,7 +195,7 @@ namespace MyFirstProject
 
         public int GetUsersCount()
         {
-            var result = 0;
+            int result;
             using (SqlConnection connection = new SqlConnection(ConnectionString))
             {
                 connection.Open();
@@ -224,14 +265,14 @@ namespace MyFirstProject
         {
             User user = new User((int)id);
             using (SqlConnection connection = new SqlConnection(ConnectionString))
-            {                
-                var cmdText = new SqlCommand(string.Format("SELECT * FROM [dbo].[User] WHERE Id={0}", id));
+            {
+                var cmdText = new SqlCommand(string.Format("SELECT * FROM [dbo].[User] WHERE Id={0}", id), connection);
                 connection.Open();
 
                 var reader = cmdText.ExecuteReader();
                 while (reader.Read())
                 {
-                    if (reader[4].ToString() == "NULL")
+                    if (reader[4].ToString() == "NULL" && reader[5].ToString() == "NULL")
                     {
                         user.FirstName = reader[1].ToString();
                         user.LastName = reader[2].ToString();
@@ -239,38 +280,100 @@ namespace MyFirstProject
                     }
                     else
                     {
-                        var admin0 = new Admin((int)id);
-                        admin0.FirstName = reader[1].ToString();
-                        admin0.LastName = reader[2].ToString();
-                        admin0.Age = (int)reader[3];
+                        var admin0 = new Admin((int)id)
+                             {
+                                 FirstName = reader[1].ToString(),
+                                 LastName = reader[2].ToString(),
+                                 Age = (int)reader[3]
+                             };
                         foreach (var privilegy in GetPrivilegies((Guid)reader[4]))
                         {
                             admin0.Privilegies.Add(privilegy);
                         }
                         user = admin0;
+
                     }
                 }
                 reader.Close();
                 connection.Close();
-            }            
+            }
             return user;
+        }
+
+        public Author GetAuthorById(int? id)
+        {
+            Author author = new Author();
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+                var cmdText = new SqlCommand(string.Format("SELECT * FROM [dbo].[User] WHERE Id={0}", id), connection);
+                connection.Open();
+
+                var reader = cmdText.ExecuteReader();
+                while (reader.Read())
+                {
+                    author.Id = (int)reader[0];
+                    author.FirstName = reader[1].ToString();
+                    author.LastName = reader[2].ToString();
+                    author.Age = (int)reader[3];
+                    author.NickName = GetNickName((Guid)reader[5]);
+                    author.Popularity = GetPopularity((Guid)reader[5]);
+                }
+                reader.Close();
+                connection.Close();
+            }
+            return author;
+        }
+
+        private string GetNickName(Guid id)
+        {
+            string result;
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+                connection.Open();
+                var command = new SqlCommand(string.Format("SELECT NickName FROM [dbo].[Author] WHERE Id='{0}'", id), connection);
+                var reader = command.ExecuteReader();
+                reader.Read();
+                result = reader[0].ToString();
+                reader.Close();
+                connection.Close();
+            }
+
+            return result;
+        }
+
+        private decimal GetPopularity(Guid id)
+        {
+            string result;
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+                connection.Open();
+                var command = new SqlCommand(string.Format("SELECT Popularity FROM [dbo].[Author] WHERE Id='{0}'", id), connection);
+                using (command)
+                {
+                    command.CommandType = CommandType.Text;
+                    result = command.ExecuteScalar().ToString();
+                }
+                connection.Close();
+            }
+
+            return Convert.ToDecimal(result);
         }
 
         public User GetRandomUser()
         {
             var user = new User();
             using (SqlConnection connection = new SqlConnection(ConnectionString))
-            {                   
+            {
                 var cmdText = new SqlCommand("SELECT * FROM [dbo].[User] ORDER BY RAND() LIMIT 1");
                 connection.Open();
-                
+
                 var reader = cmdText.ExecuteReader();
                 while (reader.Read())
                 {
                     user.Id = (int)reader[0];
                     user.FirstName = reader[1].ToString();
                     user.LastName = reader[2].ToString();
-                    user.Age = (int)reader[3];                    
+                    user.Age = (int)reader[3];
                 }
                 reader.Close();
                 connection.Close();
@@ -305,29 +408,47 @@ namespace MyFirstProject
                     var article = new Article((int)reader[0]);
                     article.Title = reader[1].ToString();
                     article.Content = reader[2].ToString();
-                    article.Author = (Author)GetUserById((int)reader[3]);
+                    article.Author = GetAuthorById(GetAuthorId((Guid)reader[3]));
                     articles.Add(article);
                 }
                 reader.Close();
-                var getAuthorCommand = new SqlCommand("SELECT * FROM [dbo].[User]", connection);
-                DataTable table = new DataTable();
-                SqlDataAdapter sda = new SqlDataAdapter();
-                getAuthorCommand.CommandType = CommandType.Text;
-                getAuthorCommand.Connection = connection;
-                sda.SelectCommand = getAuthorCommand;
-                sda.Fill(table);
-                for (int i = 0; i < articles.Count; i++)
-                {
-                    var author = new Author();
-                    author.Id = (int)table.Rows[i]["Id"];
-                    author.FirstName = table.Rows[i]["FirstName"].ToString();
-                    author.LastName = table.Rows[i]["LastName"].ToString();
-                    author.Age = (int)table.Rows[i]["Age"];
-                    articles[i].Author = author;
-                }
                 connection.Close();
             }
             return articles;
+        }
+
+        private int GetAuthorId(Guid authorGuid)
+        {
+            int result;
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+                connection.Open();
+                var command = new SqlCommand(string.Format("SELECT Id FROM [dbo].[User] WHERE AuthorId='{0}'", authorGuid), connection);
+                using (command)
+                {
+                    command.CommandType = CommandType.Text;
+                    result = (int)command.ExecuteScalar();
+                }
+                connection.Close();
+            }
+            return result;
+        }
+
+        private Guid GetAuthorGuid(int id)
+        {
+            Guid result;
+            using (var connection = new SqlConnection(ConnectionString))
+            {
+                connection.Open();
+                var command = new SqlCommand(string.Format("SELECT AuthorId FROM [dbo].[User] WHERE Id={0}", id), connection);
+                using (command)
+                {
+                    command.CommandType = CommandType.Text;
+                    result = (Guid)command.ExecuteScalar();
+                }
+                connection.Close();
+            }
+            return result;
         }
 
         public int SaveArticle(Article article)
@@ -337,9 +458,13 @@ namespace MyFirstProject
             {
                 connection.Open();
                 var cmdText = new StringBuilder();
+                cmdText.AppendLine("BEGIN TRANSACTION");
+                cmdText.AppendLine("DECLARE @authorId uniqueidentifier");
+                cmdText.AppendFormat("SET @authorId='{0}' ", GetAuthorGuid(article.Author.Id));
                 cmdText.AppendFormat(
-                    "INSERT INTO [dbo].[Article](Title,Content,AuthorId) VALUES('{0}','{1}',{2})",
-                    article.Title, article.Content, article.Author.Id);
+                    "INSERT INTO [dbo].[Article](Title,Content,AuthorId) VALUES('{0}','{1}','{2}') ",
+                    article.Title, article.Content, GetAuthorGuid(article.Author.Id));                
+                cmdText.AppendLine("COMMIT");
 
                 using (var command = new SqlCommand(cmdText.ToString(), connection))
                 {
@@ -392,10 +517,10 @@ namespace MyFirstProject
 
         public Article GetArticleById(int? id)
         {
-            Article article = new Article((int)id);
-            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            var article = new Article((int)id);
+            using (var connection = new SqlConnection(ConnectionString))
             {
-                var cmdText = new SqlCommand(string.Format("SELECT * FROM [dbo].[Article] WHERE Id={0}", id));
+                var cmdText = new SqlCommand(string.Format("SELECT * FROM [dbo].[Article] WHERE Id={0}", id), connection);
                 connection.Open();
 
                 var reader = cmdText.ExecuteReader();
@@ -403,8 +528,8 @@ namespace MyFirstProject
                 {
                     article.Title = reader[1].ToString();
                     article.Content = reader[2].ToString();
-                    var author = GetUserById((int)reader[3]);
-                    article.Author = (Author)author;
+                    var author = GetAuthorById(GetAuthorId((Guid)reader[3]));
+                    article.Author = author;
                 }
                 reader.Close();
                 connection.Close();
@@ -414,10 +539,10 @@ namespace MyFirstProject
 
         public Article GetRandomArticle()
         {
-            Article article = new Article();
-            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            var article = new Article();
+            using (var connection = new SqlConnection(ConnectionString))
             {
-                var cmdText = new SqlCommand("SELECT * FROM [dbo].[Article] ORDER BY RAND() LIMIT 1");
+                var cmdText = new SqlCommand("SELECT TOP 1 * FROM [dbo].[Article] ORDER BY RAND()", connection);
                 connection.Open();
 
                 var reader = cmdText.ExecuteReader();
@@ -426,7 +551,7 @@ namespace MyFirstProject
                     article = new Article((int)reader[0]);
                     article.Title = reader[1].ToString();
                     article.Content = reader[2].ToString();
-                    article.Author = (Author)GetUserById((int)reader[3]);
+                    article.Author = GetAuthorById(GetAuthorId((Guid)reader[3]));
                 }
                 reader.Close();
                 connection.Close();
