@@ -121,4 +121,66 @@ namespace MyFirstProject.Repository
             return _adoHelper.GetRandomArticle();
         }
     }
+
+    class DbCommentRepository : IRepository<BaseComment>
+    {
+        private AdoHelper _adoHelper;
+        public DbCommentRepository()
+        {
+            _adoHelper = new AdoHelper();
+        }
+
+        public bool Initialized
+        {
+            get
+            {
+                if (_adoHelper.GetCommentsCount() != 0)
+                {
+                    return true;
+                }
+                return false;
+            }
+        }
+
+        public void Update(BaseComment oldComment, BaseComment newComment)
+        {
+
+        }
+
+        public int Save(BaseComment comment)
+        {
+            if (!(comment is Review) && !(comment is ReviewText))
+            {
+                return _adoHelper.SaveComment((Comment)comment);
+            }
+            else
+            {
+                if (comment is ReviewText)
+                {
+                    return _adoHelper.SaveReviewText((ReviewText)comment);
+                }
+                return _adoHelper.SaveReview((Review)comment);
+            }
+        } 
+       
+        public BaseComment GetRandom()
+        {
+            return _adoHelper.GetRandomComment();
+        }
+
+        public BaseComment GetById(int? id)
+        {
+            return _adoHelper.GetCommentById(id);
+        }
+
+        public List<BaseComment> Get()
+        {
+            return _adoHelper.GetComments();
+        }
+
+        public void Delete(BaseComment comment)
+        {
+            _adoHelper.DeleteComment(comment);
+        }
+    }
 }

@@ -7,6 +7,8 @@
             Id = id;
         }
 
+        public Comment() { }
+
         public Comment(int id, string content, User user, Article article)
         {
             Id = id;

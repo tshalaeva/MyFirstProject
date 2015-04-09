@@ -15,6 +15,11 @@ namespace MyFirstProject.Entities
             return string.Format("{0} {1}:\n{2}\nRating: {3}", User.FirstName, User.LastName, Content, ConvertRatingValue());
         }
 
+        public string GetRatingValue()
+        {
+            return ConvertRatingValue();
+        }
+
         public new int GetEntityCode()
         {
             return 2;

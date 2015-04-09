@@ -17,7 +17,7 @@
             Article.AddRating(Rating);
         }
 
-        protected Rating Rating { get; private set; }        
+        public Rating Rating { get; private set; }        
 
         public override string ToString()
         {

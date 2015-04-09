@@ -22,6 +22,7 @@ namespace MyFirstProject
     ConnectionStrings["DefaultConnection"].ConnectionString;
             }
         }
+
         public void Initialize()
         {
             using (SqlConnection connection = new SqlConnection(ConnectionString))
@@ -463,7 +464,7 @@ namespace MyFirstProject
                 cmdText.AppendFormat("SET @authorId='{0}' ", GetAuthorGuid(article.Author.Id));
                 cmdText.AppendFormat(
                     "INSERT INTO [dbo].[Article](Title,Content,AuthorId) VALUES('{0}','{1}','{2}') ",
-                    article.Title, article.Content, GetAuthorGuid(article.Author.Id));                
+                    article.Title, article.Content, GetAuthorGuid(article.Author.Id));
                 cmdText.AppendLine("COMMIT");
 
                 using (var command = new SqlCommand(cmdText.ToString(), connection))
@@ -558,5 +559,281 @@ namespace MyFirstProject
             }
             return article;
         }
+
+        public int GetCommentsCount()
+        {
+            var result = 0;
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+                connection.Open();
+                var command = new SqlCommand("SELECT COUNT(Id) FROM [dbo].[Comments]", connection);
+                result = (int)command.ExecuteScalar();
+
+                connection.Close();
+            }
+            return result;
+        }
+
+        public int SaveComment(Comment comment)
+        {
+            int commentId;
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+                connection.Open();
+                var cmdText = new StringBuilder();
+                cmdText.AppendFormat(
+                    "INSERT INTO [dbo].[Comment](UserId,ArticleId,Content) VALUES('{0}','{1}','{2}') ",
+                    comment.User.Id, comment.Article.Id, comment.Content);
+
+                using (var command = new SqlCommand(cmdText.ToString(), connection))
+                {
+                    command.CommandType = CommandType.Text;
+                    command.ExecuteNonQuery();
+                }
+
+                var getIdCmd = "SELECT TOP 1 Id FROM [dbo].[Comment] ORDER BY Id DESC";
+                using (var command = new SqlCommand(getIdCmd, connection))
+                {
+                    command.CommandType = CommandType.Text;
+                    commentId = (int)command.ExecuteScalar();
+                }
+                connection.Close();
+            }
+            return commentId;
+        }
+
+        public int SaveReview(Review comment)
+        {
+            int commentId;
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+                connection.Open();
+                var cmdText = new StringBuilder();
+                cmdText.AppendFormat(
+                    "INSERT INTO [dbo].[Comment](UserId,ArticleId,Content,Rating) VALUES('{0}','{1}','{2}',{3}) ",
+                    comment.User.Id, comment.Article.Id, comment.Content, comment.Rating.Value);
+
+                using (var command = new SqlCommand(cmdText.ToString(), connection))
+                {
+                    command.CommandType = CommandType.Text;
+                    command.ExecuteNonQuery();
+                }
+
+                var getIdCmd = "SELECT TOP 1 Id FROM [dbo].[Comment] ORDER BY Id DESC";
+                using (var command = new SqlCommand(getIdCmd, connection))
+                {
+                    command.CommandType = CommandType.Text;
+                    commentId = (int)command.ExecuteScalar();
+                }
+                connection.Close();
+            }
+            return commentId;
+        }
+
+        public int SaveReviewText(ReviewText comment)
+        {
+            int commentId;
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+                connection.Open();
+                var cmdText = new StringBuilder();
+                cmdText.AppendFormat(
+                    "INSERT INTO [dbo].[Comment](UserId,ArticleId,Content,Rating,RatingText) VALUES('{0}','{1}','{2}',{3},'{4}') ",
+                    comment.User.Id, comment.Article.Id, comment.Content, comment.Rating.Value, comment.GetRatingValue());
+
+                using (var command = new SqlCommand(cmdText.ToString(), connection))
+                {
+                    command.CommandType = CommandType.Text;
+                    command.ExecuteNonQuery();
+                }
+
+                var getIdCmd = "SELECT TOP 1 Id FROM [dbo].[Comment] ORDER BY Id DESC";
+                using (var command = new SqlCommand(getIdCmd, connection))
+                {
+                    command.CommandType = CommandType.Text;
+                    commentId = (int)command.ExecuteScalar();
+                }
+                connection.Close();
+            }
+            return commentId;
+        }
+
+        public BaseComment GetRandomComment()
+        {
+            BaseComment comment = new Comment();
+            using (var connection = new SqlConnection(ConnectionString))
+            {
+                var cmdText = new SqlCommand("SELECT TOP 1 * FROM [dbo].[Comments] ORDER BY RAND()", connection);
+                connection.Open();
+
+                var reader = cmdText.ExecuteReader();
+                while (reader.Read())
+                {
+                    if ((reader[4].ToString() == "NULL") && (reader[5].ToString() == "NULL"))
+                    {
+                        comment = new Comment((int)reader[0]);
+                        comment.Content = reader[3].ToString();
+                        comment.User = GetUserById((int)reader[1]);
+                        comment.Article = GetArticleById((int)reader[2]);
+                    }
+                    else
+                    {
+                        if (reader[5].ToString() == "NULL")
+                        {
+                            var review = new Review((int)reader[0], reader[3].ToString(), GetUserById((int)reader[1]), GetArticleById((int)reader[2]), new Rating((int)reader[4]));
+                            comment = review;
+                        }
+                        else
+                        {
+                            var review = new ReviewText((int)reader[0], reader[3].ToString(), GetUserById((int)reader[1]), GetArticleById((int)reader[2]), new Rating((int)reader[4]));
+                            comment = review;
+                        }
+                    }
+                }
+                reader.Close();
+                connection.Close();
+            }
+            return comment;
+        }
+
+        public BaseComment GetCommentById(int? id)
+        {
+            BaseComment comment = new Comment();
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+                var cmdText = new SqlCommand(string.Format("SELECT * FROM [dbo].[Comment] WHERE Id={0}", id), connection);
+                connection.Open();
+
+                var reader = cmdText.ExecuteReader();
+                while (reader.Read())
+                {
+                    if (reader[4].ToString() == "NULL")
+                    {
+                        comment = new Comment((int)id);
+                        comment.User = GetUserById((int)reader[1]);
+                        comment.Article = GetArticleById((int)reader[2]);
+                        comment.Content = reader[3].ToString();
+                    }
+                    else
+                    {
+                        if (reader[5].ToString() == "NULL")
+                        {
+                            comment = new Review((int)reader[0], reader[3].ToString(), GetUserById((int)reader[1]), GetArticleById((int)reader[2]), new Rating((int)reader[4]));
+                        }
+                        else
+                        {
+                            comment = new ReviewText((int)reader[0], reader[3].ToString(), GetUserById((int)reader[1]), GetArticleById((int)reader[2]), new Rating((int)reader[4]));
+                        }
+                    }
+                }
+                reader.Close();
+                connection.Close();
+            }
+            return comment;
+        }
+
+        public List<BaseComment> GetComments()
+        {
+            var comments = new List<BaseComment>();
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+                var cmdText = new SqlCommand("SELECT * FROM [dbo].[Comment]", connection);
+                connection.Open();
+
+                var reader = cmdText.ExecuteReader();
+                while (reader.Read())
+                {
+                    if (reader[4].ToString() == "NULL")
+                    {
+                        var comment = new Comment((int)reader[0]);
+                        comment.User = GetUserById((int)reader[1]);
+                        comment.Article = GetArticleById((int)reader[2]);
+                        comment.Content = reader[3].ToString();
+                        comments.Add(comment);
+                    }
+                    else
+                    {
+                        if (reader[5].ToString() == "NULL")
+                        {
+                            var comment = new Review((int)reader[0], reader[3].ToString(), GetUserById((int)reader[1]), GetArticleById((int)reader[2]), new Rating((int)reader[4]));
+                            comments.Add(comment);
+                        }
+                        else
+                        {
+                            var comment = new ReviewText((int)reader[0], reader[3].ToString(), GetUserById((int)reader[1]), GetArticleById((int)reader[2]), new Rating((int)reader[4]));
+                            comments.Add(comment);
+                        }
+                    }
+                }
+                reader.Close();
+                connection.Close();
+            }
+            return comments;
+        }
+
+        public void DeleteComment(BaseComment comment)
+        {
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+                connection.Open();
+                var cmdText = string.Format("DELETE FROM [dbo].[Comment] WHERE Id={0}", comment.Id);
+
+                using (var command = new SqlCommand(cmdText, connection))
+                {
+                    command.CommandType = CommandType.Text;
+                    command.ExecuteNonQuery();
+                }
+                connection.Close();
+            }
+        }
+
+        public void UpdateComment(Comment oldComment, Comment newComment)
+        {
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+                var cmdText = string.Format("UPDATE [dbo].[Comment] SET Content='{0}' WHERE Id={1}", newComment.Content, oldComment.Id);
+                connection.Open();
+
+                using (var command = new SqlCommand(cmdText.ToString(), connection))
+                {
+                    command.CommandType = CommandType.Text;
+                    command.ExecuteNonQuery();
+                }
+                connection.Close();
+            }
+        }
+
+        public void UpdateReview(Review oldReview, Review newReview)
+        {
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+                var cmdText = string.Format("UPDATE [dbo].[Comment] SET Content='{0}',Rating={1} WHERE Id={2}", newReview.Content, newReview.Rating.Value, oldReview.Id);
+                connection.Open();
+
+                using (var command = new SqlCommand(cmdText.ToString(), connection))
+                {
+                    command.CommandType = CommandType.Text;
+                    command.ExecuteNonQuery();
+                }
+                connection.Close();
+            }
+        }
+
+        public void UpdateReviewText(ReviewText oldReviewText, ReviewText newReviewText)
+        {
+            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            {
+                var cmdText = string.Format("UPDATE [dbo].[Comment] SET Content='{0}',Rating={1},RatingText='{2}' WHERE Id={3}", newReviewText.Content, newReviewText.Rating.Value, newReviewText.GetRatingValue(), oldReviewText.Id);
+                connection.Open();
+
+                using (var command = new SqlCommand(cmdText.ToString(), connection))
+                {
+                    command.CommandType = CommandType.Text;
+                    command.ExecuteNonQuery();
+                }
+                connection.Close();
+            }
+        }
+
     }
 }
