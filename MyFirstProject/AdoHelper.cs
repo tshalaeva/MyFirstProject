@@ -1,11 +1,8 @@
-﻿
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
-using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using System.Text;
 using MyFirstProject.Entities;
@@ -64,7 +61,7 @@ namespace MyFirstProject
                         admin.LastName = reader[2].ToString();
                         admin.Age = (int)reader[3];
                         admin.Privilegies = GetPrivilegies((Guid)reader[4]);
-                        users.Add((User)admin);
+                        users.Add(admin);
                     }
                 }
                 reader.Close();
@@ -115,7 +112,7 @@ namespace MyFirstProject
                 cmdText.AppendFormat(
                     "INSERT INTO [dbo].[User](FirstName,LastName,Age,PrivilegiesId) VALUES ('{0}','{1}',{2},@Privilegies) ",
                     admin.FirstName, admin.LastName, admin.Age);
-                cmdText.AppendFormat("INSERT INTO Privilegies(Id,List) VALUES (@Privilegies, '{0}') ", admin.ToString());
+                cmdText.AppendFormat("INSERT INTO Privilegies(Id,List) VALUES (@Privilegies, '{0}') ", admin);
                 //cmdText.AppendLine("SELECT Id FROM [dbo].[User]");
                 cmdText.AppendLine("COMMIT");
 
@@ -156,7 +153,7 @@ namespace MyFirstProject
                 using (var command = new SqlCommand(cmdText.ToString(), connection))
                 {
                     command.CommandType = CommandType.Text;
-                    authorId = command.ExecuteNonQuery();
+                    command.ExecuteNonQuery();
                 }
 
                 var getIdCmd = "SELECT TOP 1 Id FROM [dbo].[User] ORDER BY Id DESC";
@@ -173,7 +170,7 @@ namespace MyFirstProject
         private List<string> GetPrivilegies(Guid id)
         {
             var result = new List<string>();
-            var privilegiesString = "";
+            string privilegiesString;
             using (SqlConnection connection = new SqlConnection(ConnectionString))
             {
                 connection.Open();
@@ -250,10 +247,10 @@ namespace MyFirstProject
         {
             using (SqlConnection connection = new SqlConnection(ConnectionString))
             {
-                var cmdText = string.Format("UPDATE [dbo].[User] SET FirstName='{0}',LastName='{1}',Age={3} WHERE Id={4}", newUser.FirstName, newUser.LastName, newUser.Age, oldUser.Id);
+                var cmdText = string.Format("UPDATE [dbo].[User] SET FirstName='{0}',LastName='{1}',Age={2} WHERE Id={3}", newUser.FirstName, newUser.LastName, newUser.Age, oldUser.Id);
                 connection.Open();
 
-                using (var command = new SqlCommand(cmdText.ToString(), connection))
+                using (var command = new SqlCommand(cmdText, connection))
                 {
                     command.CommandType = CommandType.Text;
                     command.ExecuteNonQuery();
@@ -264,7 +261,7 @@ namespace MyFirstProject
 
         public User GetUserById(int? id)
         {
-            User user = new User((int)id);
+            var user = new User((int)id);
             using (SqlConnection connection = new SqlConnection(ConnectionString))
             {
                 var cmdText = new SqlCommand(string.Format("SELECT * FROM [dbo].[User] WHERE Id={0}", id), connection);
@@ -273,7 +270,7 @@ namespace MyFirstProject
                 var reader = cmdText.ExecuteReader();
                 while (reader.Read())
                 {
-                    if (reader[4].ToString() == "NULL" && reader[5].ToString() == "NULL")
+                    if (reader[4].Equals(DBNull.Value) && reader[5].Equals(DBNull.Value))
                     {
                         user.FirstName = reader[1].ToString();
                         user.LastName = reader[2].ToString();
@@ -303,7 +300,7 @@ namespace MyFirstProject
 
         public Author GetAuthorById(int? id)
         {
-            Author author = new Author();
+            var author = new Author();
             using (SqlConnection connection = new SqlConnection(ConnectionString))
             {
                 var cmdText = new SqlCommand(string.Format("SELECT * FROM [dbo].[User] WHERE Id={0}", id), connection);
@@ -328,7 +325,7 @@ namespace MyFirstProject
         private string GetNickName(Guid id)
         {
             string result;
-            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            using (var connection = new SqlConnection(ConnectionString))
             {
                 connection.Open();
                 var command = new SqlCommand(string.Format("SELECT NickName FROM [dbo].[Author] WHERE Id='{0}'", id), connection);
@@ -345,7 +342,7 @@ namespace MyFirstProject
         private decimal GetPopularity(Guid id)
         {
             string result;
-            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            using (var connection = new SqlConnection(ConnectionString))
             {
                 connection.Open();
                 var command = new SqlCommand(string.Format("SELECT Popularity FROM [dbo].[Author] WHERE Id='{0}'", id), connection);
@@ -363,7 +360,7 @@ namespace MyFirstProject
         public User GetRandomUser()
         {
             var user = new User();
-            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            using (var connection = new SqlConnection(ConnectionString))
             {
                 var cmdText = new SqlCommand("SELECT * FROM [dbo].[User] ORDER BY RAND() LIMIT 1");
                 connection.Open();
@@ -384,8 +381,8 @@ namespace MyFirstProject
 
         public int GetArticlesCount()
         {
-            var result = 0;
-            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            int result;
+            using (var connection = new SqlConnection(ConnectionString))
             {
                 connection.Open();
                 var command = new SqlCommand("SELECT COUNT(Id) FROM [dbo].[Article]", connection);
@@ -399,17 +396,20 @@ namespace MyFirstProject
         public List<Article> GetArticles()
         {
             var articles = new List<Article>();
-            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            using (var connection = new SqlConnection(ConnectionString))
             {
                 connection.Open();
                 var command = new SqlCommand("SELECT * FROM [dbo].[Article]", connection);
                 var reader = command.ExecuteReader();
                 while (reader.Read())
                 {
-                    var article = new Article((int)reader[0]);
-                    article.Title = reader[1].ToString();
-                    article.Content = reader[2].ToString();
-                    article.Author = GetAuthorById(GetAuthorId((Guid)reader[3]));
+                    var article = new Article((int) reader[0])
+                    {
+                        Title = reader[1].ToString(),
+                        Content = reader[2].ToString(),
+                        Author = GetAuthorById(GetAuthorId((Guid) reader[3])),
+                        Ratings = GetArticleRatings((int) reader[0])
+                    };
                     articles.Add(article);
                 }
                 reader.Close();
@@ -418,10 +418,29 @@ namespace MyFirstProject
             return articles;
         }
 
+        private List<Rating> GetArticleRatings(int id)
+        {
+            var ratings = new List<Rating>();
+            using (var connection = new SqlConnection(ConnectionString))
+            {
+                connection.Open();
+                var command = new SqlCommand(string.Format("SELECT Value FROM [dbo].[Rating] WHERE ArticleId={0}", id), connection);
+                var reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    var rating = new Rating((int)reader[0]);
+                    ratings.Add(rating);
+                }
+                reader.Close();
+                connection.Close();
+            }
+            return ratings;
+        }
+
         private int GetAuthorId(Guid authorGuid)
         {
             int result;
-            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            using (var connection = new SqlConnection(ConnectionString))
             {
                 connection.Open();
                 var command = new SqlCommand(string.Format("SELECT Id FROM [dbo].[User] WHERE AuthorId='{0}'", authorGuid), connection);
@@ -455,7 +474,7 @@ namespace MyFirstProject
         public int SaveArticle(Article article)
         {
             int articleId;
-            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            using (var connection = new SqlConnection(ConnectionString))
             {
                 connection.Open();
                 var cmdText = new StringBuilder();
@@ -486,7 +505,7 @@ namespace MyFirstProject
 
         public void DeleteArticle(Article article)
         {
-            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            using (var connection = new SqlConnection(ConnectionString))
             {
                 connection.Open();
                 var cmdText = string.Format("DELETE FROM [dbo].[Article] WHERE Id={0}", article.Id);
@@ -502,12 +521,12 @@ namespace MyFirstProject
 
         public void UpdateArticle(Article oldArticle, Article newArticle)
         {
-            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            using (var connection = new SqlConnection(ConnectionString))
             {
-                var cmdText = string.Format("UPDATE [dbo].[Article] SET Title='{0}',Content='{1}',Author={3} WHERE Id={4}", newArticle.Title, newArticle.Content, newArticle.Author.Id, oldArticle.Id);
+                var cmdText = string.Format("UPDATE [dbo].[Article] SET Title='{0}',Content='{1}',Author={2} WHERE Id={3}", newArticle.Title, newArticle.Content, newArticle.Author.Id, oldArticle.Id);
                 connection.Open();
 
-                using (var command = new SqlCommand(cmdText.ToString(), connection))
+                using (var command = new SqlCommand(cmdText, connection))
                 {
                     command.CommandType = CommandType.Text;
                     command.ExecuteNonQuery();
@@ -531,6 +550,7 @@ namespace MyFirstProject
                     article.Content = reader[2].ToString();
                     var author = GetAuthorById(GetAuthorId((Guid)reader[3]));
                     article.Author = author;
+                    article.Ratings = GetArticleRatings((int) reader[0]);
                 }
                 reader.Close();
                 connection.Close();
@@ -553,6 +573,7 @@ namespace MyFirstProject
                     article.Title = reader[1].ToString();
                     article.Content = reader[2].ToString();
                     article.Author = GetAuthorById(GetAuthorId((Guid)reader[3]));
+                    article.Ratings = GetArticleRatings((int)reader[0]);
                 }
                 reader.Close();
                 connection.Close();
@@ -562,8 +583,8 @@ namespace MyFirstProject
 
         public int GetCommentsCount()
         {
-            var result = 0;
-            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            int result;
+            using (var connection = new SqlConnection(ConnectionString))
             {
                 connection.Open();
                 var command = new SqlCommand("SELECT COUNT(Id) FROM [dbo].[Comments]", connection);
@@ -577,12 +598,12 @@ namespace MyFirstProject
         public int SaveComment(Comment comment)
         {
             int commentId;
-            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            using (var connection = new SqlConnection(ConnectionString))
             {
                 connection.Open();
                 var cmdText = new StringBuilder();
                 cmdText.AppendFormat(
-                    "INSERT INTO [dbo].[Comment](UserId,ArticleId,Content) VALUES('{0}','{1}','{2}') ",
+                    "INSERT INTO [dbo].[Comments](UserId,ArticleId,Content) VALUES('{0}','{1}','{2}') ",
                     comment.User.Id, comment.Article.Id, comment.Content);
 
                 using (var command = new SqlCommand(cmdText.ToString(), connection))
@@ -591,7 +612,7 @@ namespace MyFirstProject
                     command.ExecuteNonQuery();
                 }
 
-                var getIdCmd = "SELECT TOP 1 Id FROM [dbo].[Comment] ORDER BY Id DESC";
+                var getIdCmd = "SELECT TOP 1 Id FROM [dbo].[Comments] ORDER BY Id DESC";
                 using (var command = new SqlCommand(getIdCmd, connection))
                 {
                     command.CommandType = CommandType.Text;
@@ -605,13 +626,17 @@ namespace MyFirstProject
         public int SaveReview(Review comment)
         {
             int commentId;
-            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            using (var connection = new SqlConnection(ConnectionString))
             {
                 connection.Open();
                 var cmdText = new StringBuilder();
+                cmdText.AppendLine("BEGIN TRANSACTION");
                 cmdText.AppendFormat(
-                    "INSERT INTO [dbo].[Comment](UserId,ArticleId,Content,Rating) VALUES('{0}','{1}','{2}',{3}) ",
+                    "INSERT INTO [dbo].[Comments](UserId,ArticleId,Content,Rating) VALUES({0},{1},'{2}',{3}) ",
                     comment.User.Id, comment.Article.Id, comment.Content, comment.Rating.Value);
+                cmdText.AppendFormat("INSERT INTO [dbo].[Rating](UserId,ArticleId,Value) VALUES({0},{1},{2}) ",
+                    comment.User.Id, comment.Article.Id, comment.Rating.Value);
+                cmdText.AppendLine("COMMIT");
 
                 using (var command = new SqlCommand(cmdText.ToString(), connection))
                 {
@@ -619,7 +644,7 @@ namespace MyFirstProject
                     command.ExecuteNonQuery();
                 }
 
-                var getIdCmd = "SELECT TOP 1 Id FROM [dbo].[Comment] ORDER BY Id DESC";
+                var getIdCmd = "SELECT TOP 1 Id FROM [dbo].[Comments] ORDER BY Id DESC";
                 using (var command = new SqlCommand(getIdCmd, connection))
                 {
                     command.CommandType = CommandType.Text;
@@ -637,9 +662,13 @@ namespace MyFirstProject
             {
                 connection.Open();
                 var cmdText = new StringBuilder();
+                cmdText.AppendLine("BEGIN TRANSACTION");
                 cmdText.AppendFormat(
-                    "INSERT INTO [dbo].[Comment](UserId,ArticleId,Content,Rating,RatingText) VALUES('{0}','{1}','{2}',{3},'{4}') ",
+                    "INSERT INTO [dbo].[Comments](UserId,ArticleId,Content,Rating,RatingText) VALUES('{0}','{1}','{2}',{3},'{4}') ",
                     comment.User.Id, comment.Article.Id, comment.Content, comment.Rating.Value, comment.GetRatingValue());
+                cmdText.AppendFormat("INSERT INTO [dbo].[Rating](UserId,ArticleId,Value) VALUES('{0}','{1}',{2}) ",
+                    comment.User.Id, comment.Article.Id, comment.Rating.Value);
+                cmdText.AppendLine("COMMIT");
 
                 using (var command = new SqlCommand(cmdText.ToString(), connection))
                 {
@@ -647,7 +676,7 @@ namespace MyFirstProject
                     command.ExecuteNonQuery();
                 }
 
-                var getIdCmd = "SELECT TOP 1 Id FROM [dbo].[Comment] ORDER BY Id DESC";
+                var getIdCmd = "SELECT TOP 1 Id FROM [dbo].[Comments] ORDER BY Id DESC";
                 using (var command = new SqlCommand(getIdCmd, connection))
                 {
                     command.CommandType = CommandType.Text;
@@ -701,7 +730,7 @@ namespace MyFirstProject
             BaseComment comment = new Comment();
             using (SqlConnection connection = new SqlConnection(ConnectionString))
             {
-                var cmdText = new SqlCommand(string.Format("SELECT * FROM [dbo].[Comment] WHERE Id={0}", id), connection);
+                var cmdText = new SqlCommand(string.Format("SELECT * FROM [dbo].[Comments] WHERE Id={0}", id), connection);
                 connection.Open();
 
                 var reader = cmdText.ExecuteReader();
@@ -737,13 +766,13 @@ namespace MyFirstProject
             var comments = new List<BaseComment>();
             using (SqlConnection connection = new SqlConnection(ConnectionString))
             {
-                var cmdText = new SqlCommand("SELECT * FROM [dbo].[Comment]", connection);
+                var cmdText = new SqlCommand("SELECT * FROM [dbo].[Comments]", connection);
                 connection.Open();
 
                 var reader = cmdText.ExecuteReader();
                 while (reader.Read())
                 {
-                    if (reader[4].ToString() == "NULL")
+                    if (reader[4].Equals(DBNull.Value))
                     {
                         var comment = new Comment((int)reader[0]);
                         comment.User = GetUserById((int)reader[1]);
@@ -753,7 +782,7 @@ namespace MyFirstProject
                     }
                     else
                     {
-                        if (reader[5].ToString() == "NULL")
+                        if (reader[5].Equals(DBNull.Value))
                         {
                             var comment = new Review((int)reader[0], reader[3].ToString(), GetUserById((int)reader[1]), GetArticleById((int)reader[2]), new Rating((int)reader[4]));
                             comments.Add(comment);
@@ -776,7 +805,7 @@ namespace MyFirstProject
             using (SqlConnection connection = new SqlConnection(ConnectionString))
             {
                 connection.Open();
-                var cmdText = string.Format("DELETE FROM [dbo].[Comment] WHERE Id={0}", comment.Id);
+                var cmdText = string.Format("DELETE FROM [dbo].[Comments] WHERE Id={0}", comment.Id);
 
                 using (var command = new SqlCommand(cmdText, connection))
                 {
@@ -791,10 +820,10 @@ namespace MyFirstProject
         {
             using (SqlConnection connection = new SqlConnection(ConnectionString))
             {
-                var cmdText = string.Format("UPDATE [dbo].[Comment] SET Content='{0}' WHERE Id={1}", newComment.Content, oldComment.Id);
+                var cmdText = string.Format("UPDATE [dbo].[Comments] SET Content='{0}' WHERE Id={1}", newComment.Content, oldComment.Id);
                 connection.Open();
 
-                using (var command = new SqlCommand(cmdText.ToString(), connection))
+                using (var command = new SqlCommand(cmdText, connection))
                 {
                     command.CommandType = CommandType.Text;
                     command.ExecuteNonQuery();
@@ -807,10 +836,10 @@ namespace MyFirstProject
         {
             using (SqlConnection connection = new SqlConnection(ConnectionString))
             {
-                var cmdText = string.Format("UPDATE [dbo].[Comment] SET Content='{0}',Rating={1} WHERE Id={2}", newReview.Content, newReview.Rating.Value, oldReview.Id);
+                var cmdText = string.Format("UPDATE [dbo].[Comments] SET Content='{0}',Rating={1} WHERE Id={2}", newReview.Content, newReview.Rating.Value, oldReview.Id);
                 connection.Open();
 
-                using (var command = new SqlCommand(cmdText.ToString(), connection))
+                using (var command = new SqlCommand(cmdText, connection))
                 {
                     command.CommandType = CommandType.Text;
                     command.ExecuteNonQuery();
@@ -823,10 +852,10 @@ namespace MyFirstProject
         {
             using (SqlConnection connection = new SqlConnection(ConnectionString))
             {
-                var cmdText = string.Format("UPDATE [dbo].[Comment] SET Content='{0}',Rating={1},RatingText='{2}' WHERE Id={3}", newReviewText.Content, newReviewText.Rating.Value, newReviewText.GetRatingValue(), oldReviewText.Id);
+                var cmdText = string.Format("UPDATE [dbo].[Comments] SET Content='{0}',Rating={1},RatingText='{2}' WHERE Id={3}", newReviewText.Content, newReviewText.Rating.Value, newReviewText.GetRatingValue(), oldReviewText.Id);
                 connection.Open();
 
-                using (var command = new SqlCommand(cmdText.ToString(), connection))
+                using (var command = new SqlCommand(cmdText, connection))
                 {
                     command.CommandType = CommandType.Text;
                     command.ExecuteNonQuery();

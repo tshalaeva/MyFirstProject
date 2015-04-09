@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using MyFirstProject.Entities;
 
 namespace MyFirstProject.Repository
@@ -124,7 +120,7 @@ namespace MyFirstProject.Repository
 
     class DbCommentRepository : IRepository<BaseComment>
     {
-        private AdoHelper _adoHelper;
+        private readonly AdoHelper _adoHelper;
         public DbCommentRepository()
         {
             _adoHelper = new AdoHelper();
@@ -149,18 +145,15 @@ namespace MyFirstProject.Repository
 
         public int Save(BaseComment comment)
         {
-            if (!(comment is Review) && !(comment is ReviewText))
+            if (!(comment is Review))
             {
                 return _adoHelper.SaveComment((Comment)comment);
             }
-            else
+            if (comment is ReviewText)
             {
-                if (comment is ReviewText)
-                {
-                    return _adoHelper.SaveReviewText((ReviewText)comment);
-                }
-                return _adoHelper.SaveReview((Review)comment);
+                return _adoHelper.SaveReviewText((ReviewText)comment);
             }
+            return _adoHelper.SaveReview((Review)comment);
         } 
        
         public BaseComment GetRandom()

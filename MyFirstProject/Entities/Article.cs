@@ -22,7 +22,7 @@ namespace MyFirstProject.Entities
                 
         public Author Author { get; set; }
 
-        public List<Rating> Ratings { get; private set; }
+        public List<Rating> Ratings { get; set; }
 
         public int Id { get; set; }        
 
@@ -39,10 +39,7 @@ namespace MyFirstProject.Entities
             {
                 return sum / Ratings.Count;
             }
-            else
-            {
-                return 0;
-            }
+            return 0;
         }
     }
 }

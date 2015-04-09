@@ -231,8 +231,6 @@ namespace MyFirstProject
         private void UpdateRating(Rating rating, Article article, User user)
         {
             var flag = false;
-            //var reviews = (from comment in m_repository.Get<Review>()
-            //               select comment).ToList();
 
             var reviews = GetReviews();
 

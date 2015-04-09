@@ -4,7 +4,7 @@ namespace MyFirstProject.Entities
 {
     public class ReviewText : Review
     {
-        private static readonly Dictionary<int, string> s_ratingTexts = new Dictionary<int, string> { { 1, "Very bad" }, { 2, "Bad" }, { 3, "Satisfactorily" }, { 4, "Good" }, { 5, "Fine" } };
+        private static readonly Dictionary<int, string> SRatingTexts = new Dictionary<int, string> { { 1, "Very bad" }, { 2, "Bad" }, { 3, "Satisfactorily" }, { 4, "Good" }, { 5, "Fine" } };
 
         public ReviewText(int id) : base(id) { }
 
@@ -28,7 +28,7 @@ namespace MyFirstProject.Entities
         private string ConvertRatingValue()
         {
             string result;
-            s_ratingTexts.TryGetValue(Rating.Value, out result);
+            SRatingTexts.TryGetValue(Rating.Value, out result);
             return result;
         }
     }
