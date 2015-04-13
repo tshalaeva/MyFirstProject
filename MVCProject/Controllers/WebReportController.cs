@@ -31,9 +31,14 @@ namespace MVCProject.Controllers
                             articles.First().Title);
                         for (var i = 1; i < articles.Count; i++)
                         {
-                            model.Content = string.Format("{0}Title of article {1}: {2}", model.Content, articles[i].Id,
+                            model.Content = string.Format("{0}\nTitle of article {1}: {2}", model.Content, articles[i].Id,
                                 articles[i].Title);
+
                         }
+                        string pattern = "\\s{2,}";
+                        string replacement = System.Environment.NewLine;
+                        var rgx = new System.Text.RegularExpressions.Regex(pattern);
+                        model.Content = rgx.Replace(model.Content, replacement);
                         break;
                     }
                 case "2":
@@ -110,7 +115,5 @@ namespace MVCProject.Controllers
             }
             return View(model);
         }
-
-        
     }
 }

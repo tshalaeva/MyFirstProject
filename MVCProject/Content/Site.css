@@ -9,6 +9,13 @@ header, footer, nav, section {
     display: block;
 }
 
+pre {
+font-size: inherit;
+color: inherit;
+border: initial;
+padding: initial;
+font-family: inherit;
+}
 
 /* Styles for basic forms
 -----------------------------------------------------------*/
@@ -61,5 +68,5 @@ textarea {
 }
 
 .result {
-    word-break: break-all;
+    white-space: pre-wrap;
 }

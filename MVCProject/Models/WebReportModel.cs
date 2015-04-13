@@ -8,7 +8,9 @@ namespace MVCProject.Models
     public class WebReportModel
     {
         private readonly List<SelectListItem> m_options;
-        
+
+        private string content;
+
         public List<SelectListItem> Options
         {
             get { return m_options; }
@@ -16,10 +18,14 @@ namespace MVCProject.Models
 
         public SelectListItem SelectedOption { get; set; }
 
-        public string Content { get; set; }
+        public string Content
+        {
+            get;
+            set;
+        }
 
         public WebReportModel()
-        {       
+        {
             m_options = new List<SelectListItem>
             {
                 new SelectListItem()
