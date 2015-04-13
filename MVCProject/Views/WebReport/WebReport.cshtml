@@ -8,14 +8,14 @@
 <body>
     @RenderBody()
     <h2>WebReport</h2>
-    @using (@Html.BeginForm("Submit", "WebReport"))
+    @using (@Html.BeginForm("Submit", "WebReport", FormMethod.Post, new { @model = @Model}))
     {
         <table>
             <thead></thead>
             <tbody>
                 <tr>
                     <td>
-                        <p class="select-method">@Html.DropDownList("dropdownlist", @Model.Options)</p>
+                        <p class="select-method">@Html.DropDownListFor(m=>m.SelectedOption.Value, @Model.Options)</p>
                     </td>
                     <td>
                         @Html.Hidden("returnUrl", Request.Url.ToString())
@@ -25,7 +25,7 @@
                 </tr>
                 <tr class="result">
                     <td>
-                        <textarea>@Model.Content</textarea>
+                        <div>@Model.Content</div>
                     </td>
                 </tr>
             </tbody>

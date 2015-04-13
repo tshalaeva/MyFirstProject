@@ -14,6 +14,8 @@ namespace MVCProject.Models
             get { return m_options; }
         }
 
+        public SelectListItem SelectedOption { get; set; }
+
         public string Content { get; set; }
 
         public WebReportModel()

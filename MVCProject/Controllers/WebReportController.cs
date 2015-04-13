@@ -22,31 +22,21 @@ namespace MVCProject.Controllers
         [HttpPost]
         public ViewResult Submit(WebReportModel model)
         {
-            var dropdown = Request["dropdownlist"];
-
-            int value;
-
-            if (!int.TryParse(dropdown, out value))
+            switch (model.SelectedOption.Value)
             {
-                return View("Error");
-            }
-
-            switch (value)
-            {
-                case 1:
+                case "1":
                     {
                         var articles = m_facade.GetArticles();
                         model.Content = string.Format("Title of article {0}: {1}", articles.First().Id,
                             articles.First().Title);
                         for (var i = 1; i < articles.Count; i++)
                         {
-                            model.Content = string.Format("{0}\nTitle of article {1}: {2}", model.Content, articles[i].Id,
+                            model.Content = string.Format("{0}Title of article {1}: {2}", model.Content, articles[i].Id,
                                 articles[i].Title);
                         }
-                        model.Options.Find(item => item.Value.Equals("1")).Selected = true;
                         break;
                     }
-                case 2:
+                case "2":
                     {
                         var articles = m_facade.GetArticles();
                         foreach (var article in articles)
@@ -54,10 +44,9 @@ namespace MVCProject.Controllers
                             model.Content = string.Format("{0}\nAverage rating of article {1}: {2}", model.Content,
                                 article.Id, article.GetAverageRating());
                         }
-                        model.Options.Find(item => item.Value.Equals("2")).Selected = true;
                         break;
                     }
-                case 3:
+                case "3":
                 {
                     var admins = m_facade.GetAdmins();
                     foreach (var admin in admins)
@@ -69,10 +58,9 @@ namespace MVCProject.Controllers
                         }
                         model.Content = string.Format("{0}\nPrivilegies of {1} {2}: {3}", model.Content, admin.FirstName, admin.LastName, privilegies);
                     }
-                    model.Options.Find(item => item.Value.Equals("3")).Selected = true;
                     break;
                 }
-                case 4:
+                case "4":
                 {
                     var articles = m_facade.GetArticles();
                     model.Content = "List of comments for each article:";
@@ -91,10 +79,9 @@ namespace MVCProject.Controllers
                             model.Content = string.Format("{0}\n{1}", model.Content, comment);
                         }                        
                     }
-                    model.Options.Find(item => item.Value.Equals("4")).Selected = true;
                     break;
                 }
-                case 5:
+                case "5":
                 {
                     model.Content = "Entity Codes:";
 
@@ -113,13 +100,11 @@ namespace MVCProject.Controllers
                     {
                         model.Content = string.Format("{0}\n{1}: {2}", model.Content, comment.Content, comment.GetEntityCode());
                     }
-                    model.Options.Find(item => item.Value.Equals("5")).Selected = true;
                     break;                   
                 }
-                case 6:
+                case "6":
                 {
-                    model.Content = string.Format("Random article id = {0}", m_facade.GetRandomArticle().Id);
-                    model.Options.Find(item => item.Value.Equals("6")).Selected = true;
+                    model.Content = string.Format("Random article id = {0}", m_facade.GetRandomArticle().Id);                    
                     break;
                 }
             }
