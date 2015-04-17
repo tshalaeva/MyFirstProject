@@ -141,9 +141,9 @@ namespace MyFirstProject.Repository
             dtoUser.PrivilegiesId = (Guid)userData["PrivilegiesId"];
             dtoUser.AuthorId = (Guid)userData["AuthorId"];
 
-            if (dtoUser.PrivilegiesId != null || dtoUser.AuthorId != null)
+            if (dtoUser.PrivilegiesId != Guid.Empty || dtoUser.AuthorId != Guid.Empty)
             {
-                if (dtoUser.AuthorId != null)
+                if (dtoUser.AuthorId != Guid.Empty)
                 {
                     return _dtoMapper.GetAuthor(dtoUser);
                 }

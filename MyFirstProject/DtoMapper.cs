@@ -168,15 +168,23 @@ else
 
         private List<string> GetPrivilegies(string privilegiesString)
         {
-            var restult = privilegiesString.Split(' ');
-            foreach (var item in restult)
+            var tmp = privilegiesString.Split(' ');
+            var result = new List<string>();
+            foreach (var item in tmp)
             {
-                if (item.Contains(","))
+                if (item != "")
                 {
-                    item.Remove(item.IndexOf(','));
+                    if (item.Contains(","))
+                    {
+                        result.Add(item.Remove(item.IndexOf(',')));
+                    }
+                    else
+                    {
+                        result.Add(item);
+                    }
                 }
             }
-            return restult.ToList();
+            return result.ToList();
         }
 
         private List<Rating> GetArticleRatings(int articleId)
