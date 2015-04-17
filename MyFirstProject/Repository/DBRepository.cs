@@ -300,11 +300,7 @@ namespace MyFirstProject.Repository
         public int Save(BaseComment comment)
         {
             var cmdText = new StringBuilder();
-            var props = new List<PropertyInfo>();
-            foreach (var prop in props)
-            {
-                object propValue = prop.GetValue(comment, null);
-            }
+            var props = new List<PropertyInfo>(comment.GetType().GetProperties());
             if (!(comment is Review))
             {
                 cmdText.AppendFormat(
@@ -316,19 +312,19 @@ namespace MyFirstProject.Repository
             {
                 cmdText.AppendLine("BEGIN TRANSACTION");
                 cmdText.AppendFormat(
-                    "INSERT INTO [dbo].[Comments](UserId,ArticleId,Content,Rating,RatingText) VALUES('{0}','{1}','{2}',{3},'{4}') ",
-                    comment.User.Id, comment.Article.Id, comment.Content, props[4], props[4].ToString());
-                cmdText.AppendFormat("INSERT INTO [dbo].[Rating](UserId,ArticleId,Value) VALUES('{0}','{1}',{2}) ",
-                    comment.User.Id, comment.Article.Id, props[4]);
+                    "INSERT INTO [dbo].[Comments](UserId,ArticleId,Content) VALUES('{0}','{1}','{2}') ",
+                    comment.User.Id, comment.Article.Id, comment.Content, props[0].GetValue(comment, null), props[0].GetValue(comment, null).ToString());
+                cmdText.AppendFormat("INSERT INTO [dbo].[Rating](UserId,ArticleId,Value,CommentId) VALUES('{0}','{1}',{2},{3}) ",
+                    comment.User.Id, comment.Article.Id, props[0].GetValue(comment, null), comment.Id);
                 cmdText.AppendLine("COMMIT");
                 return _adoHelper.CRUDOperation(cmdText.ToString(), "Comments");
             }
             cmdText.AppendLine("BEGIN TRANSACTION");
             cmdText.AppendFormat(
                 "INSERT INTO [dbo].[Comments](UserId,ArticleId,Content,Rating) VALUES({0},{1},'{2}',{3}) ",
-                comment.User.Id, comment.Article.Id, comment.Content, props[4]);
-            cmdText.AppendFormat("INSERT INTO [dbo].[Rating](UserId,ArticleId,Value) VALUES({0},{1},{2}) ",
-            comment.User.Id, comment.Article.Id, props[4]);
+                comment.User.Id, comment.Article.Id, comment.Content, props[0].GetValue(comment, null));
+            cmdText.AppendFormat("INSERT INTO [dbo].[Rating](UserId,ArticleId,Value,CommentId) VALUES({0},{1},{2},{3}) ",
+            comment.User.Id, comment.Article.Id, props[0].GetValue(comment, null), comment.Id);
             cmdText.AppendLine("COMMIT");
             return _adoHelper.CRUDOperation(cmdText.ToString(), "Comments");
         }
