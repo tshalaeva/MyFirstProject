@@ -132,38 +132,52 @@ else
         public Entities.Article GetArticleById(int id)
         {
             var articleData = _adoHelper.GetData("Article", id).Rows[0];
-            var article = new Entities.Article((int)articleData[0]);
-            article.Author = (Entities.Author)GetUserById((int)_adoHelper.GetCellValue("User", "Id", "AuthorId", articleData["AuthorId"]));
-            article.Content = articleData["Content"].ToString();
-            article.Title = articleData["Title"].ToString();
+            var article = new Entities.Article((int) articleData[0])
+            {
+                Author =
+                    (Entities.Author)
+                        GetUserById((int) _adoHelper.GetCellValue("User", "Id", "AuthorId", articleData["AuthorId"])),
+                Content = articleData["Content"].ToString(),
+                Title = articleData["Title"].ToString()
+            };
             article.Ratings = GetArticleRatings(article.Id);
             return article;
         }
 
-        public Entities.Comment GetComment(Entities.Dto.Comment comment)
+        public BaseComment GetComment(Entities.Dto.Comment comment)
         {
             var articleData = _adoHelper.GetData("Article", comment.ArticleId);
             var article = new Entities.Article((int)articleData.Rows[0][0]);
             var user = GetUserById(comment.UserId);
-            var result = new Entities.Comment(comment.Id)
+            if (comment.Rating == null)
             {
-                Content = comment.Content,
+                var result = new Entities.Comment(comment.Id)
+                {
+                    Content = comment.Content,
+                    Article = article,
+                    User = user
+                };
+                return result;
+            }
+            if (comment.Rating is int)
+            {
+                var review = new Entities.Review(comment.Id)
+                {
+                    Article = article,
+                    User = user,
+                    Rating = new Rating((int) _adoHelper.GetCellValue("Rating", "Value", "CommentId", comment.Id)),
+                    Content = comment.Content
+                };
+                return review;
+            }
+            var reviewText = new ReviewText(comment.Id)
+            {
                 Article = article,
-                User = user
+                User = user,
+                Rating = new Rating(Convert.ToInt32(_adoHelper.GetCellValue("TextRating", "Value", "CommentId", comment.Id))),
+                Content = comment.Content
             };
-            return result;
-        }
-
-        public Entities.Review GetReview(Entities.Dto.Review review)
-        {
-            var result = new Entities.Review(review.Id, review.Content, GetUserById(review.UserId), GetArticleById(review.ArticleId), new Rating(review.Rating));
-            return result;
-        }
-
-        public Entities.ReviewText GetReviewText(Entities.Dto.Review review)
-        {
-            var result = new ReviewText(review.Id, review.Content, GetUserById(review.UserId), GetArticleById(review.ArticleId), new Rating(review.Rating));
-            return result;
+            return reviewText;
         }
 
         private List<string> GetPrivilegies(string privilegiesString)

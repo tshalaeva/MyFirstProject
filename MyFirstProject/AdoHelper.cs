@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
+﻿using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Reflection;
-using MyFirstProject.Entities;
 
 namespace MyFirstProject
 {
@@ -23,7 +17,7 @@ namespace MyFirstProject
 
         public void Initialize()
         {
-            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            using (var connection = new SqlConnection(ConnectionString))
             {
                 connection.Open();
                 const string commandText = "INSERT INTO User(Id,FirstName,LastName,Age) VALUES(@id,@firstName,@lastName,@age)";
@@ -38,10 +32,10 @@ namespace MyFirstProject
             }
         }        
 
-        public int CRUDOperation(string request, string tableName)
+        public object CRUDOperation(string request, string tableName)
         {
-            int elementId;
-            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            object elementId;
+            using (var connection = new SqlConnection(ConnectionString))
             {
                 connection.Open();
                 using (var command = new SqlCommand(request, connection))
@@ -54,7 +48,7 @@ namespace MyFirstProject
                 using (var command = new SqlCommand(getIdCmd, connection))
                 {
                     command.CommandType = CommandType.Text;
-                    elementId = (int)command.ExecuteScalar();
+                    elementId = command.ExecuteScalar();
                 }
                 connection.Close();
             }
@@ -64,7 +58,7 @@ namespace MyFirstProject
         public object GetCellValue(string tableName, string columnName, int id)
         {
             object result;
-            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            using (var connection = new SqlConnection(ConnectionString))
             {
                 var cmdText = new SqlCommand(string.Format("SELECT {0} FROM [dbo].[{1}] WHERE Id={2}", columnName, tableName, id), connection);
                 connection.Open();
@@ -77,7 +71,7 @@ namespace MyFirstProject
         public object GetCellValue(string tableName, string columnName, string filterColumn, object filterValue)
         {
             object result;
-            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            using (var connection = new SqlConnection(ConnectionString))
             {
                 var cmdText = new SqlCommand(string.Format("SELECT {0} FROM [dbo].[{1}] WHERE {2}='{3}'", columnName, tableName, filterColumn, filterValue), connection);
                 connection.Open();
@@ -90,7 +84,7 @@ namespace MyFirstProject
         public DataTable GetData(string tableName)
         {
             var table = new DataTable();
-            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            using (var connection = new SqlConnection(ConnectionString))
             {
                 var cmdText = new SqlCommand(string.Format("SELECT * FROM [dbo].[{0}]", tableName), connection);
                 connection.Open();
@@ -105,7 +99,7 @@ namespace MyFirstProject
         public DataTable GetData(string tableName, object id)
         {
             var table = new DataTable();
-            using (SqlConnection connection = new SqlConnection(ConnectionString))
+            using (var connection = new SqlConnection(ConnectionString))
             {
                 var cmdText = new SqlCommand(string.Format("SELECT * FROM [dbo].[{0}] WHERE Id={1}", tableName,id), connection);
                 connection.Open();

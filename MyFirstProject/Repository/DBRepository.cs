@@ -64,7 +64,7 @@ namespace MyFirstProject.Repository
                 cmdText.AppendFormat(
                 "INSERT INTO [dbo].[User](FirstName,LastName,Age) VALUES('{0}','{1}',{2})",
                 entity.FirstName, entity.LastName, entity.Age);
-                return _adoHelper.CRUDOperation(cmdText.ToString(), "User");
+                return (int)_adoHelper.CRUDOperation(cmdText.ToString(), "User");
             }
             if (entity is Admin)
             {
@@ -77,7 +77,7 @@ namespace MyFirstProject.Repository
                 var privilegyList = props[0].GetValue(entity,null) as List<string>;
                 cmdText.AppendFormat("INSERT INTO Privilegies(Id,List) VALUES (@Privilegies, '{0}') ", GetPrivilegiesString(privilegyList));
                 cmdText.AppendLine("COMMIT");
-                return _adoHelper.CRUDOperation(cmdText.ToString(), "User");
+                return (int)_adoHelper.CRUDOperation(cmdText.ToString(), "User");
             }
             cmdText.AppendLine("BEGIN TRANSACTION");
             cmdText.AppendLine("DECLARE @AuthorID uniqueidentifier");
@@ -90,7 +90,7 @@ namespace MyFirstProject.Repository
             cmdText.AppendFormat("INSERT INTO [dbo].[Author](Id,NickName,Popularity) VALUES (@AuthorID, '{0}', '{1}'); ", nickName, popularity);
             cmdText.AppendLine("SELECT Id FROM [dbo].[User]");
             cmdText.AppendLine("COMMIT");
-            return _adoHelper.CRUDOperation(cmdText.ToString(), "User");
+            return (int)_adoHelper.CRUDOperation(cmdText.ToString(), "User");
         }
 
         public void Delete(User user)
@@ -234,7 +234,7 @@ namespace MyFirstProject.Repository
                 "INSERT INTO [dbo].[Article](Title,Content,AuthorId) VALUES('{0}','{1}','{2}') ",
                 entity.Title, entity.Content, _adoHelper.GetCellValue("User", "AuthorId", entity.Author.Id));
             cmdText.AppendLine("COMMIT");
-            return _adoHelper.CRUDOperation(cmdText.ToString(), "Article");
+            return (int)_adoHelper.CRUDOperation(cmdText.ToString(), "Article");
         }
 
         public void Delete(Article article)
@@ -306,27 +306,30 @@ namespace MyFirstProject.Repository
                 cmdText.AppendFormat(
                     "INSERT INTO [dbo].[Comments](UserId,ArticleId,Content) VALUES('{0}','{1}','{2}') ",
                     comment.User.Id, comment.Article.Id, comment.Content);
-                return _adoHelper.CRUDOperation(cmdText.ToString(), "Comments");
+                return (int)_adoHelper.CRUDOperation(cmdText.ToString(), "Comments");
             }
+            var ratingValue = (props[0].GetValue(comment, null) as Rating).Value;
             if (comment is ReviewText)
             {
                 cmdText.AppendLine("BEGIN TRANSACTION");
                 cmdText.AppendFormat(
                     "INSERT INTO [dbo].[Comments](UserId,ArticleId,Content) VALUES('{0}','{1}','{2}') ",
-                    comment.User.Id, comment.Article.Id, comment.Content, props[0].GetValue(comment, null), props[0].GetValue(comment, null).ToString());
-                cmdText.AppendFormat("INSERT INTO [dbo].[Rating](UserId,ArticleId,Value,CommentId) VALUES('{0}','{1}',{2},{3}) ",
-                    comment.User.Id, comment.Article.Id, props[0].GetValue(comment, null), comment.Id);
+                    comment.User.Id, comment.Article.Id, comment.Content);                
                 cmdText.AppendLine("COMMIT");
-                return _adoHelper.CRUDOperation(cmdText.ToString(), "Comments");
+                var reviewTextId = _adoHelper.CRUDOperation(cmdText.ToString(), "Comments");
+                var ratingCmd = string.Format("INSERT INTO [dbo].[TextRating](Id,ArticleId,Value,CommentId) VALUES('{0}','{1}',{2},{3}) ", comment.User.Id, comment.Article.Id, ratingValue, reviewTextId);
+                _adoHelper.CRUDOperation(ratingCmd, "Rating");
+                return (int)reviewTextId;
             }
             cmdText.AppendLine("BEGIN TRANSACTION");
             cmdText.AppendFormat(
-                "INSERT INTO [dbo].[Comments](UserId,ArticleId,Content,Rating) VALUES({0},{1},'{2}',{3}) ",
-                comment.User.Id, comment.Article.Id, comment.Content, props[0].GetValue(comment, null));
-            cmdText.AppendFormat("INSERT INTO [dbo].[Rating](UserId,ArticleId,Value,CommentId) VALUES({0},{1},{2},{3}) ",
-            comment.User.Id, comment.Article.Id, props[0].GetValue(comment, null), comment.Id);
+                "INSERT INTO [dbo].[Comments](UserId,ArticleId,Content) VALUES({0},{1},'{2}') ",
+                comment.User.Id, comment.Article.Id, comment.Content);
             cmdText.AppendLine("COMMIT");
-            return _adoHelper.CRUDOperation(cmdText.ToString(), "Comments");
+            var commentId = _adoHelper.CRUDOperation(cmdText.ToString(), "Comments");
+            var ratingCommand = string.Format("INSERT INTO [dbo].[Rating](Id,ArticleId,Value,CommentId) VALUES({0},{1},{2},{3}) ", comment.User.Id, comment.Article.Id, ratingValue, commentId);
+            _adoHelper.CRUDOperation(ratingCommand, "Rating");
+            return (int)commentId;
         }
 
         public BaseComment GetRandom()
@@ -334,12 +337,20 @@ namespace MyFirstProject.Repository
             var random = new Random();
             var table = _adoHelper.GetData("Comments");
             var commentTable = table.Rows[random.Next(0, table.Rows.Count - 1)];
-            var comment = new Entities.Dto.Comment();
-            comment.Id = (int)commentTable["Id"];
-            comment.Content = commentTable["Content"].ToString();
-            comment.ArticleId = (int)commentTable["ArticleId"];
-            comment.UserId = (int)commentTable["UserId"];
-            comment.RatingId = (Guid)commentTable["RatingId"];
+            var comment = new Entities.Dto.Comment
+            {
+                Id = (int) commentTable["Id"],
+                Content = commentTable["Content"].ToString(),
+                ArticleId = (int) commentTable["ArticleId"],
+                UserId = (int) commentTable["UserId"]
+            };
+            var rating = _adoHelper.GetCellValue("Rating", "Value", "CommentId", commentTable["Id"]);
+            var textRating = _adoHelper.GetCellValue("TextRating", "Value", "CommentId", commentTable["Id"]);
+            if (rating != null)
+            {
+                comment.Rating = (int) rating;
+            }
+            comment.Rating = (int) textRating;
             return _dtoMapper.GetComment(comment);
         }
 
@@ -347,12 +358,21 @@ namespace MyFirstProject.Repository
         {
             var commentData = _adoHelper.GetData("Comments", (int)id);
             var commentTable = commentData.Rows[(int)id];
-            var comment = new Entities.Dto.Comment();
-            comment.Id = (int)commentTable["Id"];
-            comment.Content = commentTable["Content"].ToString();
-            comment.ArticleId = (int)commentTable["ArticleId"];
-            comment.UserId = (int)commentTable["UserId"];
-            comment.RatingId = (Guid)commentTable["RatingId"];
+            var comment = new Entities.Dto.Comment
+            {
+                Id = (int) commentTable["Id"],
+                Content = commentTable["Content"].ToString(),
+                ArticleId = (int) commentTable["ArticleId"],
+                UserId = (int) commentTable["UserId"],                
+            };
+            var rating = _adoHelper.GetCellValue("Rating", "Value", "CommentId", commentTable["Id"]);
+            var textRating = _adoHelper.GetCellValue("TextRating", "Value", "CommentId", commentTable["Id"]);
+            if (((int) rating != 0) && (textRating != DBNull.Value)) return _dtoMapper.GetComment(comment);
+            if (((int) rating == 0))
+            {
+                comment.Rating = rating;
+            }
+            comment.Rating = textRating;
             return _dtoMapper.GetComment(comment);
         }
 
@@ -360,20 +380,20 @@ namespace MyFirstProject.Repository
         {
             var comments = new List<BaseComment>();
             var commentsTable = _adoHelper.GetData("Comments");
-            for (int i = 0; i < commentsTable.Rows.Count; i++)
+            for (var i = 0; i < commentsTable.Rows.Count; i++)
             {
-                var dtoComment = new Entities.Dto.Comment();
-                dtoComment.Id = (int)commentsTable.Rows[i]["Id"];
-                dtoComment.Content = commentsTable.Rows[i]["Content"].ToString();
-                dtoComment.ArticleId = (int)commentsTable.Rows[i]["ArticleId"];
-                dtoComment.UserId = (int)commentsTable.Rows[i]["UserId"];
-                if (commentsTable.Rows[i]["Rating"].Equals(DBNull.Value))
+                var dtoComment = new Entities.Dto.Comment
                 {
-                    dtoComment.RatingId = Guid.Empty;
-                }
-                else
+                    Id = (int) commentsTable.Rows[i]["Id"],
+                    Content = commentsTable.Rows[i]["Content"].ToString(),
+                    ArticleId = (int) commentsTable.Rows[i]["ArticleId"],
+                    UserId = (int) commentsTable.Rows[i]["UserId"]
+                };
+                var rating = _adoHelper.GetCellValue("Rating", "Value", "CommentId", commentsTable.Rows[i]["Id"]);
+                var textRating = _adoHelper.GetCellValue("TextRating", "Value", "CommentId", commentsTable.Rows[i]["Id"]);
+                if (rating != null || textRating != DBNull.Value)
                 {
-                    dtoComment.RatingId = (Guid)commentsTable.Rows[i]["Rating"];
+                    dtoComment.Rating = rating ?? textRating;
                 }
                 comments.Add(_dtoMapper.GetComment(dtoComment));
             }
