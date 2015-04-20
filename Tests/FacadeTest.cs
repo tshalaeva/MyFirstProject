@@ -158,7 +158,7 @@ namespace Tests
             facade.SaveArticle(article);
             var newArticle = article;
             newArticle.Title = "Updated title";
-            facade.UpdateArticle(article, newArticle);
+            facade.UpdateArticle(article.Id, newArticle);
 
             Assert.IsTrue(m_articleRepository.MethodIsCalled(0));
         }

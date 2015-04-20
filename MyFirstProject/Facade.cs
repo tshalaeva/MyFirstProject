@@ -84,6 +84,7 @@ namespace MyFirstProject
             _mCommentRepository.Save(new Comment(0, "Content 0", users[0], articles[0]));
             _mCommentRepository.Save(new Review(1, "Review Content 1", users[0], articles[0], new Rating(4)));
             _mCommentRepository.Save(new ReviewText(2, "Review text 2", users[1], articles[0], new Rating(4)));
+            _mCommentRepository.Save(new Review(1, "Updated review", users[0], articles[1], new Rating(3)));
         }
 
         public Facade(Repository.IRepository<User> userRepository, Repository.IRepository<Article> articleRepository, Repository.IRepository<BaseComment> commentRepository)
@@ -182,7 +183,7 @@ namespace MyFirstProject
             _mCommentRepository.Save(review);
         }
 
-        public void UpdateArticle(Article oldEntity, Article newEntity)
+        public void UpdateArticle(int oldEntity, Article newEntity)
         {
             _mArticleRepository.Update(oldEntity, newEntity);
         }

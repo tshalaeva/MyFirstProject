@@ -111,11 +111,8 @@
     <Compile Include="Entities\Article.cs" />
     <Compile Include="Entities\Author.cs" />
     <Compile Include="Entities\Comment.cs" />
-    <Compile Include="Entities\Dto\Admin.cs" />
     <Compile Include="Entities\Dto\Article.cs" />
-    <Compile Include="Entities\Dto\Author.cs" />
     <Compile Include="Entities\Dto\Comment.cs" />
-    <Compile Include="Entities\Dto\Review.cs" />
     <Compile Include="Entities\Dto\User.cs" />
     <Compile Include="Entities\IEntity.cs" />
     <Compile Include="Entities\ReviewText.cs" />

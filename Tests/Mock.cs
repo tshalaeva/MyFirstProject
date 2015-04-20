@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using MyFirstProject.Entities;
 using MyFirstProject.Repository;
 
@@ -127,11 +128,12 @@ namespace Tests
             return entity.Id;
         }
 
-        public void Update(Article oldEntity, Article newEntity)
+        public int Update(int oldEntity, Article newEntity)
         {
-            Data[Data.IndexOf(oldEntity)] = newEntity;
+            Data[oldEntity] = newEntity;
             m_entity = newEntity;
             m_flag = true;
+            return oldEntity;
         }
 
         public void Delete(Article entity)
@@ -196,11 +198,12 @@ namespace Tests
             return entity.Id;
         }
 
-        public void Update(User oldEntity, User newEntity)
+        public int Update(int oldEntity, User newEntity)
         {
-            Data[Data.IndexOf(oldEntity)] = newEntity;
+            Data[oldEntity] = newEntity;
             m_entity = newEntity;
             m_flag = true;
+            return oldEntity;
         }
 
         public void Delete(User entity)
@@ -265,11 +268,12 @@ namespace Tests
             return entity.Id;
         }
 
-        public void Update(BaseComment oldEntity, BaseComment newEntity)
+        public int Update(int oldEntity, BaseComment newEntity)
         {
-            Data[Data.IndexOf(oldEntity)] = newEntity;
+            Data[oldEntity] = newEntity;
             m_entity = newEntity;
             m_flag = true;
+            return oldEntity;
         }
 
         public void Delete(BaseComment entity)

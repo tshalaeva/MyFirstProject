@@ -13,7 +13,7 @@ namespace MyFirstProject.Repository
 
         void Delete(T entity);
 
-        void Update(T existingEntity, T newEntity);
+        int Update(int existingEntityId, T newEntity);
 
         T GetById(int? id);
 

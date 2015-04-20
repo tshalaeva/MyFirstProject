@@ -11,26 +11,9 @@ namespace MyFirstProject
             get
             {
                 return ConfigurationManager.
-    ConnectionStrings["DefaultConnection"].ConnectionString;
+                    ConnectionStrings["DefaultConnection"].ConnectionString;
             }
         }
-
-        public void Initialize()
-        {
-            using (var connection = new SqlConnection(ConnectionString))
-            {
-                connection.Open();
-                const string commandText = "INSERT INTO User(Id,FirstName,LastName,Age) VALUES(@id,@firstName,@lastName,@age)";
-                var command = new SqlCommand(commandText, connection);
-                command.Parameters.AddWithValue("@id", 0);
-                command.Parameters.AddWithValue("@firstName", "Test");
-                command.Parameters.AddWithValue("@lastName", "User");
-                command.Parameters.AddWithValue("@age", 30);
-
-                command.ExecuteNonQuery();
-                connection.Close();
-            }
-        }        
 
         public object CRUDOperation(string request, string tableName)
         {

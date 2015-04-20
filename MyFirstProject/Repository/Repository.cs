@@ -38,9 +38,10 @@ namespace MyFirstProject.Repository
             Data.Remove(entity);
         }
 
-        public void Update(User existingEntity, User newEntity)
+        public int Update(int existingEntityId, User newEntity)
         {
-            Data[Data.IndexOf(existingEntity)] = newEntity;
+            Data[existingEntityId] = newEntity;
+            return existingEntityId;
         }
 
         public User GetById(int? id)
@@ -90,9 +91,10 @@ namespace MyFirstProject.Repository
             Data.Remove(entity);
         }
 
-        public void Update(Article existingEntity, Article newEntity)
+        public int Update(int existingEntityId, Article newEntity)
         {
-            Data[Data.IndexOf(existingEntity)] = newEntity;
+            Data[existingEntityId] = newEntity;
+            return existingEntityId;
         }
 
         public Article GetById(int? id)
@@ -142,9 +144,10 @@ namespace MyFirstProject.Repository
             Data.Remove(entity);
         }
 
-        public void Update(BaseComment existingEntity, BaseComment newEntity)
+        public int Update(int existingEntityId, BaseComment newEntity)
         {
-            Data[Data.IndexOf(existingEntity)] = newEntity;
+            Data[existingEntityId] = newEntity;
+            return existingEntityId;
         }
 
         public BaseComment GetById(int? id)
