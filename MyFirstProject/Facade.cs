@@ -59,6 +59,11 @@ namespace MyFirstProject
 
             admin.Id = _mUserRepository.Save(admin);
 
+            //var updatedAdmin = admin;
+            //updatedAdmin.FirstName = "Updated Admin";
+            //updatedAdmin.Privilegies = new List<string> {"Edit", "Read"};
+            //_mUserRepository.Save(updatedAdmin);
+
             var articles = new List<Article>();
 
             for (var i = 0; i < 4; i++)

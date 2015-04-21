@@ -91,43 +91,7 @@ namespace MyFirstProject
                     return result;
                 }
             }
-        }
-
-        private Entities.User GetUserById(int id)
-        {
-            var userData = _adoHelper.GetData("User", id).Rows[0];
-
-            if (userData["PrivilegiesId"].Equals(DBNull.Value) && userData["AuthorId"].Equals(DBNull.Value))
-            {
-            var user = new Entities.User((int)userData[0]);
-            user.FirstName = userData["FirstName"].ToString();
-            user.LastName = userData["LastName"].ToString();
-            user.Age = (int)userData["Age"];
-            return user;
-            }
-else
-            {
-                if (userData["PrivilegiesId"].Equals(DBNull.Value))
-                {
-                    var author = new Entities.Author((int)userData["Id"]);
-                    author.FirstName = userData["FirstName"].ToString();
-                    author.LastName = userData["LastName"].ToString();
-                    author.Age = (int)userData["Age"];
-                    author.NickName = _adoHelper.GetCellValue("Author", "NickName", "Id", userData["AuthorId"]).ToString();
-                    author.Popularity = Convert.ToDecimal(_adoHelper.GetCellValue("Author", "Popularity", "Id", userData["AuthorId"]));
-                    return author;
-                }
-                else
-                {
-                    var admin = new Entities.Admin((int)userData["Id"]);
-                    admin.FirstName = userData["FirstName"].ToString();
-                    admin.LastName = userData["LastName"].ToString();
-                    admin.Age = (int)userData["Age"];
-                    admin.Privilegies = GetPrivilegies(_adoHelper.GetCellValue("Privilegies", "List", "Id", userData[5]).ToString());
-                    return admin;
-                }
-            }
-        }
+        }        
 
         public Entities.Article GetArticleById(int id)
         {
@@ -216,5 +180,40 @@ else
             return result;
         }
 
+        private Entities.User GetUserById(int id)
+        {
+            var userData = _adoHelper.GetData("User", id).Rows[0];
+
+            if (userData["PrivilegiesId"].Equals(DBNull.Value) && userData["AuthorId"].Equals(DBNull.Value))
+            {
+                var user = new Entities.User((int)userData[0]);
+                user.FirstName = userData["FirstName"].ToString();
+                user.LastName = userData["LastName"].ToString();
+                user.Age = (int)userData["Age"];
+                return user;
+            }
+            else
+            {
+                if (userData["PrivilegiesId"].Equals(DBNull.Value))
+                {
+                    var author = new Entities.Author((int)userData["Id"]);
+                    author.FirstName = userData["FirstName"].ToString();
+                    author.LastName = userData["LastName"].ToString();
+                    author.Age = (int)userData["Age"];
+                    author.NickName = _adoHelper.GetCellValue("Author", "NickName", "Id", userData["AuthorId"]).ToString();
+                    author.Popularity = Convert.ToDecimal(_adoHelper.GetCellValue("Author", "Popularity", "Id", userData["AuthorId"]));
+                    return author;
+                }
+                else
+                {
+                    var admin = new Entities.Admin((int)userData["Id"]);
+                    admin.FirstName = userData["FirstName"].ToString();
+                    admin.LastName = userData["LastName"].ToString();
+                    admin.Age = (int)userData["Age"];
+                    admin.Privilegies = GetPrivilegies(_adoHelper.GetCellValue("Privilegies", "List", "Id", userData[5]).ToString());
+                    return admin;
+                }
+            }
+        }
     }
 }

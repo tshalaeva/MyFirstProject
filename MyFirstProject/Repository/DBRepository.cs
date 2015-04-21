@@ -65,20 +65,20 @@ namespace MyFirstProject.Repository
             if (!(entity is Admin) && !(entity is Author))
             {
                 cmdText.AppendFormat(
-                    "INSERT INTO [dbo].[User](FirstName,LastName,Age) VALUES('{0}','{1}',{2})",
-                    entity.FirstName, entity.LastName, entity.Age);
+                    "INSERT INTO [dbo].[User] (Id,FirstName,LastName,Age) VALUES({0},'{1}','{2}',{3})",
+                    entity.Id, entity.FirstName, entity.LastName, entity.Age);
                 return (int)_adoHelper.CRUDOperation(cmdText.ToString(), "User");
             }
             if (entity is Admin)
             {
                 cmdText.AppendLine("BEGIN TRANSACTION");
-                cmdText.AppendLine("DECLARE @Privilegies uniqueidentifier");
-                cmdText.AppendLine("SET @Privilegies=NEWID()");
+                cmdText.AppendLine("DECLARE @Privilegies uniqueidentifier;");
+                cmdText.AppendLine("SET @Privilegies=NEWID();");
                 cmdText.AppendFormat(
-                    "INSERT INTO [dbo].[User](FirstName,LastName,Age,PrivilegiesId) VALUES ('{0}','{1}',{2},@Privilegies) ",
-                    entity.FirstName, entity.LastName, entity.Age);
+                    "INSERT INTO [dbo].[User] (Id,FirstName,LastName,Age,PrivilegiesId) VALUES ({0},'{1}','{2}',{3},@Privilegies); ",
+                    entity.Id, entity.FirstName, entity.LastName, entity.Age);
                 var privilegyList = props[0].GetValue(entity, null) as List<string>;
-                cmdText.AppendFormat("INSERT INTO Privilegies(Id,List) VALUES (@Privilegies, '{0}') ",
+                cmdText.AppendFormat("INSERT INTO Privilegies (Id,List) VALUES (@Privilegies, '{0}'); ",
                     GetPrivilegiesString(privilegyList));
                 cmdText.AppendLine("COMMIT");
                 return (int)_adoHelper.CRUDOperation(cmdText.ToString(), "User");
@@ -87,14 +87,14 @@ namespace MyFirstProject.Repository
             cmdText.AppendLine("DECLARE @AuthorID uniqueidentifier");
             cmdText.AppendLine("SET @AuthorID=NEWID()");
             cmdText.AppendFormat(
-                "INSERT INTO [dbo].[User](FirstName,LastName,Age,AuthorId) VALUES ('{0}','{1}',{2},@AuthorID); ",
-                entity.FirstName, entity.LastName, entity.Age);
-            var nickName = props[0].GetValue(entity, null);
-            var popularity = props[1].GetValue(entity, null);
+                "INSERT INTO [dbo].[User](Id,FirstName,LastName,Age,AuthorId) VALUES ({0},'{1}','{2}',{3},@AuthorID) ",
+                entity.Id, entity.FirstName, entity.LastName, entity.Age);
+            var nickName = props[0].GetValue(entity, null).ToString();
+            var popularity = Convert.ToDecimal(props[1].GetValue(entity, null));
             cmdText.AppendFormat(
-                "INSERT INTO [dbo].[Author](Id,NickName,Popularity) VALUES (@AuthorID, '{0}', '{1}'); ", nickName,
+                "INSERT INTO [dbo].[Author](Id,NickName,Popularity) VALUES (@AuthorID,'{0}','{1}') ", nickName,
                 popularity);
-            cmdText.AppendLine("SELECT Id FROM [dbo].[User]");
+            //cmdText.AppendLine("SELECT Id FROM [dbo].[User]");
             cmdText.AppendLine("COMMIT");
             return (int)_adoHelper.CRUDOperation(cmdText.ToString(), "User");
         }
@@ -130,8 +130,27 @@ namespace MyFirstProject.Repository
 
         public int Update(int oldUserId, User newUser)
         {
-            var commandText = string.Format("UPDATE [dbo].[User] SET FirstName='{0}',LastName='{1}',Age={2} WHERE Id={3}", newUser.FirstName, newUser.LastName, newUser.Age, oldUserId);
-            return Convert.ToInt32(_adoHelper.CRUDOperation(commandText, "User"));
+            if(!(newUser is Admin) && !(newUser is Author))
+            {
+                var commandText = string.Format("UPDATE [dbo].[User] SET FirstName='{0}',LastName='{1}',Age={2} WHERE Id={3}", newUser.FirstName, newUser.LastName, newUser.Age, oldUserId);
+                return Convert.ToInt32(_adoHelper.CRUDOperation(commandText, "User"));
+            }
+            var cmd = new StringBuilder();
+            cmd.AppendLine("BEGIN TRANSACTION");
+            cmd.AppendFormat("UPDATE [dbo].[User] SET FirstName='{0}',LastName='{1}',Age={2} WHERE Id={3} ", newUser.FirstName, newUser.LastName, newUser.Age, oldUserId);
+            var type = newUser.GetType();
+            var properties = new List<PropertyInfo>(type.GetProperties());
+            if(newUser is Admin)
+            {
+                var privilegiesId = _adoHelper.GetCellValue("User", "PrivilegiesId", oldUserId);
+                cmd.AppendFormat("UPDATE [dbo].[Privilegies] SET List='{0}' WHERE Id='{1}' ", GetPrivilegiesString(properties[0].GetValue(newUser, null) as List<string>), privilegiesId);
+                cmd.AppendLine("COMMIT");
+                return Convert.ToInt32(_adoHelper.CRUDOperation(cmd.ToString(), "User"));
+            }
+            var authorId = _adoHelper.GetCellValue("User", "AuthorId", oldUserId);
+            cmd.AppendFormat("UPDATE [dbo].[Author] SET NickName='{0}',Popularity='{1}' WHERE Id='{3}' ", properties[0].GetValue(newUser, null), properties[1].GetValue(newUser, null), authorId);
+            cmd.AppendLine("COMMIT");
+            return Convert.ToInt32(_adoHelper.CRUDOperation(cmd.ToString(), "User"));
         }
 
         public User GetById(int? id)
