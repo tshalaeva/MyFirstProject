@@ -1,10 +1,9 @@
-﻿using System.Collections.Generic;
-using MyFirstProject.Entities;
-using System.Text;
+﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
-using System;
-using System.Diagnostics.Eventing.Reader;
-using System.Runtime.Remoting.Messaging;
+using System.Text;
+using MyFirstProject.Entities;
+using Comment = MyFirstProject.Entities.Dto.Comment;
 
 namespace MyFirstProject.Repository
 {
@@ -24,11 +23,7 @@ namespace MyFirstProject.Repository
         {
             get
             {
-                if (_adoHelper.GetData("User").Rows.Count != 0)
-                {
-                    return true;
-                }
-                return false;
+                return _adoHelper.GetData("User").Rows.Count != 0;
             }
         }
 
@@ -94,7 +89,6 @@ namespace MyFirstProject.Repository
             cmdText.AppendFormat(
                 "INSERT INTO [dbo].[Author](Id,NickName,Popularity) VALUES (@AuthorID,'{0}','{1}') ", nickName,
                 popularity);
-            //cmdText.AppendLine("SELECT Id FROM [dbo].[User]");
             cmdText.AppendLine("COMMIT");
             return (int)_adoHelper.CRUDOperation(cmdText.ToString(), "User");
         }
@@ -130,27 +124,24 @@ namespace MyFirstProject.Repository
 
         public int Update(int oldUserId, User newUser)
         {
+            var commandText = string.Format("UPDATE [dbo].[User] SET FirstName='{0}',LastName='{1}',Age={2} WHERE Id={3}", newUser.FirstName, newUser.LastName, newUser.Age, oldUserId);
             if(!(newUser is Admin) && !(newUser is Author))
-            {
-                var commandText = string.Format("UPDATE [dbo].[User] SET FirstName='{0}',LastName='{1}',Age={2} WHERE Id={3}", newUser.FirstName, newUser.LastName, newUser.Age, oldUserId);
+            {                
                 return Convert.ToInt32(_adoHelper.CRUDOperation(commandText, "User"));
-            }
-            var cmd = new StringBuilder();
-            cmd.AppendLine("BEGIN TRANSACTION");
-            cmd.AppendFormat("UPDATE [dbo].[User] SET FirstName='{0}',LastName='{1}',Age={2} WHERE Id={3} ", newUser.FirstName, newUser.LastName, newUser.Age, oldUserId);
+            }            
             var type = newUser.GetType();
             var properties = new List<PropertyInfo>(type.GetProperties());
             if(newUser is Admin)
             {
-                var privilegiesId = _adoHelper.GetCellValue("User", "PrivilegiesId", oldUserId);
-                cmd.AppendFormat("UPDATE [dbo].[Privilegies] SET List='{0}' WHERE Id='{1}' ", GetPrivilegiesString(properties[0].GetValue(newUser, null) as List<string>), privilegiesId);
-                cmd.AppendLine("COMMIT");
-                return Convert.ToInt32(_adoHelper.CRUDOperation(cmd.ToString(), "User"));
+                var privilegiesId = (Guid)_adoHelper.GetCellValue("User", "PrivilegiesId", oldUserId);
+                var cmd = string.Format("UPDATE [dbo].[Privilegies] SET List='{0}' WHERE Id='{1}' ", GetPrivilegiesString(properties[0].GetValue(newUser, null) as List<string>), privilegiesId);
+                _adoHelper.CRUDOperation(cmd, "Privilegies");
+                return Convert.ToInt32(_adoHelper.CRUDOperation(commandText, "User"));
             }
             var authorId = _adoHelper.GetCellValue("User", "AuthorId", oldUserId);
-            cmd.AppendFormat("UPDATE [dbo].[Author] SET NickName='{0}',Popularity='{1}' WHERE Id='{3}' ", properties[0].GetValue(newUser, null), properties[1].GetValue(newUser, null), authorId);
-            cmd.AppendLine("COMMIT");
-            return Convert.ToInt32(_adoHelper.CRUDOperation(cmd.ToString(), "User"));
+            var authorCmd = string.Format("UPDATE [dbo].[Author] SET NickName='{0}',Popularity='{1}' WHERE Id='{2}'; ", properties[0].GetValue(newUser, null), properties[1].GetValue(newUser, null), authorId);
+            _adoHelper.CRUDOperation(authorCmd, "Author");
+            return Convert.ToInt32(_adoHelper.CRUDOperation(commandText, "User"));
         }
 
         public User GetById(int? id)
@@ -261,8 +252,8 @@ namespace MyFirstProject.Repository
             cmdText.AppendLine("DECLARE @authorId uniqueidentifier");
             cmdText.AppendFormat("SET @authorId='{0}' ", _adoHelper.GetCellValue("User", "AuthorId", entity.Author.Id));
             cmdText.AppendFormat(
-                "INSERT INTO [dbo].[Article](Title,Content,AuthorId) VALUES('{0}','{1}','{2}') ",
-                entity.Title, entity.Content, _adoHelper.GetCellValue("User", "AuthorId", entity.Author.Id));
+                "INSERT INTO [dbo].[Article](Id,Title,Content,AuthorId) VALUES({0},'{1}','{2}','{3}') ",
+                entity.Id, entity.Title, entity.Content, _adoHelper.GetCellValue("User", "AuthorId", entity.Author.Id));
             cmdText.AppendLine("COMMIT");
             return (int)_adoHelper.CRUDOperation(cmdText.ToString(), "Article");
         }
@@ -275,7 +266,7 @@ namespace MyFirstProject.Repository
 
         public int Update(int oldArticleId, Article newArticle)
         {
-            var commandText = string.Format("UPDATE [dbo].[Article] SET Title='{0}',Content='{1}',Author={2} WHERE Id={3}", newArticle.Title, newArticle.Content, newArticle.Author.Id, oldArticleId);
+            var commandText = string.Format("UPDATE [dbo].[Article] SET Title='{0}',Content='{1}' WHERE Id={2}", newArticle.Title, newArticle.Content, oldArticleId);
             return Convert.ToInt32(_adoHelper.CRUDOperation(commandText, "Article"));
         }
 
@@ -395,7 +386,7 @@ namespace MyFirstProject.Repository
             var random = new Random();
             var table = _adoHelper.GetData("Comments");
             var commentTable = table.Rows[random.Next(0, table.Rows.Count - 1)];
-            var comment = new Entities.Dto.Comment
+            var comment = new Comment
             {
                 Id = (int)commentTable["Id"],
                 Content = commentTable["Content"].ToString(),
@@ -416,7 +407,7 @@ namespace MyFirstProject.Repository
         {
             var commentData = _adoHelper.GetData("Comments", (int)id);
             var commentTable = commentData.Rows[(int)id];
-            var comment = new Entities.Dto.Comment
+            var comment = new Comment
             {
                 Id = (int)commentTable["Id"],
                 Content = commentTable["Content"].ToString(),
@@ -440,7 +431,7 @@ namespace MyFirstProject.Repository
             var commentsTable = _adoHelper.GetData("Comments");
             for (var i = 0; i < commentsTable.Rows.Count; i++)
             {
-                var dtoComment = new Entities.Dto.Comment
+                var dtoComment = new Comment
                 {
                     Id = (int)commentsTable.Rows[i]["Id"],
                     Content = commentsTable.Rows[i]["Content"].ToString(),

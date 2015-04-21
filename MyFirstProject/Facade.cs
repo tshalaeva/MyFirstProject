@@ -49,6 +49,10 @@ namespace MyFirstProject
                 user.Id = _mUserRepository.Save(user);
             }
 
+            var updatedUser = users[0];
+            updatedUser.FirstName = "Updated";
+            _mUserRepository.Save(updatedUser);
+
             var admin = new Admin(4)
             {
                 FirstName = "Admin",
@@ -59,16 +63,20 @@ namespace MyFirstProject
 
             admin.Id = _mUserRepository.Save(admin);
 
-            //var updatedAdmin = admin;
-            //updatedAdmin.FirstName = "Updated Admin";
-            //updatedAdmin.Privilegies = new List<string> {"Edit", "Read"};
-            //_mUserRepository.Save(updatedAdmin);
+            var updatedAdmin = admin;
+            updatedAdmin.FirstName = "Updated Admin";
+            updatedAdmin.Privilegies = new List<string> { "Edit", "Read" };
+            _mUserRepository.Save(updatedAdmin);
+
+            var updatedAuthor = authors[0];
+            updatedAuthor.NickName = "Updated Nick";
+            _mUserRepository.Save(updatedAuthor);
 
             var articles = new List<Article>();
 
             for (var i = 0; i < 4; i++)
             {
-                var article = new Article
+                var article = new Article(i)
                 {
                     Content = string.Format("Text {0}", i + 1),
                     Title = string.Format("Title {0}", i + 1)
@@ -85,6 +93,10 @@ namespace MyFirstProject
                 article.Id = _mArticleRepository.Save(article);
                 articles.Add(article);
             }
+
+            var updatedArticle = articles[1];
+            updatedArticle.Title = "Updated Article";
+            _mArticleRepository.Save(updatedArticle);
 
             _mCommentRepository.Save(new Comment(0, "Content 0", users[0], articles[0]));
             _mCommentRepository.Save(new Review(1, "Review Content 1", users[0], articles[0], new Rating(4)));
