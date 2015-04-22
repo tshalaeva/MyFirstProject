@@ -1,37 +1,37 @@
 ﻿using System.Collections.Generic;
-using MyFirstProject.Entities;
+using MyFirstProject;
 
 namespace MVCProject.Models
 {
     public class ArticleModel
     {
-        private readonly Article m_article;
+        private readonly ArticleAdapter m_adapter;
 
         public List<CommentModel> Comments { get; set; }
 
-        public ArticleModel(Article article)
+        public ArticleModel(ArticleAdapter adapter)
         {
-            m_article = article;
+            m_adapter = adapter;
         }
 
         public string Title
         {
-            get { return m_article.Title; }            
+            get { return m_adapter.Title; }            
         }
 
         public string Author
         {
-            get { return m_article.Author.NickName; }                         
+            get { return m_adapter.Author; }                         
         }
 
         public string Content
         {
-            get { return m_article.Content; }            
+            get { return m_adapter.Content; }            
         }
 
         public int Id
         {
-            get { return m_article.Id; }
+            get { return m_adapter.Id; }
         } 
     }
 }

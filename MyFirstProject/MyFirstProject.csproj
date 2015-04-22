@@ -106,6 +106,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ArticleAdapter.cs" />
+    <Compile Include="CommentAdapter.cs" />
     <Compile Include="DtoMapper.cs" />
     <Compile Include="Entities\Admin.cs" />
     <Compile Include="Entities\Article.cs" />

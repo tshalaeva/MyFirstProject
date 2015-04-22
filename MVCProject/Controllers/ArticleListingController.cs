@@ -19,7 +19,7 @@ namespace MVCProject.Controllers
         public ActionResult Index()
         {
             var articles = m_facade.GetArticles();
-            var articleModels = articles.Select(article => new ArticleModel(article)).ToList();
+            var articleModels = articles.Select(article => new ArticleModel(new ArticleAdapter(article))).ToList();
             return View(articleModels);
         }
 
@@ -32,12 +32,12 @@ namespace MVCProject.Controllers
         {
             if (!m_facade.ArticleExists(id)) return Redirect("~/ArticleListing/Index");
             var article = m_facade.GetArticleById(id);
-            var articleModel = new ArticleModel(article);
+            var articleModel = new ArticleModel(new ArticleAdapter(article));
             var comments = m_facade.FilterCommentsByArticle(article);
             articleModel.Comments = new List<CommentModel>();
             foreach (var comment in comments)
             {
-                articleModel.Comments.Add(new CommentModel(comment));
+                articleModel.Comments.Add(new CommentModel(new CommentAdapter(comment)));
             }
             return View(articleModel);
         }

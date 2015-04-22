@@ -31,7 +31,7 @@ namespace MyFirstProject.Repository
             container.Configure(x => x.For<IRepository<User>>().Use<DbUserRepository>());
             container.Configure(y => y.For <IRepository<Article>>().Use<DbArticleRepository>());
             container.Configure(z => z.For<IRepository<BaseComment>>().Use<DbCommentRepository>());
-            container.Configure(facade => facade.For<Facade>().Use<Facade>());
+            container.Configure(facade => facade.For<Facade>().Use<Facade>());            
             return container;
         }
     }    
