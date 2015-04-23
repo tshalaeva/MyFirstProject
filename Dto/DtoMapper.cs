@@ -3,16 +3,10 @@ using System.Linq;
 using ObjectRepository.Entities;
 using Comment = Dto.DtoEntities.Comment;
 
-//using Article = MyFirstProject.Entities.Dto.Article;
-//using Comment = MyFirstProject.Entities.Dto.Comment;
-//using User = MyFirstProject.Entities.Dto.User;
-
 namespace Dto
 {
     public class DtoMapper
     {
-        //private AdoHelper _adoHelper = new AdoHelper();
-
         public Article GetArticle(DtoEntities.Article article)
         {
             var result = new Article
@@ -47,7 +41,6 @@ namespace Dto
                 FirstName = admin.FirstName,
                 LastName = admin.LastName,
                 Age = admin.Age,
-                //Privilegies = GetPrivilegies(_adoHelper.GetCellValue("Privilegies", "List", "Id", admin.PrivilegiesId).ToString())
                 Privilegies = GetPrivilegies(admin.Privilegies)
             };
             return result;
@@ -55,7 +48,6 @@ namespace Dto
 
         public User GetUser(DtoEntities.User user)
         {
-            //if (user.PrivilegiesId.Equals(Guid.Empty) && user.AuthorId.Equals(Guid.Empty))
             if(user.Privilegies == null && user.NickName == null)
             {
                 var result = new User(user.Id)
@@ -66,7 +58,6 @@ namespace Dto
                 };
                 return result;
             }
-            //if (!user.PrivilegiesId.Equals(Guid.Empty))
             if(user.Privilegies != null)
             {
                 var result = new Admin(user.Id)
@@ -75,7 +66,6 @@ namespace Dto
                     LastName = user.LastName,
                     Age = user.Age,
                     Privilegies = GetPrivilegies(user.Privilegies)
-                    //Privilegies = GetPrivilegies(_adoHelper.GetCellValue("Privilegies", "List", "Id", user.PrivilegiesId).ToString())
                 };
                 return result;
             }
@@ -86,8 +76,6 @@ namespace Dto
                     FirstName = user.FirstName,
                     LastName = user.LastName,
                     Age = user.Age,
-                    //NickName = _adoHelper.GetCellValue("Author", "NickName", "Id", user.AuthorId).ToString(),
-                    //Popularity = Convert.ToDecimal(_adoHelper.GetCellValue("Author", "Popularity", "Id", user.AuthorId))
                     NickName = user.NickName,
                     Popularity = user.Popularity
                 };
@@ -95,26 +83,8 @@ namespace Dto
             }
         }
 
-        //public Article GetArticleById(int id)
-        //{
-        //    var articleData = _adoHelper.GetData("Article", id).Rows[0];
-        //    var article = new Article((int) articleData[0])
-        //    {
-        //        Author =
-        //            (Author)
-        //                GetUserById((int) _adoHelper.GetCellValue("User", "Id", "AuthorId", articleData["AuthorId"])),
-        //        Content = articleData["Content"].ToString(),
-        //        Title = articleData["Title"].ToString()
-        //    };
-        //    article.Ratings = GetArticleRatings(article.Id);
-        //    return article;
-        //}
-
         public BaseComment GetComment(Comment comment)
         {
-            //var articleData = _adoHelper.GetData("Article", comment.ArticleId);
-            //var article = new Article((int)articleData.Rows[0][0]);
-            //var user = GetUserById(comment.UserId);
             if (comment.Rating == null)
             {
                 var result = new ObjectRepository.Entities.Comment(comment.Id)
@@ -131,7 +101,6 @@ namespace Dto
                 {
                     Article = new Article(comment.ArticleId),
                     User = new User(comment.UserId),
-                    //Rating = new Rating((int) _adoHelper.GetCellValue("Rating", "Value", "CommentId", comment.Id)),
                     Rating = new Rating((int)comment.Rating),
                     Content = comment.Content
                 };
@@ -141,7 +110,6 @@ namespace Dto
             {
                 Article = new Article(comment.ArticleId),
                 User = new User(comment.UserId),
-                //Rating = new Rating(Convert.ToInt32(_adoHelper.GetCellValue("TextRating", "Value", "CommentId", comment.Id))),
                 Rating = new Rating(ConvertRating(comment.Rating.ToString())),
                 Content = comment.Content
             };
@@ -191,42 +159,6 @@ namespace Dto
                 result.Add(new Rating((int)value));
             }
             return result;
-        }
-
-        //private User GetUserById(int id)
-        //{
-        //    var userData = _adoHelper.GetData("User", id).Rows[0];
-
-        //    if (userData["PrivilegiesId"].Equals(DBNull.Value) && userData["AuthorId"].Equals(DBNull.Value))
-        //    {
-        //        var user = new User((int)userData[0]);
-        //        user.FirstName = userData["FirstName"].ToString();
-        //        user.LastName = userData["LastName"].ToString();
-        //        user.Age = (int)userData["Age"];
-        //        return user;
-        //    }
-        //    else
-        //    {
-        //        if (userData["PrivilegiesId"].Equals(DBNull.Value))
-        //        {
-        //            var author = new Author((int)userData["Id"]);
-        //            author.FirstName = userData["FirstName"].ToString();
-        //            author.LastName = userData["LastName"].ToString();
-        //            author.Age = (int)userData["Age"];
-        //            author.NickName = _adoHelper.GetCellValue("Author", "NickName", "Id", userData["AuthorId"]).ToString();
-        //            author.Popularity = Convert.ToDecimal(_adoHelper.GetCellValue("Author", "Popularity", "Id", userData["AuthorId"]));
-        //            return author;
-        //        }
-        //        else
-        //        {
-        //            var admin = new Admin((int)userData["Id"]);
-        //            admin.FirstName = userData["FirstName"].ToString();
-        //            admin.LastName = userData["LastName"].ToString();
-        //            admin.Age = (int)userData["Age"];
-        //            admin.Privilegies = GetPrivilegies(_adoHelper.GetCellValue("Privilegies", "List", "Id", userData[5]).ToString());
-        //            return admin;
-        //        }
-        //    }
-        //}
+        }        
     }
 }

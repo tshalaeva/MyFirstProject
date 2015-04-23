@@ -245,9 +245,37 @@ namespace DataAccessLayer.Repositories
                     Id = (int)articlesTable.Rows[i]["Id"],
                     Title = articlesTable.Rows[i]["Title"].ToString(),
                     Content = articlesTable.Rows[i]["Content"].ToString(),
-                    AuthorId = Convert.ToInt32(_adoHelper.GetCellValue("User", "Id", "AuthorId", articlesTable.Rows[i]["AuthorId"]))
+                    AuthorId = Convert.ToInt32(_adoHelper.GetCellValue("User", "Id", "AuthorId", articlesTable.Rows[i]["AuthorId"])),
+                    Ratings = new List<object>()
                 };
-                articles.Add(_dtoMapper.GetArticle(dtoArticle));
+                var rating = _adoHelper.GetData("Rating").Rows;
+                for (int j = 0; j < rating.Count; j++)
+                {
+                    if ((int)rating[j]["ArticleId"] == (int)articlesTable.Rows[i]["Id"])
+                    {
+                        dtoArticle.Ratings.Add((int)rating[j]["Value"]);
+                    }
+                }
+                var textRating = _adoHelper.GetData("TextRating").Rows;
+                for (var j = 0; j < textRating.Count; j++)
+                {
+                    if ((int)textRating[j]["ArticleId"] == (int)articlesTable.Rows[i]["Id"])
+                    {
+                        dtoArticle.Ratings.Add(textRating[i]["Value"]);
+                    }
+                }
+                var currentArticle = _dtoMapper.GetArticle(dtoArticle);
+                currentArticle.Author = new Author()
+                {
+                    Id = dtoArticle.AuthorId,
+                    FirstName = _adoHelper.GetCellValue("User", "FirstName", dtoArticle.AuthorId).ToString(),
+                    LastName = _adoHelper.GetCellValue("User", "LastName", dtoArticle.AuthorId).ToString(),
+                    Age = Convert.ToInt32(_adoHelper.GetCellValue("User", "Age", dtoArticle.AuthorId)),
+                    NickName = _adoHelper.GetCellValue("Author", "NickName", "Id", _adoHelper.GetCellValue("User", "AuthorId", dtoArticle.AuthorId)).ToString(),
+                    Popularity = Convert.ToDecimal(_adoHelper.GetCellValue("Author", "Popularity", "Id", _adoHelper.GetCellValue("User", "AuthorId", dtoArticle.AuthorId)))
+                };
+
+                articles.Add(currentArticle);
             }
             return articles;
         }
@@ -316,7 +344,7 @@ namespace DataAccessLayer.Repositories
             var articleTable = table.Rows[random.Next(0, table.Rows.Count - 1)];
             var article = new Dto.DtoEntities.Article
             {
-                Id = (int) articleTable["Id"],
+                Id = (int)articleTable["Id"],
                 Title = articleTable["Title"].ToString(),
                 Content = articleTable["Content"].ToString(),
                 AuthorId = Convert.ToInt32(articleTable["AuthorId"])
@@ -427,10 +455,10 @@ namespace DataAccessLayer.Repositories
             var rating = ratingInt ?? ratingText;
             var dtoComment = new Dto.DtoEntities.Comment()
             {
-                Id = (int) commentTable["Id"],
+                Id = (int)commentTable["Id"],
                 Content = commentTable["Content"].ToString(),
-                ArticleId = (int) commentTable["ArticleId"],
-                UserId = (int) commentTable["UserId"],
+                ArticleId = (int)commentTable["ArticleId"],
+                UserId = (int)commentTable["UserId"],
                 Rating = rating
             };
             //var comment = new ObjectRepository.Entities.Comment
