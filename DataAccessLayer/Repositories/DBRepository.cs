@@ -347,8 +347,25 @@ namespace DataAccessLayer.Repositories
                 Id = (int)articleTable["Id"],
                 Title = articleTable["Title"].ToString(),
                 Content = articleTable["Content"].ToString(),
-                AuthorId = Convert.ToInt32(articleTable["AuthorId"])
+                AuthorId = Convert.ToInt32(_adoHelper.GetCellValue("User", "Id", "AuthorId", articleTable["AuthorId"])),
+                Ratings = new List<object>()
             };
+            var rating = _adoHelper.GetData("Rating").Rows;
+            for (var i = 0; i < rating.Count; i++)
+            {
+                if (rating[i]["ArticleId"] == articleTable["Id"])
+                {
+                    article.Ratings.Add((int)rating[i]["Value"]);
+                }
+            }
+            var textRating = _adoHelper.GetData("TextRating").Rows;
+            for (var i = 0; i < textRating.Count; i++)
+            {
+                if (textRating[i]["ArticleId"] == articleTable["Id"])
+                {
+                    article.Ratings.Add(textRating[i]["Value"]);
+                }
+            }
             return _dtoMapper.GetArticle(article);
         }
 

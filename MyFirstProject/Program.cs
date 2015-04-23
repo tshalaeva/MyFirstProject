@@ -11,17 +11,17 @@ namespace MyFirstProject
             var appDataPath = Path.Combine(baseProjectPath, ".\\App_Data\\");
             AppDomain.CurrentDomain.SetData("DataDirectory", Path.GetFullPath(appDataPath));
 
-            var report = new Report();            
+            var report = new Report();
 
-            //report.CreateAticles();
+            report.CreateAticles();
 
-            //report.CreateComments();
+            report.CreateComments();
 
-            //report.CreateReviews();
+            report.CreateReviews();
 
-            //report.PrintArticleTitles();
+            report.PrintArticleTitles();
 
-            //report.PrintAverageRatingForArticle();
+            report.PrintAverageRatingForArticle();
 
             report.PrintListOfPrivilegies();
 
