@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using MyFirstProject.Entities;
-using MyFirstProject.Repository;
-
+using DataAccessLayer.Repositories;
+using ObjectRepository.Entities;
 
 namespace Tests
 {
@@ -86,20 +84,21 @@ namespace Tests
 
     public class ArticleMock : IRepository<Article>
     {
-        private bool m_flag;
-        private Article m_entity;
-        private List<Article> Data;
+        private bool _mFlag;
+        private Article _mEntity;
+        private readonly List<Article> _data;
 
-        public bool Initialized { get { if (Data.Count != 0) { return true; } else { return false; } } }
+        public bool Initialized { get { return _data.Count != 0; }
+        }
 
         public ArticleMock(List<Article> articles)
         {
-            Data = articles;
+            _data = articles;
         }
 
         public Article GetById(int? id)
         {
-            foreach (var item in Data)
+            foreach (var item in _data)
             {
                 if (item.Id == id)
                 {
@@ -112,42 +111,42 @@ namespace Tests
         public Article GetRandom()
         {
             var random = new Random();
-            return Data[random.Next(0, Data.Count)];
+            return _data[random.Next(0, _data.Count)];
         }
 
         public List<Article> Get()
         {
-            return Data;
+            return _data;
         }
 
         public int Save(Article entity)
         {
-            Data.Add(entity);
-            m_flag = true;
-            m_entity = entity;
+            _data.Add(entity);
+            _mFlag = true;
+            _mEntity = entity;
             return entity.Id;
         }
 
         public int Update(int oldEntity, Article newEntity)
         {
-            Data[oldEntity] = newEntity;
-            m_entity = newEntity;
-            m_flag = true;
+            _data[oldEntity] = newEntity;
+            _mEntity = newEntity;
+            _mFlag = true;
             return oldEntity;
         }
 
         public void Delete(Article entity)
         {
-            Data.Remove(entity);
-            m_entity = entity;
-            m_flag = true;
+            _data.Remove(entity);
+            _mEntity = entity;
+            _mFlag = true;
         }
 
         public bool MethodIsCalled(int id)
         {
-            if (m_flag && m_entity.Id == id)
+            if (_mFlag && _mEntity.Id == id)
             {
-                m_flag = false;
+                _mFlag = false;
                 return true;
             }
             return false;
@@ -156,20 +155,21 @@ namespace Tests
 
     public class UserMock : IRepository<User>
     {
-        private bool m_flag;
-        private User m_entity;
-        private List<User> Data;
+        private bool _mFlag;
+        private User _mEntity;
+        private readonly List<User> _data;
 
-        public bool Initialized { get { if (Data.Count != 0) { return true; } else { return false; } } }
+        public bool Initialized { get { return _data.Count != 0; }
+        }
 
         public UserMock(List<User> users)
         {
-            Data = users;
+            _data = users;
         }
 
         public User GetById(int? id)
         {
-            foreach (var item in Data)
+            foreach (var item in _data)
             {
                 if (item.Id == id)
                 {
@@ -182,42 +182,42 @@ namespace Tests
         public User GetRandom()
         {
             var random = new Random();
-            return Data[random.Next(0, Data.Count)];
+            return _data[random.Next(0, _data.Count)];
         }
 
         public List<User> Get()
         {
-            return Data;
+            return _data;
         }
 
         public int Save(User entity)
         {
-            Data.Add(entity);
-            m_flag = true;
-            m_entity = entity;
+            _data.Add(entity);
+            _mFlag = true;
+            _mEntity = entity;
             return entity.Id;
         }
 
         public int Update(int oldEntity, User newEntity)
         {
-            Data[oldEntity] = newEntity;
-            m_entity = newEntity;
-            m_flag = true;
+            _data[oldEntity] = newEntity;
+            _mEntity = newEntity;
+            _mFlag = true;
             return oldEntity;
         }
 
         public void Delete(User entity)
         {
-            Data.Remove(entity);
-            m_entity = entity;
-            m_flag = true;
+            _data.Remove(entity);
+            _mEntity = entity;
+            _mFlag = true;
         }
 
         public bool MethodIsCalled(int id)
         {
-            if (m_flag && m_entity.Id == id)
+            if (_mFlag && _mEntity.Id == id)
             {
-                m_flag = false;
+                _mFlag = false;
                 return true;
             }
             return false;
@@ -226,20 +226,20 @@ namespace Tests
 
     public class CommentMock : IRepository<BaseComment>
     {
-        private bool m_flag;
-        private BaseComment m_entity;
-        private List<BaseComment> Data;
+        private bool _mFlag;
+        private BaseComment _mEntity;
+        private readonly List<BaseComment> _data;
 
-        public bool Initialized { get { if (Data.Count != 0) { return true; } else { return false; } } }
+        public bool Initialized { get { if (_data.Count != 0) { return true; } else { return false; } } }
 
         public CommentMock(List<BaseComment> users)
         {
-            Data = users;
+            _data = users;
         }
 
         public BaseComment GetById(int? id)
         {
-            foreach (var item in Data)
+            foreach (var item in _data)
             {
                 if (item.Id == id)
                 {
@@ -252,42 +252,42 @@ namespace Tests
         public BaseComment GetRandom()
         {
             var random = new Random();
-            return Data[random.Next(0, Data.Count)];
+            return _data[random.Next(0, _data.Count)];
         }
 
         public List<BaseComment> Get()
         {
-            return Data;
+            return _data;
         }
 
         public int Save(BaseComment entity)
         {
-            Data.Add(entity);
-            m_flag = true;
-            m_entity = entity;
+            _data.Add(entity);
+            _mFlag = true;
+            _mEntity = entity;
             return entity.Id;
         }
 
         public int Update(int oldEntity, BaseComment newEntity)
         {
-            Data[oldEntity] = newEntity;
-            m_entity = newEntity;
-            m_flag = true;
+            _data[oldEntity] = newEntity;
+            _mEntity = newEntity;
+            _mFlag = true;
             return oldEntity;
         }
 
         public void Delete(BaseComment entity)
         {
-            Data.Remove(entity);
-            m_entity = entity;
-            m_flag = true;
+            _data.Remove(entity);
+            _mEntity = entity;
+            _mFlag = true;
         }
 
         public bool MethodIsCalled(int id)
         {
-            if (m_flag && m_entity.Id == id)
+            if (_mFlag && _mEntity.Id == id)
             {
-                m_flag = false;
+                _mFlag = false;
                 return true;
             }
             return false;

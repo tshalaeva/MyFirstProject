@@ -1,37 +1,38 @@
-﻿using MyFirstProject.Entities;
-using MyFirstProject;
+﻿using System.Web.Providers.Entities;
+using MVCProject.Adapters;
+using ObjectRepository.Entities;
 
 namespace MVCProject.Models
 {
     public class CommentModel
     {
-        private readonly CommentAdapter m_adapter;
+        private readonly CommentAdapter _mAdapter;
 
         public int Id
         {
-            get { return m_adapter.Id; }            
+            get { return _mAdapter.Id; }            
         }
 
-        public User User { get { return m_adapter.User; } }
+        public ObjectRepository.Entities.User User { get { return _mAdapter.User; } }
 
         public ArticleModel Article 
         {
-            get { return new ArticleModel(new ArticleAdapter(m_adapter.Article)); }
+            get { return new ArticleModel(new ArticleAdapter(_mAdapter.Article)); }
         }
 
         public string Content 
         {
-            get { return m_adapter.Content; }
+            get { return _mAdapter.Content; }
         }
 
         public CommentModel(CommentAdapter comment)
         {
-            m_adapter = comment;
+            _mAdapter = comment;
         }
 
         public string Show()
         {
-            return m_adapter.ToString();
+            return _mAdapter.ToString();
         }
     }
 }

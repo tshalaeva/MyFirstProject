@@ -1,6 +1,5 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using MyFirstProject.Entities;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using ObjectRepository.Entities;
 
 namespace Tests
 {

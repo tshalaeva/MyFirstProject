@@ -1,8 +1,5 @@
-﻿using System;
-using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using MyFirstProject;
-using MyFirstProject.Entities;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using ObjectRepository.Entities;
 
 namespace Tests
 {

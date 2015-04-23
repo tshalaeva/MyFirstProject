@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using MyFirstProject;
+using MVCProject.Adapters;
 
 namespace MVCProject.Models
 {

@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Web.Mvc;
+using DataAccessLayer;
 using MVCProject.Models;
-using MyFirstProject;
-using MyFirstProject.Entities;
-using MyFirstProject.Repository;
+using ObjectRepository.Entities;
 
 namespace MVCProject.Controllers
 {
@@ -122,8 +123,8 @@ namespace MVCProject.Controllers
         private string TrimSpaces(string input)
         {
             const string pattern = "\\s{2,}";
-            var replacement = System.Environment.NewLine;
-            var rgx = new System.Text.RegularExpressions.Regex(pattern);
+            var replacement = Environment.NewLine;
+            var rgx = new Regex(pattern);
             return rgx.Replace(input, replacement);
         }
     }

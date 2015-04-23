@@ -1,11 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-using System.Web.Http;
+using DataAccessLayer;
+using MVCProject.Adapters;
 using MVCProject.Models;
-using MyFirstProject;
-using MyFirstProject.Entities;
-using MyFirstProject.Repository;
 
 namespace MVCProject.Controllers
 {

@@ -131,6 +131,8 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Adapters\ArticleAdapter.cs" />
+    <Compile Include="Adapters\CommentAdapter.cs" />
     <Compile Include="Controllers\ArticleDetailsController.cs" />
     <Compile Include="Controllers\ArticleListingController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -144,10 +146,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Data\MyDatabase.mdf" />
-    <Content Include="App_Data\MyDatabase_log.ldf">
-      <DependentUpon>MyDatabase.mdf</DependentUpon>
-    </Content>
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
@@ -243,11 +241,17 @@
     <Content Include="Views\ArticleDetails\Index.cshtml" />
     <Content Include="Views\ArticleListing\OpenDetails.cshtml" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
-    <ProjectReference Include="..\MyFirstProject\MyFirstProject.csproj">
-      <Project>{02cd5d15-c0c1-42d6-bd0f-6015508f82d5}</Project>
-      <Name>MyFirstProject</Name>
+    <Folder Include="App_Data\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DataAccessLayer\DataAccessLayer.csproj">
+      <Project>{e94e8e05-1524-4d4c-bd2f-3d8c36ea30fd}</Project>
+      <Name>DataAccessLayer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ObjectRepository\ObjectRepository.csproj">
+      <Project>{22da06d4-4ed1-4279-985e-98ae03e9d077}</Project>
+      <Name>ObjectRepository</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
