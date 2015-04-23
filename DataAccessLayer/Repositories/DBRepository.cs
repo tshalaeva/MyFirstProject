@@ -314,7 +314,7 @@ namespace DataAccessLayer.Repositories
                 Id = Convert.ToInt32(articleTable["Id"]),
                 Title = articleTable["Title"].ToString(),
                 Content = articleTable["Content"].ToString(),
-                AuthorId = Convert.ToInt32(articleTable["AuthorId"]),
+                AuthorId = Convert.ToInt32(_adoHelper.GetCellValue("User", "Id", "AuthorId", articleTable["AuthorId"])),
                 Ratings = new List<object>()
             };
             var rating = _adoHelper.GetData("Rating").Rows;

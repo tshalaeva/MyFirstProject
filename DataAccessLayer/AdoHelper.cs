@@ -10,8 +10,7 @@ namespace DataAccessLayer
         {
             get
             {
-                return ConfigurationManager.
-                    ConnectionStrings["DefaultConnection"].ConnectionString;
+                return ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
             }
         }
 

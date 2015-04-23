@@ -202,10 +202,6 @@
     <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
-    <Content Include="App_Data\MyDatabase.mdf" />
-    <Content Include="App_Data\MyDatabase_log.ldf">
-      <DependentUpon>MyDatabase.mdf</DependentUpon>
-    </Content>
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>

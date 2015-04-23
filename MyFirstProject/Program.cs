@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 
 namespace MyFirstProject
 {
@@ -6,6 +7,10 @@ namespace MyFirstProject
     {
         private static void Main()
         {
+            var baseProjectPath = AppDomain.CurrentDomain.BaseDirectory;
+            var appDataPath = Path.Combine(baseProjectPath, ".\\App_Data\\");
+            AppDomain.CurrentDomain.SetData("DataDirectory", Path.GetFullPath(appDataPath));
+
             var report = new Report();            
 
             //report.CreateAticles();
