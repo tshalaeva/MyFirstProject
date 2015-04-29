@@ -131,8 +131,6 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Adapters\ArticleAdapter.cs" />
-    <Compile Include="Adapters\CommentAdapter.cs" />
     <Compile Include="Controllers\ArticleDetailsController.cs" />
     <Compile Include="Controllers\ArticleListingController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -247,9 +245,9 @@
       <Project>{e94e8e05-1524-4d4c-bd2f-3d8c36ea30fd}</Project>
       <Name>DataAccessLayer</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ObjectRepository\ObjectRepository.csproj">
+    <ProjectReference Include="..\ObjectRepository\Core.csproj">
       <Project>{22da06d4-4ed1-4279-985e-98ae03e9d077}</Project>
-      <Name>ObjectRepository</Name>
+      <Name>Core</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
@@ -268,7 +266,7 @@
         <WebProjectProperties>
           <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>0</DevelopmentServerPort>
+          <DevelopmentServerPort>55251</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost:50393/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>

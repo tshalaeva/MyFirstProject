@@ -1,6 +1,6 @@
-﻿namespace Dto.DtoEntities
+﻿namespace DataAccessLayer.DtoEntities
 {
-    public class Comment
+    public class DtoComment
     {
         public string Content { get; set; }
 

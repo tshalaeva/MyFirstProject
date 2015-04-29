@@ -33,7 +33,7 @@ namespace MVCProject
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
             var baseProjectPath = AppDomain.CurrentDomain.BaseDirectory;
-            var appDataPath = Path.Combine(baseProjectPath, ".\\bin\\App_Data");
+            var appDataPath = Path.Combine(baseProjectPath, ".\\..\\App_Data");
             AppDomain.CurrentDomain.SetData("DataDirectory", Path.GetFullPath(appDataPath));
         }
     }

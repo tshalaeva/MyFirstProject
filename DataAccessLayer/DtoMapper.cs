@@ -1,13 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using DataAccessLayer.DtoEntities;
 using ObjectRepository.Entities;
-using Comment = Dto.DtoEntities.Comment;
+using Comment = DataAccessLayer.DtoEntities.DtoComment;
 
-namespace Dto
+namespace DataAccessLayer
 {
     public class DtoMapper
     {
-        public Article GetArticle(DtoEntities.Article article)
+        public Article GetArticle(DtoArticle article)
         {
             var result = new Article
             {
@@ -20,7 +21,7 @@ namespace Dto
             return result;
         }
 
-        public Author GetAuthor(DtoEntities.User author)
+        public Author GetAuthor(DtoUser author)
         {
             var result = new Author
             {
@@ -34,7 +35,7 @@ namespace Dto
             return result;
         }
 
-        public Admin GetAdmin(DtoEntities.User admin)
+        public Admin GetAdmin(DtoUser admin)
         {
             var result = new Admin(admin.Id)
             {
@@ -46,7 +47,7 @@ namespace Dto
             return result;
         }
 
-        public User GetUser(DtoEntities.User user)
+        public User GetUser(DtoUser user)
         {
             if(user.Privilegies == null && user.NickName == null)
             {

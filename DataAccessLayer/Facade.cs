@@ -102,7 +102,6 @@ namespace DataAccessLayer
             _mCommentRepository.Save(new Comment(0, "Content 0", users[0], articles[0]));
             _mCommentRepository.Save(new Review(1, "Review Content 1", users[0], articles[0], new Rating(4)));
             _mCommentRepository.Save(new ReviewText(2, "Review text 2", users[1], articles[0], new Rating(4)));
-            _mCommentRepository.Save(new Review(1, "Updated review", users[0], articles[1], new Rating(3)));
         }
 
         public Facade(IRepository<User> userRepository, IRepository<Article> articleRepository, IRepository<BaseComment> commentRepository)

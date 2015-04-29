@@ -23,13 +23,6 @@ namespace DataAccessLayer
                 using (var command = new SqlCommand(request, connection))
                 {
                     command.CommandType = CommandType.Text;
-                    command.ExecuteNonQuery();
-                }
-
-                var getIdCmd = string.Format("SELECT TOP 1 Id FROM [dbo].[{0}] ORDER BY Id DESC", tableName);
-                using (var command = new SqlCommand(getIdCmd, connection))
-                {
-                    command.CommandType = CommandType.Text;
                     elementId = command.ExecuteScalar();
                 }
                 connection.Close();

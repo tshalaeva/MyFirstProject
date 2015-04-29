@@ -44,10 +44,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DtoEntities\Article.cs" />
-    <Compile Include="DtoEntities\Comment.cs" />
-    <Compile Include="DtoEntities\User.cs" />
-    <Compile Include="DtoMapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

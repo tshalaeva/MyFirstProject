@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 
-namespace Dto.DtoEntities
+namespace DataAccessLayer.DtoEntities
 {
-    public class Article
+    public class DtoArticle
     {
         public string Title { get; set; }
 

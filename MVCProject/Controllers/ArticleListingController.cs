@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Web.Mvc;
 using DataAccessLayer;
-using MVCProject.Adapters;
 using MVCProject.Models;
 
 namespace MVCProject.Controllers
@@ -11,13 +10,13 @@ namespace MVCProject.Controllers
     {
         //
         // GET: /ArticleListing/
-        
-        private readonly Facade m_facade = MvcApplication.Facade;
+
+        private readonly Facade _mFacade = MvcApplication.Facade;
 
         public ActionResult Index()
         {
-            var articles = m_facade.GetArticles();
-            var articleModels = articles.Select(article => new ArticleModel(new ArticleAdapter(article))).ToList();
+            var articles = _mFacade.GetArticles();
+            var articleModels = articles.Select(article => new ArticleModel(article)).ToList();
             return View(articleModels);
         }
 
@@ -28,14 +27,14 @@ namespace MVCProject.Controllers
 
         public ActionResult OpenDetails(int? id)
         {
-            if (!m_facade.ArticleExists(id)) return Redirect("~/ArticleListing/Index");
-            var article = m_facade.GetArticleById(id);
-            var articleModel = new ArticleModel(new ArticleAdapter(article));
-            var comments = m_facade.FilterCommentsByArticle(article);
+            if (!_mFacade.ArticleExists(id)) return Redirect("~/ArticleListing/Index");
+            var article = _mFacade.GetArticleById(id);
+            var articleModel = new ArticleModel(article);
+            var comments = _mFacade.FilterCommentsByArticle(article);
             articleModel.Comments = new List<CommentModel>();
             foreach (var comment in comments)
             {
-                articleModel.Comments.Add(new CommentModel(new CommentAdapter(comment)));
+                articleModel.Comments.Add(new CommentModel(comment));
             }
             return View(articleModel);
         }

@@ -1,38 +1,36 @@
-﻿using System.Web.Providers.Entities;
-using MVCProject.Adapters;
-using ObjectRepository.Entities;
+﻿using ObjectRepository.Entities;
 
 namespace MVCProject.Models
 {
     public class CommentModel
     {
-        private readonly CommentAdapter _mAdapter;
+        private readonly BaseComment _mComment;
 
         public int Id
         {
-            get { return _mAdapter.Id; }            
+            get { return _mComment.Id; }            
         }
 
-        public ObjectRepository.Entities.User User { get { return _mAdapter.User; } }
+        public User User { get { return _mComment.User; } }
 
         public ArticleModel Article 
         {
-            get { return new ArticleModel(new ArticleAdapter(_mAdapter.Article)); }
+            get { return new ArticleModel(_mComment.Article); }
         }
 
         public string Content 
         {
-            get { return _mAdapter.Content; }
+            get { return _mComment.Content; }
         }
 
-        public CommentModel(CommentAdapter comment)
+        public CommentModel(BaseComment comment)
         {
-            _mAdapter = comment;
+            _mComment = comment;
         }
 
         public string Show()
         {
-            return _mAdapter.ToString();
+            return _mComment.ToString();
         }
     }
 }

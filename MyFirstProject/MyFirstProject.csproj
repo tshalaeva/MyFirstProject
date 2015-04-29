@@ -138,9 +138,9 @@
       <Project>{e94e8e05-1524-4d4c-bd2f-3d8c36ea30fd}</Project>
       <Name>DataAccessLayer</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ObjectRepository\ObjectRepository.csproj">
+    <ProjectReference Include="..\ObjectRepository\Core.csproj">
       <Project>{22da06d4-4ed1-4279-985e-98ae03e9d077}</Project>
-      <Name>ObjectRepository</Name>
+      <Name>Core</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

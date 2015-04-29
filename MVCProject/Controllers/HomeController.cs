@@ -4,6 +4,10 @@ namespace MVCProject.Controllers
 {
     public class HomeController : Controller
     {
+        public HomeController()
+        {
+        }
+
         //
         // GET: /Home/
 

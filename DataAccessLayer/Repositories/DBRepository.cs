@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
-using Dto;
+using DataAccessLayer.DtoEntities;
 using ObjectRepository.Entities;
-//using Comment = MyFirstProject.Entities.Dto.Comment;
 
 namespace DataAccessLayer.Repositories
 {
@@ -24,7 +23,8 @@ namespace DataAccessLayer.Repositories
         {
             get
             {
-                return _adoHelper.GetData("User").Rows.Count != 0;
+                var table = _adoHelper.GetData("User").Rows.Count;
+                return table != 0;
             }
         }
 
@@ -34,7 +34,7 @@ namespace DataAccessLayer.Repositories
             var users = new List<User>();
             for (var i = 0; i < userTable.Rows.Count; i++)
             {
-                var tmpUser = new Dto.DtoEntities.User
+                var tmpUser = new DtoUser
                 {
                     Id = (int)userTable.Rows[i]["Id"],
                     FirstName = userTable.Rows[i]["FirstName"].ToString(),
@@ -66,8 +66,8 @@ namespace DataAccessLayer.Repositories
             if (!(entity is Admin) && !(entity is Author))
             {
                 cmdText.AppendFormat(
-                    "INSERT INTO [dbo].[User] (Id,FirstName,LastName,Age) VALUES({0},'{1}','{2}',{3})",
-                    entity.Id, entity.FirstName, entity.LastName, entity.Age);
+                    "INSERT INTO [dbo].[User] (FirstName,LastName,Age) OUTPUT Inserted.Id VALUES('{0}','{1}',{2})",
+                    entity.FirstName, entity.LastName, entity.Age);
                 return (int)_adoHelper.CrudOperation(cmdText.ToString(), "User");
             }
             if (entity is Admin)
@@ -76,8 +76,8 @@ namespace DataAccessLayer.Repositories
                 cmdText.AppendLine("DECLARE @Privilegies uniqueidentifier;");
                 cmdText.AppendLine("SET @Privilegies=NEWID();");
                 cmdText.AppendFormat(
-                    "INSERT INTO [dbo].[User] (Id,FirstName,LastName,Age,PrivilegiesId) VALUES ({0},'{1}','{2}',{3},@Privilegies); ",
-                    entity.Id, entity.FirstName, entity.LastName, entity.Age);
+                    "INSERT INTO [dbo].[User] (FirstName,LastName,Age,PrivilegiesId) OUTPUT Inserted.Id VALUES ('{0}','{1}',{2},@Privilegies); ",
+                    entity.FirstName, entity.LastName, entity.Age);
                 var privilegyList = props[0].GetValue(entity, null) as List<string>;
                 cmdText.AppendFormat("INSERT INTO Privilegies (Id,List) VALUES (@Privilegies, '{0}'); ",
                     GetPrivilegiesString(privilegyList));
@@ -88,8 +88,8 @@ namespace DataAccessLayer.Repositories
             cmdText.AppendLine("DECLARE @AuthorID uniqueidentifier");
             cmdText.AppendLine("SET @AuthorID=NEWID()");
             cmdText.AppendFormat(
-                "INSERT INTO [dbo].[User](Id,FirstName,LastName,Age,AuthorId) VALUES ({0},'{1}','{2}',{3},@AuthorID) ",
-                entity.Id, entity.FirstName, entity.LastName, entity.Age);
+                "INSERT INTO [dbo].[User](FirstName,LastName,Age,AuthorId) OUTPUT Inserted.Id VALUES ('{0}','{1}',{2},@AuthorID) ",
+                entity.FirstName, entity.LastName, entity.Age);
             var nickName = props[0].GetValue(entity, null).ToString();
             var popularity = Convert.ToDecimal(props[1].GetValue(entity, null));
             cmdText.AppendFormat(
@@ -154,7 +154,7 @@ namespace DataAccessLayer.Repositories
         {
             var userData = _adoHelper.GetData("User", (int)id).Rows[0];
 
-            var dtoUser = new Dto.DtoEntities.User
+            var dtoUser = new DtoUser
             {
                 Id = (int)userData["Id"],
                 FirstName = userData["FirstName"].ToString(),
@@ -179,7 +179,7 @@ namespace DataAccessLayer.Repositories
             var random = new Random();
             var table = _adoHelper.GetData("User");
             var userTable = table.Rows[random.Next(0, table.Rows.Count - 1)];
-            var tmpUser = new Dto.DtoEntities.User
+            var tmpUser = new DtoUser
             {
                 Id = (int)userTable["Id"],
                 FirstName = userTable["FirstName"].ToString(),
@@ -240,7 +240,7 @@ namespace DataAccessLayer.Repositories
             var articlesTable = _adoHelper.GetData("Article");
             for (int i = 0; i < articlesTable.Rows.Count; i++)
             {
-                var dtoArticle = new Dto.DtoEntities.Article
+                var dtoArticle = new DtoArticle
                 {
                     Id = (int)articlesTable.Rows[i]["Id"],
                     Title = articlesTable.Rows[i]["Title"].ToString(),
@@ -288,8 +288,8 @@ namespace DataAccessLayer.Repositories
             cmdText.AppendLine("DECLARE @authorId uniqueidentifier");
             cmdText.AppendFormat("SET @authorId='{0}' ", _adoHelper.GetCellValue("User", "AuthorId", entity.Author.Id));
             cmdText.AppendFormat(
-                "INSERT INTO [dbo].[Article](Id,Title,Content,AuthorId) VALUES({0},'{1}','{2}','{3}') ",
-                entity.Id, entity.Title, entity.Content, _adoHelper.GetCellValue("User", "AuthorId", entity.Author.Id));
+                "INSERT INTO [dbo].[Article](Title,Content,AuthorId) OUTPUT Inserted.Id VALUES('{0}','{1}','{2}') ",
+                entity.Title, entity.Content, _adoHelper.GetCellValue("User", "AuthorId", entity.Author.Id));
             cmdText.AppendLine("COMMIT");
             return (int)_adoHelper.CrudOperation(cmdText.ToString(), "Article");
         }
@@ -309,7 +309,7 @@ namespace DataAccessLayer.Repositories
         public Article GetById(int? id)
         {
             var articleTable = _adoHelper.GetData("Article", id).Rows[0];
-            var dtoArticle = new Dto.DtoEntities.Article
+            var dtoArticle = new DtoArticle
             {
                 Id = Convert.ToInt32(articleTable["Id"]),
                 Title = articleTable["Title"].ToString(),
@@ -342,7 +342,7 @@ namespace DataAccessLayer.Repositories
             var random = new Random();
             var table = _adoHelper.GetData("Article");
             var articleTable = table.Rows[random.Next(0, table.Rows.Count - 1)];
-            var article = new Dto.DtoEntities.Article
+            var article = new DtoArticle
             {
                 Id = (int)articleTable["Id"],
                 Title = articleTable["Title"].ToString(),
@@ -434,8 +434,8 @@ namespace DataAccessLayer.Repositories
             if (!(comment is Review))
             {
                 cmdText.AppendFormat(
-                    "INSERT INTO [dbo].[Comments](Id, UserId,ArticleId,Content) VALUES({0},'{1}','{2}','{3}') ",
-                    comment.Id, comment.User.Id, comment.Article.Id, comment.Content);
+                    "INSERT INTO [dbo].[Comments](UserId,ArticleId,Content) OUTPUT Inserted.Id VALUES('{0}','{1}','{2}') ",
+                    comment.User.Id, comment.Article.Id, comment.Content);
                 return (int)_adoHelper.CrudOperation(cmdText.ToString(), "Comments");
             }
             var ratingValue = (props[0].GetValue(comment, null) as Rating).Value;
@@ -443,8 +443,8 @@ namespace DataAccessLayer.Repositories
             {
                 cmdText.AppendLine("BEGIN TRANSACTION");
                 cmdText.AppendFormat(
-                    "INSERT INTO [dbo].[Comments](Id,UserId,ArticleId,Content) VALUES({0},'{1}','{2}','{3}') ",
-                    comment.Id, comment.User.Id, comment.Article.Id, comment.Content);
+                    "INSERT INTO [dbo].[Comments](UserId,ArticleId,Content) OUTPUT Inserted.Id VALUES('{0}','{1}','{2}') ",
+                    comment.User.Id, comment.Article.Id, comment.Content);
                 cmdText.AppendLine("COMMIT");
                 var reviewTextId = _adoHelper.CrudOperation(cmdText.ToString(), "Comments");
                 var ratingCmd = string.Format("INSERT INTO [dbo].[TextRating](Id,ArticleId,Value,CommentId) VALUES('{0}','{1}',{2},{3}) ", comment.Id, comment.Article.Id, ratingValue, reviewTextId);
@@ -453,11 +453,11 @@ namespace DataAccessLayer.Repositories
             }
             cmdText.AppendLine("BEGIN TRANSACTION");
             cmdText.AppendFormat(
-                "INSERT INTO [dbo].[Comments](Id,UserId,ArticleId,Content) VALUES({0},{1},{2},'{3}') ",
-                comment.Id, comment.User.Id, comment.Article.Id, comment.Content);
+                "INSERT INTO [dbo].[Comments](UserId,ArticleId,Content) OUTPUT Inserted.Id VALUES({0},{1},'{2}') ",
+                comment.User.Id, comment.Article.Id, comment.Content);
             cmdText.AppendLine("COMMIT");
             var commentId = _adoHelper.CrudOperation(cmdText.ToString(), "Comments");
-            var ratingCommand = string.Format("INSERT INTO [dbo].[Rating](Id,ArticleId,Value,CommentId) VALUES({0},{1},{2},{3}) ", comment.User.Id, comment.Article.Id, ratingValue, commentId);
+            var ratingCommand = string.Format("INSERT INTO [dbo].[Rating](ArticleId,Value,CommentId) VALUES({0},{1},{2}) ", comment.Article.Id, ratingValue, commentId);
             _adoHelper.CrudOperation(ratingCommand, "Rating");
             return (int)commentId;
         }
@@ -470,28 +470,14 @@ namespace DataAccessLayer.Repositories
             var ratingInt = _adoHelper.GetCellValue("Rating", "Value", "CommentId", commentTable["Id"]);
             var ratingText = _adoHelper.GetCellValue("TextRating", "Value", "CommentId", commentTable["Id"]);
             var rating = ratingInt ?? ratingText;
-            var dtoComment = new Dto.DtoEntities.Comment()
+            var dtoComment = new DtoComment()
             {
                 Id = (int)commentTable["Id"],
                 Content = commentTable["Content"].ToString(),
                 ArticleId = (int)commentTable["ArticleId"],
                 UserId = (int)commentTable["UserId"],
                 Rating = rating
-            };
-            //var comment = new ObjectRepository.Entities.Comment
-            //{
-            //    Id = (int)commentTable["Id"],
-            //    Content = commentTable["Content"].ToString(),
-            //    ArticleId = (int)commentTable["ArticleId"],
-            //    UserId = (int)commentTable["UserId"]
-            //};
-            //var rating = _adoHelper.GetCellValue("Rating", "Value", "CommentId", commentTable["Id"]);
-            //var textRating = _adoHelper.GetCellValue("TextRating", "Value", "CommentId", commentTable["Id"]);
-            //if (rating != null)
-            //{
-            //    comment.Rating = (int)rating;
-            //}
-            //comment.Rating = (int)textRating;            
+            };           
             return _dtoMapper.GetComment(dtoComment);
         }
 
@@ -499,7 +485,7 @@ namespace DataAccessLayer.Repositories
         {
             var commentData = _adoHelper.GetData("Comments", (int)id);
             var commentTable = commentData.Rows[(int)id];
-            var comment = new Dto.DtoEntities.Comment
+            var comment = new DtoComment
             {
                 Id = (int)commentTable["Id"],
                 Content = commentTable["Content"].ToString(),
@@ -523,7 +509,7 @@ namespace DataAccessLayer.Repositories
             var commentsTable = _adoHelper.GetData("Comments");
             for (var i = 0; i < commentsTable.Rows.Count; i++)
             {
-                var dtoComment = new Dto.DtoEntities.Comment
+                var dtoComment = new DtoComment
                 {
                     Id = (int)commentsTable.Rows[i]["Id"],
                     Content = commentsTable.Rows[i]["Content"].ToString(),
