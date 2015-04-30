@@ -11,6 +11,8 @@ namespace DataAccessLayer
         private readonly IRepository<User> _mUserRepository;
         private readonly IRepository<Article> _mArticleRepository;
         private readonly IRepository<BaseComment> _mCommentRepository;
+        private readonly DbAdminRepository _mAdminRepository;
+        private readonly DbAuthorRepository _mAuthorRepository;
 
         private void Initialize()
         {
@@ -109,6 +111,8 @@ namespace DataAccessLayer
             _mUserRepository = userRepository;
             _mArticleRepository = articleRepository;
             _mCommentRepository = commentRepository;
+            _mAdminRepository = new DbAdminRepository();
+            _mAuthorRepository = new DbAuthorRepository();
             if (!(_mCommentRepository.Initialized) && !(_mArticleRepository.Initialized) && !(_mUserRepository.Initialized))
             {
                 Initialize();

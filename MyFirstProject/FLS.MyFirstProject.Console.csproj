@@ -134,13 +134,13 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DataAccessLayer\DataAccessLayer.csproj">
+    <ProjectReference Include="..\DataAccessLayer\FLS.MyFirstProject.DataAccessLayer.csproj">
       <Project>{e94e8e05-1524-4d4c-bd2f-3d8c36ea30fd}</Project>
-      <Name>DataAccessLayer</Name>
+      <Name>FLS.MyFirstProject.DataAccessLayer</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ObjectRepository\Core.csproj">
+    <ProjectReference Include="..\ObjectRepository\FLS.MyFirstProject.Core.csproj">
       <Project>{22da06d4-4ed1-4279-985e-98ae03e9d077}</Project>
-      <Name>Core</Name>
+      <Name>FLS.MyFirstProject.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

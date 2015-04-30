@@ -9,9 +9,9 @@ namespace DataAccessLayer.Repositories
 {
     class DbUserRepository : IRepository<User>
     {
-        private readonly AdoHelper _adoHelper;
+        protected readonly AdoHelper _adoHelper;
 
-        private readonly DtoMapper _dtoMapper;
+        protected readonly DtoMapper _dtoMapper;
 
         public DbUserRepository()
         {
@@ -193,7 +193,7 @@ namespace DataAccessLayer.Repositories
             return _dtoMapper.GetUser(tmpUser);
         }
 
-        private string GetPrivilegiesString(List<string> privilegies)
+        protected string GetPrivilegiesString(List<string> privilegies)
         {
             var result = privilegies[0];
             for (int i = 1; i < privilegies.Count; i++)
@@ -203,10 +203,136 @@ namespace DataAccessLayer.Repositories
             return result;
         }
 
-        private bool Exists(int id)
+        protected bool Exists(int id)
         {
             var user = _adoHelper.GetCellValue("User", "Id", id);
             return user != null;
+        }
+    }
+
+    class DbAdminRepository : DbUserRepository
+    {
+        public DbAdminRepository()
+            : base()
+        {
+        }
+
+        public List<Admin> GetAdmins()
+        {
+            var adminTable = _adoHelper.GetData("Privilegies");
+            var admins = new List<Admin>();
+            for (var i = 0; i < adminTable.Rows.Count; i++)
+            {
+                var tmpUser = new DtoUser
+                {
+                    Id = (int)_adoHelper.GetCellValue("User", "Id", "PrivilegiesId", adminTable.Rows[i]["Id"]),
+                    FirstName = _adoHelper.GetCellValue("User", "FirstName", "PrivilegiesId", adminTable.Rows[i]["Id"]).ToString(),
+                    LastName = _adoHelper.GetCellValue("User", "LastName", "PrivilegiesId", adminTable.Rows[i]["Id"]).ToString(),
+                    Age = (int)_adoHelper.GetCellValue("User", "Age", "PrivilegiesId", adminTable.Rows[i]["Id"]),
+                    Privilegies = adminTable.Rows[i]["List"].ToString()
+                };
+                admins.Add(_dtoMapper.GetAdmin(tmpUser));
+            }
+            return admins;
+        }
+
+        public int Save(Admin entity)
+        {
+            if (Exists(entity.Id)) return Update(entity.Id, entity);
+            var cmdText = new StringBuilder();
+            cmdText.AppendLine("BEGIN TRANSACTION");
+            cmdText.AppendLine("DECLARE @Privilegies uniqueidentifier;");
+            cmdText.AppendLine("SET @Privilegies=NEWID();");
+            cmdText.AppendFormat(
+                "INSERT INTO [dbo].[User] (FirstName,LastName,Age,PrivilegiesId) OUTPUT Inserted.Id VALUES ('{0}','{1}',{2},@Privilegies); ",
+                entity.FirstName, entity.LastName, entity.Age);
+            var privilegyList = entity.Privilegies;
+            cmdText.AppendFormat("INSERT INTO Privilegies (Id,List) VALUES (@Privilegies, '{0}'); ",
+                GetPrivilegiesString(privilegyList));
+            cmdText.AppendLine("COMMIT");
+            return (int)_adoHelper.CrudOperation(cmdText.ToString(), "User");
+        }
+
+        public void Delete(int adminId)
+        {
+            var cmdText = new StringBuilder();
+            var privilegyId = (Guid)_adoHelper.GetCellValue("User", "PrivilegiesId", adminId);
+            cmdText.AppendLine("BEGIN TRANSACTION");
+            cmdText.AppendFormat("DELETE FROM [dbo].[User] WHERE Id={0}) ", adminId);
+            cmdText.AppendFormat("DELETE FROM [dbo].[Privilegies] WHERE Id={0}", privilegyId);
+            cmdText.AppendLine("COMMIT");
+            _adoHelper.CrudOperation(cmdText.ToString(), "User");
+        }
+
+        public int Update(int oldAdminId, Admin newAdmin)
+        {
+            var commandText = string.Format("UPDATE [dbo].[User] SET FirstName='{0}',LastName='{1}',Age={2} WHERE Id={3}", newAdmin.FirstName, newAdmin.LastName, newAdmin.Age, oldAdminId);
+            var privilegiesId = (Guid)_adoHelper.GetCellValue("User", "PrivilegiesId", oldAdminId);
+            var cmd = string.Format("UPDATE [dbo].[Privilegies] SET List='{0}' WHERE Id='{1}' ", GetPrivilegiesString(newAdmin.Privilegies), privilegiesId);
+            _adoHelper.CrudOperation(cmd, "Privilegies");
+            return Convert.ToInt32(_adoHelper.CrudOperation(commandText, "User"));
+        }
+    }
+
+    class DbAuthorRepository : DbUserRepository
+    {
+        public DbAuthorRepository() : base() { }
+
+        public List<Author> GetAuthors()
+        {
+            var authorTable = _adoHelper.GetData("Author");
+            var authors = new List<Author>();
+            for (var i = 0; i < authorTable.Rows.Count; i++)
+            {
+                var tmpUser = new DtoUser
+                {
+                    Id = (int)_adoHelper.GetCellValue("User", "Id", "AuthorId", authorTable.Rows[i]["Id"]),
+                    FirstName = _adoHelper.GetCellValue("User", "FirstName", "AuthorId", authorTable.Rows[i]["Id"]).ToString(),
+                    LastName = _adoHelper.GetCellValue("User", "LastName", "AuthorId", authorTable.Rows[i]["Id"]).ToString(),
+                    Age = (int)_adoHelper.GetCellValue("User", "Age", "AuthorId", authorTable.Rows[i]["Id"]),
+                    NickName = authorTable.Rows[i]["NickName"].ToString(),
+                    Popularity = Convert.ToDecimal(authorTable.Rows[i]["Popularity"])
+                };
+                authors.Add(_dtoMapper.GetAuthor(tmpUser));
+            }
+            return authors;
+        }
+
+        public int Save(Author entity)
+        {
+            if (Exists(entity.Id)) return Update(entity.Id, entity);
+            var cmdText = new StringBuilder();
+            cmdText.AppendLine("BEGIN TRANSACTION");
+            cmdText.AppendLine("DECLARE @AuthorID uniqueidentifier");
+            cmdText.AppendLine("SET @AuthorID=NEWID()");
+            cmdText.AppendFormat(
+                "INSERT INTO [dbo].[User](FirstName,LastName,Age,AuthorId) OUTPUT Inserted.Id VALUES ('{0}','{1}',{2},@AuthorID) ",
+                entity.FirstName, entity.LastName, entity.Age);
+            cmdText.AppendFormat(
+                "INSERT INTO [dbo].[Author](Id,NickName,Popularity) VALUES (@AuthorID,'{0}','{1}') ", entity.NickName,
+                entity.Popularity);
+            cmdText.AppendLine("COMMIT");
+            return (int)_adoHelper.CrudOperation(cmdText.ToString(), "User");
+        }
+
+        public void Delete(int authorId)
+        {
+            var cmdText = new StringBuilder();
+            var authorGuid = (Guid)_adoHelper.GetCellValue("User", "AuthorId", authorId);
+            cmdText.AppendLine("BEGIN TRANSACTION");
+            cmdText.AppendFormat("DELETE FROM [dbo].[User] WHERE Id={0}) ", authorId);
+            cmdText.AppendFormat("DELETE FROM [dbo].[Author] WHERE Id={0}", authorGuid);
+            cmdText.AppendLine("COMMIT");
+            _adoHelper.CrudOperation(cmdText.ToString(), "User");
+        }
+
+        public int Update(int oldAuthorId, Author newAuthor)
+        {
+            var commandText = string.Format("UPDATE [dbo].[User] SET FirstName='{0}',LastName='{1}',Age={2} WHERE Id={3}", newAuthor.FirstName, newAuthor.LastName, newAuthor.Age, oldAuthorId);
+            var authorId = _adoHelper.GetCellValue("User", "AuthorId", oldAuthorId);
+            var authorCmd = string.Format("UPDATE [dbo].[Author] SET NickName='{0}',Popularity='{1}' WHERE Id='{2}'; ", newAuthor.NickName, newAuthor.Popularity, authorId);
+            _adoHelper.CrudOperation(authorCmd, "Author");
+            return Convert.ToInt32(_adoHelper.CrudOperation(commandText, "User"));
         }
     }
 
@@ -477,7 +603,7 @@ namespace DataAccessLayer.Repositories
                 ArticleId = (int)commentTable["ArticleId"],
                 UserId = (int)commentTable["UserId"],
                 Rating = rating
-            };           
+            };
             return _dtoMapper.GetComment(dtoComment);
         }
 

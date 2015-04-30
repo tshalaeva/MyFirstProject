@@ -103,9 +103,9 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ObjectRepository\Core.csproj">
+    <ProjectReference Include="..\ObjectRepository\FLS.MyFirstProject.Core.csproj">
       <Project>{22da06d4-4ed1-4279-985e-98ae03e9d077}</Project>
-      <Name>Core</Name>
+      <Name>FLS.MyFirstProject.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

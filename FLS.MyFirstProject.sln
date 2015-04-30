@@ -1,13 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyFirstProject", "MyFirstProject\MyFirstProject.csproj", "{02CD5D15-C0C1-42D6-BD0F-6015508F82D5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FLS.MyFirstProject.Console", "MyFirstProject\FLS.MyFirstProject.Console.csproj", "{02CD5D15-C0C1-42D6-BD0F-6015508F82D5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{842F4187-023D-485F-9D77-B80785571B57}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FLS.MyFirstProject.Tests", "Tests\FLS.MyFirstProject.Tests.csproj", "{842F4187-023D-485F-9D77-B80785571B57}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NMockTests", "NMockTests\NMockTests.csproj", "{50C62FAC-FE81-4C6A-8A71-DB92C5C79B29}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FLS.MyFirstProject.NMockTests", "NMockTests\FLS.MyFirstProject.NMockTests.csproj", "{50C62FAC-FE81-4C6A-8A71-DB92C5C79B29}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MVCProject", "MVCProject\MVCProject.csproj", "{EA93CFE5-3280-4E67-A320-816059AB5D48}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FLS.MyFirstProject.MVCProject", "MVCProject\FLS.MyFirstProject.MVCProject.csproj", "{EA93CFE5-3280-4E67-A320-816059AB5D48}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C2BB0C32-2F18-438F-947D-3D5D28699B0E}"
 	ProjectSection(SolutionItems) = preProject
@@ -15,9 +15,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		App_Data\MyDatabase_log.ldf = App_Data\MyDatabase_log.ldf
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccessLayer", "DataAccessLayer\DataAccessLayer.csproj", "{E94E8E05-1524-4D4C-BD2F-3D8C36EA30FD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FLS.MyFirstProject.DataAccessLayer", "DataAccessLayer\FLS.MyFirstProject.DataAccessLayer.csproj", "{E94E8E05-1524-4D4C-BD2F-3D8C36EA30FD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "ObjectRepository\Core.csproj", "{22DA06D4-4ED1-4279-985E-98AE03E9D077}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FLS.MyFirstProject.Core", "ObjectRepository\FLS.MyFirstProject.Core.csproj", "{22DA06D4-4ED1-4279-985E-98AE03E9D077}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
