@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web.Mvc;
-using DataAccessLayer;
+using Infrastructure;
 using MVCProject.Models;
 using ObjectRepository.Entities;
 
@@ -28,16 +28,14 @@ namespace MVCProject.Controllers
                 case "1":
                     {
                         var articles = _mFacade.GetArticles();
-                        model.Content = string.Format("Title of article {0}: {1}", articles.First().Id,
-                            articles.First().Title);
+                        model.Content = TrimSpaces(string.Format("Title of article {0}: {1}", articles.First().Id,
+                            articles.First().Title));
                         for (var i = 1; i < articles.Count; i++)
                         {
-                            model.Content = string.Format("{0}\nTitle of article {1}: {2}", model.Content, articles[i].Id,
-                                articles[i].Title);
+                            model.Content = string.Format("{0}{1}Title of article {2}: {3}", model.Content, Environment.NewLine, articles[i].Id,
+                                TrimSpaces(articles[i].Title));
 
                         }
-
-                        model.Content = TrimSpaces(model.Content);
                         break;
                     }
                 case "2":
@@ -122,10 +120,22 @@ namespace MVCProject.Controllers
 
         private string TrimSpaces(string input)
         {
-            const string pattern = "\\s{2,}";
-            var replacement = Environment.NewLine;
+            var result = "";
+
+            string pattern = "\\s{2,}";
+            var replacement = " ";
             var rgx = new Regex(pattern);
-            return rgx.Replace(input, replacement);
+            result = rgx.Replace(input, replacement);
+
+            //if (input.Contains("\n"))
+            //{
+            //    string newLinePattern = "\n";
+            //    var newLine = Environment.NewLine;
+            //    var regex = new Regex(newLinePattern);
+            //    result = regex.Replace(result, newLine);
+            //}
+
+            return result;
         }
     }
 }

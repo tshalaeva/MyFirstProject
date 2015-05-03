@@ -3,6 +3,7 @@ using System.Linq;
 using DataAccessLayer;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ObjectRepository.Entities;
+using Infrastructure;
 
 namespace Tests
 {

@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FLS.MyFirstProject.Console", "MyFirstProject\FLS.MyFirstProject.Console.csproj", "{02CD5D15-C0C1-42D6-BD0F-6015508F82D5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FLS.MyFirstProject.Tests", "Tests\FLS.MyFirstProject.Tests.csproj", "{842F4187-023D-485F-9D77-B80785571B57}"
@@ -18,6 +20,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FLS.MyFirstProject.DataAccessLayer", "DataAccessLayer\FLS.MyFirstProject.DataAccessLayer.csproj", "{E94E8E05-1524-4D4C-BD2F-3D8C36EA30FD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FLS.MyFirstProject.Core", "ObjectRepository\FLS.MyFirstProject.Core.csproj", "{22DA06D4-4ED1-4279-985E-98AE03E9D077}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FLS.MyFirstProject.Infrastructure", "FLS.MyFirstProject.Infrastructure\FLS.MyFirstProject.Infrastructure.csproj", "{A602AC32-6DAF-42CD-8B01-3E0641B808AC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -49,6 +53,10 @@ Global
 		{22DA06D4-4ED1-4279-985E-98AE03E9D077}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{22DA06D4-4ED1-4279-985E-98AE03E9D077}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{22DA06D4-4ED1-4279-985E-98AE03E9D077}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A602AC32-6DAF-42CD-8B01-3E0641B808AC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A602AC32-6DAF-42CD-8B01-3E0641B808AC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A602AC32-6DAF-42CD-8B01-3E0641B808AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A602AC32-6DAF-42CD-8B01-3E0641B808AC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

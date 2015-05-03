@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
-using DataAccessLayer;
-using DataAccessLayer.Repositories;
+using Infrastructure;
+//using DataAccessLayer.Repositories;
 using ObjectRepository.Entities;
 
 namespace MyFirstProject

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-using DataAccessLayer;
+using Infrastructure;
 using MVCProject.Models;
 
 namespace MVCProject.Controllers

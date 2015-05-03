@@ -7,7 +7,7 @@ using ObjectRepository.Entities;
 
 namespace DataAccessLayer.Repositories
 {
-    class DbUserRepository : IRepository<User>
+    public class DbUserRepository : IRepository<User>
     {
         protected readonly AdoHelper _adoHelper;
 
@@ -210,7 +210,7 @@ namespace DataAccessLayer.Repositories
         }
     }
 
-    class DbAdminRepository : DbUserRepository
+    public class DbAdminRepository : DbUserRepository
     {
         public DbAdminRepository()
             : base()
@@ -274,7 +274,7 @@ namespace DataAccessLayer.Repositories
         }
     }
 
-    class DbAuthorRepository : DbUserRepository
+    public class DbAuthorRepository : DbUserRepository
     {
         public DbAuthorRepository() : base() { }
 
@@ -336,7 +336,7 @@ namespace DataAccessLayer.Repositories
         }
     }
 
-    class DbArticleRepository : IRepository<Article>
+    public class DbArticleRepository : IRepository<Article>
     {
         private readonly AdoHelper _adoHelper;
 
@@ -502,7 +502,7 @@ namespace DataAccessLayer.Repositories
         }
     }
 
-    class DbCommentRepository : IRepository<BaseComment>
+    public class DbCommentRepository : IRepository<BaseComment>
     {
         private readonly AdoHelper _adoHelper;
 

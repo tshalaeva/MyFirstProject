@@ -4,7 +4,7 @@ using System.Linq;
 using DataAccessLayer.Repositories;
 using ObjectRepository.Entities;
 
-namespace DataAccessLayer
+namespace Infrastructure
 {
     public class Facade
     {
