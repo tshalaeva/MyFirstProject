@@ -99,28 +99,29 @@ namespace DataAccessLayer.Repositories
             return (int)_adoHelper.CrudOperation(cmdText.ToString(), "User");
         }
 
-        public void Delete(User user)
+        public void Delete(int userId)
         {
+            var Data = Get();
             var cmdText = new StringBuilder();
-            if (!(user is Admin) && !(user is Author))
+            if (!(Data[userId] is Admin) && !(Data[userId] is Author))
             {
-                cmdText.AppendFormat("DELETE FROM [dbo].[User] WHERE Id='{0}'", user.Id);
+                cmdText.AppendFormat("DELETE FROM [dbo].[User] WHERE Id='{0}'", userId);
             }
             else
             {
-                if (user is Admin)
+                if (Data[userId] is Admin)
                 {
-                    var privilegyId = (Guid)_adoHelper.GetCellValue("User", "PrivilegiesId", user.Id);
+                    var privilegyId = (Guid)_adoHelper.GetCellValue("User", "PrivilegiesId", userId);
                     cmdText.AppendLine("BEGIN TRANSACTION");
-                    cmdText.AppendFormat("DELETE FROM [dbo].[User] WHERE Id={0}) ", user.Id);
+                    cmdText.AppendFormat("DELETE FROM [dbo].[User] WHERE Id={0}) ", userId);
                     cmdText.AppendFormat("DELETE FROM [dbo].[Privilegies] WHERE Id={0}", privilegyId);
                     cmdText.AppendLine("COMMIT");
                 }
                 else
                 {
-                    var authorId = (Guid)_adoHelper.GetCellValue("User", "AuthorId", user.Id);
+                    var authorId = (Guid)_adoHelper.GetCellValue("User", "AuthorId", userId);
                     cmdText.AppendLine("BEGIN TRANSACTION");
-                    cmdText.AppendFormat("DELETE FROM [dbo].[User] WHERE Id={0}) ", user.Id);
+                    cmdText.AppendFormat("DELETE FROM [dbo].[User] WHERE Id={0}) ", userId);
                     cmdText.AppendFormat("DELETE FROM [dbo].[Author] WHERE Id={0}", authorId);
                     cmdText.AppendLine("COMMIT");
                 }
@@ -420,9 +421,9 @@ namespace DataAccessLayer.Repositories
             return (int)_adoHelper.CrudOperation(cmdText.ToString(), "Article");
         }
 
-        public void Delete(Article article)
+        public void Delete(int articleId)
         {
-            var cmdText = string.Format("DELETE FROM [dbo].[Article] WHERE Id={0}", article.Id);
+            var cmdText = string.Format("DELETE FROM [dbo].[Article] WHERE Id={0}", articleId);
             _adoHelper.CrudOperation(cmdText, "Article");
         }
 
@@ -653,9 +654,9 @@ namespace DataAccessLayer.Repositories
             return comments;
         }
 
-        public void Delete(BaseComment comment)
+        public void Delete(int commentId)
         {
-            var cmdText = string.Format("DELETE FROM [dbo].[Comments] WHERE Id={0}", comment.Id);
+            var cmdText = string.Format("DELETE FROM [dbo].[Comments] WHERE Id={0}", commentId);
             _adoHelper.CrudOperation(cmdText, "Comments");
         }
 

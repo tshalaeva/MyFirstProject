@@ -135,10 +135,10 @@ namespace Tests
             return oldEntity;
         }
 
-        public void Delete(Article entity)
+        public void Delete(int entityId)
         {
-            _data.Remove(entity);
-            _mEntity = entity;
+            _mEntity = _data[entityId];
+            _data.Remove(_mEntity);            
             _mFlag = true;
         }
 
@@ -206,10 +206,10 @@ namespace Tests
             return oldEntity;
         }
 
-        public void Delete(User entity)
+        public void Delete(int entityId)
         {
-            _data.Remove(entity);
-            _mEntity = entity;
+            _mEntity = _data[entityId];
+            _data.Remove(_mEntity);            
             _mFlag = true;
         }
 
@@ -276,10 +276,10 @@ namespace Tests
             return oldEntity;
         }
 
-        public void Delete(BaseComment entity)
+        public void Delete(int entityId)
         {
-            _data.Remove(entity);
-            _mEntity = entity;
+            _mEntity = _data[entityId];
+            _data.Remove(_mEntity);           
             _mFlag = true;
         }
 

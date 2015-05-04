@@ -33,9 +33,9 @@ namespace DataAccessLayer.Repositories
             return entity.Id;
         }
 
-        public void Delete(User entity)
+        public void Delete(int entityId)
         {
-            Data.Remove(entity);
+            Data.Remove(Data[entityId]);
         }
 
         public int Update(int existingEntityId, User newEntity)
@@ -86,9 +86,9 @@ namespace DataAccessLayer.Repositories
             return entity.Id;
         }
 
-        public void Delete(Article entity)
+        public void Delete(int entityId)
         {
-            Data.Remove(entity);
+            Data.Remove(Data[entityId]);
         }
 
         public int Update(int existingEntityId, Article newEntity)
@@ -139,9 +139,9 @@ namespace DataAccessLayer.Repositories
             return entity.Id;
         }
 
-        public void Delete(BaseComment entity)
+        public void Delete(int entityId)
         {
-            Data.Remove(entity);
+            Data.Remove(Data[entityId]);
         }
 
         public int Update(int existingEntityId, BaseComment newEntity)

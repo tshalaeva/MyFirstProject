@@ -17,13 +17,13 @@ namespace MyFirstProject
 
             report.CreateComments();
 
-            report.CreateReviews();
+            //report.CreateReviews();
 
-            report.PrintArticleTitles();
+            //report.PrintArticleTitles();
 
-            report.PrintAverageRatingForArticle();
+            //report.PrintAverageRatingForArticle();
 
-            report.PrintListOfPrivilegies();
+            //report.PrintListOfPrivilegies();
 
             //report.PrintListOfCommentsForArticles();
 

@@ -134,9 +134,9 @@ namespace Infrastructure
             return _mUserRepository.Get().OfType<Admin>().ToList();
         }
 
-        public void DeleteUser(User entity)
+        public void DeleteUser(int entityId)
         {
-            _mUserRepository.Delete(entity);
+            _mUserRepository.Delete(entityId);
         }
 
         public void SaveUser(User entity)
@@ -230,14 +230,14 @@ namespace Infrastructure
             return elements.Any(element => element.Id == id);
         }
 
-        public void DeleteArticle(Article entity)
+        public void DeleteArticle(int entityId)
         {
-            _mArticleRepository.Delete(entity);
+            _mArticleRepository.Delete(entityId);
         }
 
-        public void DeleteComment(BaseComment comment)
+        public void DeleteComment(int commentId)
         {
-            _mCommentRepository.Delete(comment);
+            _mCommentRepository.Delete(commentId);
         }
 
         public void SaveArticle(Article entity)

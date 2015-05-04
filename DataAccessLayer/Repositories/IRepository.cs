@@ -11,7 +11,8 @@ namespace DataAccessLayer.Repositories
 
         int Save(T entity);
 
-        void Delete(T entity);
+        //void Delete(T entity);
+        void Delete(int id);
 
         int Update(int existingEntityId, T newEntity);
 

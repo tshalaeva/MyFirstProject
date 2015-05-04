@@ -143,7 +143,7 @@ namespace Tests
             var facade = new Facade(_mUserRepository, _mArticleRepository, _mCommentRepository);
 
             var article = facade.GetArticles()[3];
-            facade.DeleteArticle(article);
+            facade.DeleteArticle(article.Id);
 
             Assert.IsTrue(_mArticleRepository.MethodIsCalled(article.Id));
         }
@@ -182,7 +182,7 @@ namespace Tests
 
             var article0 = facade.GetRandomArticle();
             var id0 = article0.Id;
-            facade.DeleteArticle(article0);
+            facade.DeleteArticle(article0.Id);
             var article1 = facade.GetRandomArticle();
 
             Assert.AreNotEqual(id0, article1.Id);
