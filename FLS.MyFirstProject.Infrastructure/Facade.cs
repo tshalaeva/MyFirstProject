@@ -3,16 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using DataAccessLayer.Repositories;
 using ObjectRepository.Entities;
+using StructureMap;
 
-namespace Infrastructure
+namespace FLS.MyFirstProject.Infrastructure
 {
     public class Facade
     {
         private readonly IRepository<User> _mUserRepository;
         private readonly IRepository<Article> _mArticleRepository;
         private readonly IRepository<BaseComment> _mCommentRepository;
-        private readonly DbAdminRepository _mAdminRepository;
-        private readonly DbAuthorRepository _mAuthorRepository;
 
         private void Initialize()
         {
@@ -106,13 +105,12 @@ namespace Infrastructure
             _mCommentRepository.Save(new ReviewText(2, "Review text 2", users[1], articles[0], new Rating(4)));
         }
 
+        [DefaultConstructor]
         public Facade(IRepository<User> userRepository, IRepository<Article> articleRepository, IRepository<BaseComment> commentRepository)
         {
             _mUserRepository = userRepository;
             _mArticleRepository = articleRepository;
             _mCommentRepository = commentRepository;
-            _mAdminRepository = new DbAdminRepository();
-            _mAuthorRepository = new DbAuthorRepository();
             if (!(_mCommentRepository.Initialized) && !(_mArticleRepository.Initialized) && !(_mUserRepository.Initialized))
             {
                 Initialize();

@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using DataAccessLayer;
+using FLS.MyFirstProject.Infrastructure;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ObjectRepository.Entities;
-using Infrastructure;
 
 namespace Tests
 {

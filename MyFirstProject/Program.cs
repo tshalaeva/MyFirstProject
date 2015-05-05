@@ -13,23 +13,23 @@ namespace MyFirstProject
 
             var report = new Report();
 
-            report.CreateAticles();
+            //report.CreateAticles();
 
-            report.CreateComments();
+            //report.CreateComments();
 
             //report.CreateReviews();
 
-            //report.PrintArticleTitles();
+            report.PrintArticleTitles();
 
-            //report.PrintAverageRatingForArticle();
+            report.PrintAverageRatingForArticle();
 
-            //report.PrintListOfPrivilegies();
+            report.PrintListOfPrivilegies();
 
-            //report.PrintListOfCommentsForArticles();
+            report.PrintListOfCommentsForArticles();
 
-            //report.PrintEntityCodeForEachComment();
+            report.PrintEntityCodeForEachComment();
 
-            //report.PrintRandomArticleId();
+            report.PrintRandomArticleId();
 
             Console.ReadLine();
         }

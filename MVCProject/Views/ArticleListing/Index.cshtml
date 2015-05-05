@@ -7,6 +7,8 @@
 
 <h2>Article Listing</h2>
 
+<p>@Html.ActionLink("Reports", "OpenReports")</p>
+
 <table class="Articles">
     <thead>
     <tr class="header">
@@ -18,8 +20,7 @@
         </td>
     </tr>
     </thead>
-    <tbody>
-    <p>@Html.ActionLink("Reports", "OpenReports")</p>
+    <tbody>    
     @foreach (ArticleModel article in Model)
     {
         <tr>

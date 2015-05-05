@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-using Infrastructure;
+using FLS.MyFirstProject.Infrastructure;
 using MVCProject.Models;
 
 namespace MVCProject.Controllers

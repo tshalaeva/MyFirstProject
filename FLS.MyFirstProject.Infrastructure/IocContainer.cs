@@ -1,15 +1,15 @@
 ﻿using System;
+using DataAccessLayer.Repositories;
 using ObjectRepository.Entities;
 using StructureMap;
-using DataAccessLayer.Repositories;
 
-namespace Infrastructure
+namespace FLS.MyFirstProject.Infrastructure
 {
     public class IocContainer
     {
         private static readonly Lazy<IContainer> SContainerLazy;
 
-        public static StructureMap.IContainer Container
+        public static IContainer Container
         {
             get
             {
@@ -33,6 +33,11 @@ namespace Infrastructure
             container.Configure(x => x.For<IRepository<User>>().Use<DbUserRepository>());
             container.Configure(y => y.For <IRepository<Article>>().Use<DbArticleRepository>());
             container.Configure(z => z.For<IRepository<BaseComment>>().Use<DbCommentRepository>());      
+            container.Configure(i => i.For<DbAdminRepository>().Use<DbAdminRepository>());
+            container.Configure(j => j.For<DbAuthorRepository>().Use<DbAuthorRepository>());
+            container.Configure(k => k.For<DbReviewRepository>().Use<DbReviewRepository>());
+            container.Configure(l => l.For<DbReviewTextRepository>().Use<DbReviewTextRepository>());
+            //container.Configure(articleListing => articleListing.For<ArticleListingController>());
             return container;
         }
     }    

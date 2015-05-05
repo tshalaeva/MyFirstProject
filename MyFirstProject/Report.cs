@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using Infrastructure;
+using FLS.MyFirstProject.Infrastructure;
 //using DataAccessLayer.Repositories;
 using ObjectRepository.Entities;
 
@@ -21,7 +21,7 @@ namespace MyFirstProject
 
             foreach (var article in articles)
             {
-                Console.WriteLine("Title of article {0}: {1}", article.Id, article.Title);
+                Console.WriteLine("Title of article {0}: {1}", article.Id, article.Title.Trim());
             }
 
             Console.WriteLine();
@@ -43,16 +43,16 @@ namespace MyFirstProject
             var admins = _mFacade.GetAdmins();
             foreach (var admin in admins)
             {
-                Console.Write("List of {0} {1} privilegies: ", admin.FirstName, admin.LastName);
+                Console.Write("List of {0} {1} privilegies: ", admin.FirstName.Trim(), admin.LastName.Trim());
                 foreach (var privilegy in admin.Privilegies)
                 {
                     if (privilegy == admin.Privilegies.Last())
                     {
-                        Console.WriteLine(privilegy);
+                        Console.WriteLine(privilegy.Trim());
                         break;
                     }
 
-                    Console.Write("{0}, ", privilegy);
+                    Console.Write("{0}, ", privilegy.Trim());
                 }
             }
 
@@ -65,12 +65,12 @@ namespace MyFirstProject
             Console.WriteLine("List of comments for each article:");
             foreach (var article in articles)
             {
-                Console.WriteLine("Article {0}: ", article.Title);
+                Console.WriteLine("Article {0}: ", article.Title.Trim());
                 Console.WriteLine();
                 var articleComments = _mFacade.FilterCommentsByArticle(article);
                 foreach (var comment in articleComments)
                 {
-                    Console.WriteLine(comment.ToString());
+                    Console.WriteLine(comment.ToString().Trim());
                     Console.WriteLine();
                 }
 
@@ -144,7 +144,7 @@ namespace MyFirstProject
 
             foreach (var comment in _mFacade.GetComments())
             {
-                Console.WriteLine("{0}: {1}", comment.Content, comment.GetEntityCode());
+                Console.WriteLine("{0}: {1}", comment.Content.Trim(), comment.GetEntityCode());
 
                 Console.WriteLine();
             }
@@ -152,14 +152,14 @@ namespace MyFirstProject
             var reviews = _mFacade.GetReviews();
             foreach (var comment in reviews.Where(comment => !(comment is ReviewText)))
             {
-                Console.WriteLine("{0}: {1}", comment.Content, comment.GetEntityCode());
+                Console.WriteLine("{0}: {1}", comment.Content.Trim(), comment.GetEntityCode());
 
                 Console.WriteLine();
             }
 
             foreach (var comment in _mFacade.GetReviewTexts())
             {
-                Console.WriteLine("{0}: {1}", comment.Content, comment.GetEntityCode());
+                Console.WriteLine("{0}: {1}", comment.Content.Trim(), comment.GetEntityCode());
 
                 Console.WriteLine();
             }
