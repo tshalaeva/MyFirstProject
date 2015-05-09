@@ -16,7 +16,7 @@ namespace MVCProject.Controllers
         public ActionResult Index()
         {
             var articles = _mFacade.GetArticles();
-            var articleModels = articles.Select(article => new ArticleModel(article)).ToList();
+            var articleModels = articles.Select(article => new ArticleViewModel() { Id = article.Id, Author = article.Author.NickName, Title = article.Title, Content = article.Content}).ToList();
             return View(articleModels);
         }
 
@@ -29,7 +29,13 @@ namespace MVCProject.Controllers
         {
             if (!_mFacade.ArticleExists(id)) return Redirect("~/ArticleListing/Index");
             var article = _mFacade.GetArticleById(id);
-            var articleModel = new ArticleModel(article);
+            var articleModel = new ArticleViewModel()
+            {
+                Author = article.Author.NickName,
+                Content = article.Content,
+                Title = article.Title,
+                Id = article.Id
+            };
             var comments = _mFacade.FilterCommentsByArticle(article);
             articleModel.Comments = new List<CommentModel>();
             foreach (var comment in comments)

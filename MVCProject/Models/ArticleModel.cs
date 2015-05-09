@@ -37,10 +37,13 @@ namespace MVCProject.Models
 
     public class ArticleViewModel
     {
+        public int Id { get; set; }
 
         public ArticleViewModel()
         {
         }
+
+        public string Author { get; set; }
 
         public string Title
         {
@@ -53,5 +56,7 @@ namespace MVCProject.Models
             get;
             set;
         }
+
+        public List<CommentModel> Comments { get; set; }
     }
 }

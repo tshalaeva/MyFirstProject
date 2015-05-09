@@ -410,6 +410,11 @@ namespace DataAccessLayer.Repositories
                 Title = articleTable["Title"].ToString(),
                 Content = articleTable["Content"].ToString(),
                 AuthorId = Convert.ToInt32(_adoHelper.GetCellValue("User", "Id", "AuthorId", articleTable["AuthorId"])),
+                AuthorFirstName = _adoHelper.GetCellValue("User", "FirstName", "AuthorId", articleTable["AuthorId"]).ToString(),
+                AuthorLastName = _adoHelper.GetCellValue("User", "LastName", "AuthorId", articleTable["AuthorId"]).ToString(),
+                AuthorAge = (int)_adoHelper.GetCellValue("User", "Age", "AuthorId", articleTable["AuthorId"]),
+                AuthorNickName = _adoHelper.GetCellValue("Author", "NickName", "Id", articleTable["AuthorId"]).ToString(),
+                AuthorPopularity = Convert.ToDecimal(_adoHelper.GetCellValue("Author", "Popularity", "Id", articleTable["AuthorId"])),
                 Ratings = new List<object>()
             };
             var rating = _adoHelper.GetData("Rating").Rows;
@@ -592,11 +597,14 @@ namespace DataAccessLayer.Repositories
                     Id = (int)commentsTable.Rows[i]["Id"],
                     Content = commentsTable.Rows[i]["Content"].ToString(),
                     ArticleId = (int)commentsTable.Rows[i]["ArticleId"],
-                    UserId = (int)commentsTable.Rows[i]["UserId"]
+                    UserId = (int)commentsTable.Rows[i]["UserId"],
+                    UserName = AdoHelper.GetCellValue("User", "FirstName", (int)commentsTable.Rows[i]["UserId"]).ToString(),
+                    UserLastName = AdoHelper.GetCellValue("User", "LastName", (int)commentsTable.Rows[i]["UserId"]).ToString(),
+                    UserAge = (int)AdoHelper.GetCellValue("User", "Age", (int)commentsTable.Rows[i]["UserId"])
                 };
                 var rating = AdoHelper.GetCellValue("Rating", "Value", "CommentId", commentsTable.Rows[i]["Id"]);
                 var textRating = AdoHelper.GetCellValue("TextRating", "Value", "CommentId", commentsTable.Rows[i]["Id"]);
-                if (rating != null || textRating != DBNull.Value)
+                if (rating != null || textRating != null)
                 {
                     dtoComment.Rating = rating ?? textRating;
                 }

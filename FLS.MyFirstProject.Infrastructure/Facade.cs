@@ -203,7 +203,7 @@ namespace FLS.MyFirstProject.Infrastructure
         }
 
         //public void UpdateArticle(int oldEntity, Article newEntity)
-        public void UpdateArticle(int oldEntity, string articleTitle, string articleContent)
+        public int UpdateArticle(int oldEntity, string articleTitle, string articleContent)
         {
             var newEntity = new Article(oldEntity)
             {
@@ -212,7 +212,7 @@ namespace FLS.MyFirstProject.Infrastructure
                 Ratings = GetArticleById(oldEntity).Ratings,
                 Title = articleTitle
             };
-            _mArticleRepository.Update(oldEntity, newEntity);
+            return _mArticleRepository.Update(oldEntity, newEntity);
         }
 
         public Article GetArticleById(int? id)

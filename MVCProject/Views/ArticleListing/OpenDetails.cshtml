@@ -1,11 +1,13 @@
 ﻿@using MVCProject.Models
-@model ArticleModel
+@model ArticleViewModel
 @{
     ViewBag.Title = "OpenDetails";
     Layout = "~/Views/ArticleDetails/Index.cshtml";
 }
 
 <h2>Details</h2>
+
+@Html.ActionLink("Edit Article", "EditArticle", "ArticleDetails", new { id = @Model.Id }, new object { })
 
 <h3>Articele title: @Model.Title</h3>
 

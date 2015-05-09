@@ -4,6 +4,7 @@ using DataAccessLayer.DtoEntities;
 using ObjectRepository.Entities;
 using Comment = DataAccessLayer.DtoEntities.DtoComment;
 
+
 namespace DataAccessLayer
 {
     public class DtoMapper
@@ -14,7 +15,14 @@ namespace DataAccessLayer
             {
                 Id = article.Id,
                 Content = article.Content,
-                Author = new Author(article.AuthorId),
+                Author = new Author(article.AuthorId)
+                {
+                    FirstName = article.AuthorFirstName,
+                    LastName = article.AuthorLastName,
+                    Age = article.AuthorAge,
+                    Popularity = article.AuthorPopularity,
+                    NickName = article.AuthorNickName
+                },
                 Title = article.Title,
                 Ratings = GetArticleRatings(article.Ratings)
             };
@@ -93,6 +101,11 @@ namespace DataAccessLayer
                     Content = comment.Content,
                     Article = new Article(comment.ArticleId),
                     User = new User(comment.UserId)
+                    {
+                        FirstName = comment.UserName,
+                        LastName = comment.UserLastName,
+                        Age = comment.UserAge
+                    }
                 };
                 return result;
             }
@@ -101,7 +114,12 @@ namespace DataAccessLayer
                 var review = new Review(comment.Id)
                 {
                     Article = new Article(comment.ArticleId),
-                    User = new User(comment.UserId),
+                    User = new User(comment.UserId)
+                    {
+                        FirstName = comment.UserName,
+                        LastName = comment.UserLastName,
+                        Age = comment.UserAge
+                    },
                     Rating = new Rating((int)comment.Rating),
                     Content = comment.Content
                 };
@@ -110,7 +128,12 @@ namespace DataAccessLayer
             var reviewText = new ReviewText(comment.Id)
             {
                 Article = new Article(comment.ArticleId),
-                User = new User(comment.UserId),
+                User = new User(comment.UserId)
+                {
+                    FirstName = comment.UserName,
+                    LastName = comment.UserLastName,
+                    Age = comment.UserAge
+                },
                 Rating = new Rating(ConvertRating(comment.Rating.ToString())),
                 Content = comment.Content
             };

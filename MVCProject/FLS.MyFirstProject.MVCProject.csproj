@@ -137,6 +137,7 @@
     <Compile Include="Controllers\ArticleDetailsController.cs" />
     <Compile Include="Controllers\ArticleListingController.cs" />
     <Compile Include="Controllers\CreateArticleController.cs" />
+    <Compile Include="Controllers\EditArticleController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\WebReportController.cs" />
     <Compile Include="Global.asax.cs">
@@ -215,6 +216,7 @@
     <Content Include="Views\CreateArticle\CreateArticle.cshtml" />
     <Content Include="Views\ArticleListing\OpenCreateArticle.cshtml" />
     <Content Include="Views\CreateArticle\Submit.cshtml" />
+    <Content Include="Views\ArticleDetails\EditArticle.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -246,7 +248,9 @@
     <Content Include="Views\ArticleDetails\Index.cshtml" />
     <Content Include="Views\ArticleListing\OpenDetails.cshtml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Views\EditArticle\" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FLS.MyFirstProject.Infrastructure\FLS.MyFirstProject.Infrastructure.csproj">
       <Project>{a602ac32-6daf-42cd-8b01-3e0641b808ac}</Project>

@@ -21,7 +21,7 @@
     </tr>
     </thead>
     <tbody>    
-    @foreach (ArticleModel article in Model)
+    @foreach (ArticleViewModel article in Model)
     {
         <tr>
             <td class="article-title">@Html.ActionLink(@article.Title, "OpenDetails", new {id = article.Id})</td>
