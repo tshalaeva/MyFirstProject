@@ -127,14 +127,6 @@ namespace MVCProject.Controllers
             var rgx = new Regex(pattern);
             result = rgx.Replace(input, replacement);
 
-            //if (input.Contains("\n"))
-            //{
-            //    string newLinePattern = "\n";
-            //    var newLine = Environment.NewLine;
-            //    var regex = new Regex(newLinePattern);
-            //    result = regex.Replace(result, newLine);
-            //}
-
             return result;
         }
     }

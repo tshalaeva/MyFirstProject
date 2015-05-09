@@ -49,7 +49,7 @@ namespace Tests
         {
             var articleFacade = new Facade(_mUserRepository, _mArticleRepository, _mCommentRepository);
 
-            articleFacade.CreateArticle(10, new Author(10), "Test Title", "Test Content");
+            articleFacade.CreateArticle(10, new Author(10), "Test Title", "Test Content");// 
 
             Assert.IsTrue(_mArticleRepository.MethodIsCalled(10));
         }

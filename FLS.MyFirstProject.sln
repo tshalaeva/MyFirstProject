@@ -1,8 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
-MinimumVisualStudioVersion = 10.0.40219.1
+# Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FLS.MyFirstProject.Console", "MyFirstProject\FLS.MyFirstProject.Console.csproj", "{02CD5D15-C0C1-42D6-BD0F-6015508F82D5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FLS.MyFirstProject.Tests", "Tests\FLS.MyFirstProject.Tests.csproj", "{842F4187-023D-485F-9D77-B80785571B57}"

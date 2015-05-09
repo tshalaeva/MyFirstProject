@@ -1,0 +1,26 @@
+﻿@model MVCProject.Models.ArticleModel
+
+@{
+    ViewBag.Title = "Create Article";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<body>
+    @RenderBody()
+    <h2>Create Article</h2>
+    @using (@Html.BeginForm("Submit", "CreateArticle", FormMethod.Post, new { @model = @Model, name = "Submit" }))
+    {
+        <p class="article-title">
+            <label>Title: </label>
+            @Html.TextBoxFor(m => m.Title)
+        </p>
+        <p class="article-content">
+            <label>Content: </label>
+            @Html.TextAreaFor(m => m.Content)
+        </p>
+                    
+        @Html.Hidden("returnUrl", Request.Url.ToString(), new {@model = @Model})
+        <input type="Submit" value="Create" onclick="@("window.location.href='" + @Url.Action("Submit") + "'");"/>
+    }
+</body>
+

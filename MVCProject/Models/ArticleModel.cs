@@ -34,4 +34,24 @@ namespace MVCProject.Models
             get { return _mArticle.Id; }
         } 
     }
+
+    public class ArticleViewModel
+    {
+
+        public ArticleViewModel()
+        {
+        }
+
+        public string Title
+        {
+            get;
+            set;
+        }
+
+        public string Content
+        {
+            get;
+            set;
+        }
+    }
 }

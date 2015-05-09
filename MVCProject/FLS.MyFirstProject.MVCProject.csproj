@@ -136,6 +136,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\ArticleDetailsController.cs" />
     <Compile Include="Controllers\ArticleListingController.cs" />
+    <Compile Include="Controllers\CreateArticleController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\WebReportController.cs" />
     <Compile Include="Global.asax.cs">
@@ -211,6 +212,9 @@
     <Content Include="Views\WebReport\Index.cshtml" />
     <Content Include="Views\WebReport\Submit.cshtml" />
     <Content Include="packages.config" />
+    <Content Include="Views\CreateArticle\CreateArticle.cshtml" />
+    <Content Include="Views\ArticleListing\OpenCreateArticle.cshtml" />
+    <Content Include="Views\CreateArticle\Submit.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -82,6 +82,8 @@ namespace MyFirstProject
         {
             _mFacade.CreateArticle(5, _mFacade.GetAuthors().First(), "Test 0", "Text 0");
             _mFacade.CreateArticle(6, _mFacade.GetAuthors().First(), "Test 1", "Text 1");
+            //_mFacade.CreateArticle(_mFacade.GetAuthors().First(), "Test 0", "Text 0");
+            //_mFacade.CreateArticle(_mFacade.GetAuthors().First(), "Test 1", "Text 1");
         }
 
         public void CreateComments()

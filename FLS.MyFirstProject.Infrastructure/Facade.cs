@@ -60,7 +60,7 @@ namespace FLS.MyFirstProject.Infrastructure
                 FirstName = "Admin",
                 LastName = "User",
                 Age = 58,
-                Privilegies = new List<string> {"edit", "read", "delete"}
+                Privilegies = new List<string> { "edit", "read", "delete" }
             };
 
             admin.Id = _mUserRepository.Save(admin);
@@ -176,10 +176,10 @@ namespace FLS.MyFirstProject.Infrastructure
             return result;
         }
 
-        public void CreateArticle(int id, Author author, string title, string content)
+        public int CreateArticle(int id, Author author, string title, string content)
         {
             var article = new Article(id) { Author = author, Title = title, Content = content };
-            _mArticleRepository.Save(article);
+            return _mArticleRepository.Save(article);
         }
 
         public void CreateComment(int id, Article article, User user, string content)
@@ -202,8 +202,16 @@ namespace FLS.MyFirstProject.Infrastructure
             _mCommentRepository.Save(review);
         }
 
-        public void UpdateArticle(int oldEntity, Article newEntity)
+        //public void UpdateArticle(int oldEntity, Article newEntity)
+        public void UpdateArticle(int oldEntity, string articleTitle, string articleContent)
         {
+            var newEntity = new Article(oldEntity)
+            {
+                Author = GetArticleById(oldEntity).Author,
+                Content = articleContent,
+                Ratings = GetArticleById(oldEntity).Ratings,
+                Title = articleTitle
+            };
             _mArticleRepository.Update(oldEntity, newEntity);
         }
 

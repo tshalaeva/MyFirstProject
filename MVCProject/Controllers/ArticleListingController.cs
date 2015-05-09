@@ -44,5 +44,10 @@ namespace MVCProject.Controllers
             var webReportModel = new WebReportModel();
             return View(webReportModel);
         }
+
+        public ActionResult OpenCreateArticle()
+        {
+            return View();
+        }
     }
 }
