@@ -1,0 +1,23 @@
+﻿@model MVCProject.Models.ArticleViewModel
+
+@{
+    ViewBag.Title = string.Format("Edit Article {0}", @Model.Title);
+    Layout = "~/Views/ArticleDetails/Index.cshtml";
+}
+
+<h2>Edit Article</h2>
+
+@using (@Html.BeginForm("Submit", "EditArticle", FormMethod.Post, new { model = @Model}))
+{
+    @Html.HiddenFor(m => m.Id)
+    <p class="edit-title">
+        <label>Title:</label>
+        @Html.TextBoxFor(m => m.Title)
+    </p>
+    <p class="edit-content">
+        <label>Content:</label>
+        @Html.TextAreaFor(m => m.Content)
+    </p>
+    @Html.Hidden("returnUrl", Request.Url.ToString())   
+    <button type="submit">Submit</button>
+}
