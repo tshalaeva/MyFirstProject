@@ -8,8 +8,9 @@
 <body>
     @RenderBody()
     <h2>Create Article</h2>
-    @using (@Html.BeginForm("Submit", "CreateArticle", FormMethod.Post, new { @model = @Model, name = "Submit" }))
+    @using (@Html.BeginForm("Submit", "CreateArticle", FormMethod.Post, new { @model = @Model}))
     {
+        @Html.HiddenFor(m => m.Author)
         <p class="article-title">
             <label>Title: </label>
             @Html.TextBoxFor(m => m.Title)

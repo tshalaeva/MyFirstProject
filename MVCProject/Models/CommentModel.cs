@@ -6,9 +6,13 @@ namespace MVCProject.Models
     {
         private readonly BaseComment _mComment;
 
+        public CommentModel()
+        {
+        }
+
         public int Id
         {
-            get { return _mComment.Id; }            
+            get { return _mComment.Id; }
         }
 
         public User User { get { return _mComment.User; } }
@@ -32,5 +36,22 @@ namespace MVCProject.Models
         {
             return _mComment.ToString();
         }
+    }
+
+    public class CommentViewModel
+    {
+        public CommentViewModel()
+        {
+        }
+
+        public string UserFirstName { get; set; }
+
+        public string UserLastName { get; set; }
+
+        public int UserAge { get; set; }
+
+        public string Content { get; set; }
+
+        public int ArticleId { get; set; }
     }
 }

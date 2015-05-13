@@ -1,8 +1,9 @@
-﻿using System.Web.Mvc;
-using MVCProject.Models;
-using FLS.MyFirstProject.Infrastructure;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Web.Mvc;
+using System.Web.Routing;
+using FLS.MyFirstProject.Infrastructure;
+using MVCProject.Models;
 
 namespace MVCProject.Controllers
 {
@@ -39,6 +40,13 @@ namespace MVCProject.Controllers
                 articleModel.Comments.Add(new CommentModel(comment));
             }
             return View(articleModel);
+        }
+
+        public ActionResult CreateComment(ArticleViewModel model)
+        {
+            var user = _mFacade.CreateUser(model.NewComment.UserFirstName, model.NewComment.UserLastName, model.NewComment.UserAge);
+            _mFacade.CreateComment(model.Id, _mFacade.GetUserById(user), model.NewComment.Content);
+            return RedirectToAction("OpenDetails", "ArticleListing", new RouteValueDictionary() {{"id", model.Id}});
         }
     }
 }

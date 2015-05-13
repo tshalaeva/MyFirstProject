@@ -133,13 +133,13 @@ namespace DataAccessLayer.Repositories
                 Id = (int)userData["Id"],
                 FirstName = userData["FirstName"].ToString(),
                 LastName = userData["LastName"].ToString(),
-                Privilegies = AdoHelper.GetCellValue("Privilegies", "List", "Id", userData["PrivilegiesId"]).ToString(),
-                NickName = AdoHelper.GetCellValue("Author", "NickName", "Id", userData["AuthorId"]).ToString(),
-                Popularity =
-                    Convert.ToInt32(AdoHelper.GetCellValue("Author", "Popularity", "Id", userData["AuthorId"]))
+                Privilegies = (!userData.IsNull("PrivilegiesId")) ? AdoHelper.GetCellValue("Privilegies", "List", "Id", userData["PrivilegiesId"]).ToString() : string.Empty,
+                NickName = (!userData.IsNull("AuthorId")) ? AdoHelper.GetCellValue("Author", "NickName", "Id", userData["AuthorId"]).ToString() : string.Empty,
+                Popularity = (!userData.IsNull("AuthorId")) ?
+                    Convert.ToDecimal(AdoHelper.GetCellValue("Author", "Popularity", "Id", userData["AuthorId"])) : 0
             };
 
-            if ((Guid)userData["PrivilegiesId"] == Guid.Empty && (Guid)userData["AuthorId"] == Guid.Empty)
+            if (userData.IsNull("PrivilegiesId") && userData.IsNull("AuthorId"))
                 return DtoMapper.GetUser(dtoUser);
             if ((Guid)userData["AuthorId"] != Guid.Empty)
             {
@@ -311,6 +311,7 @@ namespace DataAccessLayer.Repositories
 
         private readonly DtoMapper _dtoMapper;
 
+        [DefaultConstructor]
         public DbArticleRepository()
         {
             _adoHelper = new AdoHelper();
@@ -380,8 +381,8 @@ namespace DataAccessLayer.Repositories
             if (Exists(entity.Id)) return Update(entity.Id, entity);
             var cmdText = new StringBuilder();
             cmdText.AppendLine("BEGIN TRANSACTION");
-            cmdText.AppendLine("DECLARE @authorId uniqueidentifier");
-            cmdText.AppendFormat("SET @authorId='{0}' ", _adoHelper.GetCellValue("User", "AuthorId", entity.Author.Id));
+            cmdText.AppendLine("DECLARE @AuthorId uniqueidentifier");
+            cmdText.AppendFormat("SET @AuthorId='{0}' ", _adoHelper.GetCellValue("User", "AuthorId", entity.Author.Id));
             cmdText.AppendFormat(
                 "INSERT INTO [dbo].[Article](Title,Content,AuthorId) OUTPUT Inserted.Id VALUES('{0}','{1}','{2}') ",
                 entity.Title, entity.Content, _adoHelper.GetCellValue("User", "AuthorId", entity.Author.Id));
@@ -535,7 +536,7 @@ namespace DataAccessLayer.Repositories
             {
                 cmdText.AppendFormat(
                     "INSERT INTO [dbo].[Comments](UserId,ArticleId,Content) OUTPUT Inserted.Id VALUES('{0}','{1}','{2}') ",
-                    comment.User.Id, comment.Article.Id, comment.Content);
+                    comment.User.Id, comment.Article.Id, comment.Content.Trim());
                 return (int)AdoHelper.CrudOperation(cmdText.ToString(), "Comments");
             }
             if (comment is ReviewText)

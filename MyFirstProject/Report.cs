@@ -88,9 +88,9 @@ namespace MyFirstProject
 
         public void CreateComments()
         {
-            _mFacade.CreateComment(1, _mFacade.GetArticles()[1], _mFacade.GetAllUsers()[2], "Test comment 0");
-            _mFacade.CreateComment(2, _mFacade.GetArticles()[1], _mFacade.GetAllUsers()[1], "Test comment 1");
-            _mFacade.CreateComment(3, _mFacade.GetArticles()[1], _mFacade.GetAllUsers()[0], "Test comment 2");
+            _mFacade.CreateComment(_mFacade.GetArticles()[1].Id, _mFacade.GetAllUsers()[2], "Test comment 0");
+            _mFacade.CreateComment(_mFacade.GetArticles()[1].Id, _mFacade.GetAllUsers()[1], "Test comment 1");
+            _mFacade.CreateComment(_mFacade.GetArticles()[1].Id, _mFacade.GetAllUsers()[0], "Test comment 2");
         }
 
         public void CreateReviews()

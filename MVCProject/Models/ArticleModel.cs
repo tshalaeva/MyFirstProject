@@ -58,5 +58,7 @@ namespace MVCProject.Models
         }
 
         public List<CommentModel> Comments { get; set; }
+
+        public CommentViewModel NewComment { get; set; }
     }
 }

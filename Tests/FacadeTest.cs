@@ -60,9 +60,9 @@ namespace Tests
         {
             var facade = new Facade(_mUserRepository, _mArticleRepository, _mCommentRepository);
 
-            facade.CreateComment(10, facade.GetArticles().First(), new User(10), "CommentTest");
+            var id = facade.CreateComment(facade.GetArticles().First().Id, new User(10), "CommentTest");
 
-            Assert.IsTrue(_mCommentRepository.MethodIsCalled(10));
+            Assert.IsTrue(_mCommentRepository.MethodIsCalled(id));
         }
 
         [TestMethod]

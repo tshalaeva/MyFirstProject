@@ -57,7 +57,7 @@ namespace DataAccessLayer
 
         public User GetUser(DtoUser user)
         {
-            if(user.Privilegies == null && user.NickName == null)
+            if(user.Privilegies == string.Empty && user.NickName == string.Empty)
             {
                 var result = new User(user.Id)
                 {

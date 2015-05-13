@@ -1,7 +1,7 @@
 ﻿@using MVCProject.Models
 @model ArticleViewModel
 @{
-    ViewBag.Title = "OpenDetails";
+    ViewBag.Title = "Details";
     Layout = "~/Views/ArticleDetails/Index.cshtml";
 }
 
@@ -15,8 +15,38 @@
 
 <p>@Model.Content</p>
 
-<h3>Comments and reviews:</h3>
-@foreach (var comment in @Model.Comments)
+@using (@Html.BeginForm("CreateComment", "ArticleDetails", FormMethod.Post, new{model = @Model}))
 {
+    <h3>Comments and reviews:</h3>
+    foreach (var comment in @Model.Comments)
+    {
     <p>@comment.Show()</p>
+    }
+    <h1>Create comment</h1>
+    @Html.HiddenFor(m => m.Id)
+    @Html.HiddenFor(m => m.Author)
+    @Html.HiddenFor(m => m.Comments)
+    @Html.HiddenFor(m => m.Content)
+    @Html.HiddenFor(m => m.Title)
+    <p class="user=firstname">
+        <label class="firstname">First Name:</label>
+        @Html.TextBoxFor(m => m.NewComment.UserFirstName)
+    </p>
+
+    <p class="user=lastname">
+        <label class="lastname">Last Name:</label>
+        @Html.TextBoxFor(m => m.NewComment.UserLastName)
+    </p>
+
+    <p class="user-age">
+        <label class="age">Age:</label>
+        @Html.TextBoxFor(m => m.NewComment.UserAge)
+    </p>
+
+    <p class="comment-content">
+        <label class="content">Content:</label>
+        @Html.TextAreaFor(m => m.NewComment.Content)
+    </p>
+
+    <button type="submit">Save</button>
 }

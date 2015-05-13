@@ -83,12 +83,13 @@ namespace FLS.MyFirstProject.Infrastructure
                     Content = string.Format("Text {0}", i + 1),
                     Title = string.Format("Title {0}", i + 1)
                 };
+
                 if (i == 3)
                 {
                     article.Author = authors[0];
                     article.Id = _mArticleRepository.Save(article);
                     articles.Add(article);
-                    break;
+                    break;                  
                 }
 
                 article.Author = authors[i];
@@ -137,9 +138,25 @@ namespace FLS.MyFirstProject.Infrastructure
             _mUserRepository.Delete(entityId);
         }
 
-        public void SaveUser(User entity)
+        public int CreateUser(string firstName, string lastName, int age)
         {
-            _mUserRepository.Save(entity);
+            var user = new User
+            {
+                FirstName = firstName,
+                LastName = lastName,
+                Age = age
+            };
+            return SaveUser(user);
+        }
+
+        public int SaveUser(User entity)
+        {
+            return _mUserRepository.Save(entity);
+        }
+
+        public User GetUserById(int id)
+        {
+            return _mUserRepository.GetById(id);
         }
 
         public List<Article> GetArticles()
@@ -182,10 +199,16 @@ namespace FLS.MyFirstProject.Infrastructure
             return _mArticleRepository.Save(article);
         }
 
-        public void CreateComment(int id, Article article, User user, string content)
+        public int CreateComment(int articleId, User user, string content)
         {
-            var comment = new Comment(id, content, user, article);
-            _mCommentRepository.Save(comment);
+            //var comment = new Comment(id, content, user, _mArticleRepository.GetById(articleId));
+            var comment = new Comment()
+            {
+                User = user,
+                Article = _mArticleRepository.GetById(articleId),
+                Content = content
+            };
+            return _mCommentRepository.Save(comment);
         }
 
         public void CreateReview(int id, string content, Rating rating, User user, Article article)

@@ -7,7 +7,9 @@
         {
         }
 
-        public Author() { }
+        public Author()
+        {
+        }
 
         public string NickName { get; set; }
         
