@@ -84,9 +84,20 @@ namespace FLS.MyFirstProject.Infrastructure
                     Title = string.Format("Title {0}", i + 1)
                 };
 
+                article.Author = new Author();
+
                 if (i == 3)
                 {
-                    article.Author = authors[0];
+                    var newAuthor = new Author()
+                    {
+                        Age = 30,
+                        LastName = "Last Name",
+                        FirstName = "First Name",
+                        NickName = "Nick Name",
+                        Popularity = (decimal)1.4
+                    };
+                    newAuthor.Id = _mUserRepository.Save(newAuthor);
+                    article.Author = newAuthor;
                     article.Id = _mArticleRepository.Save(article);
                     articles.Add(article);
                     break;                  

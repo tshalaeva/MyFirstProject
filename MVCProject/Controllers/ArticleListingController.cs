@@ -37,10 +37,17 @@ namespace MVCProject.Controllers
                 Id = article.Id
             };
             var comments = _mFacade.FilterCommentsByArticle(article);
-            articleModel.Comments = new List<CommentModel>();
+            articleModel.Comments = new List<CommentViewModel>();
             foreach (var comment in comments)
             {
-                articleModel.Comments.Add(new CommentModel(comment));
+                articleModel.Comments.Add(new CommentViewModel()
+                {
+                    Content = comment.Content, 
+                    ArticleId = comment.Article.Id,
+                    UserFirstName = comment.User.FirstName,
+                    UserAge = comment.User.Age,
+                    UserLastName = comment.User.LastName
+                });
             }
             return View(articleModel);
         }
