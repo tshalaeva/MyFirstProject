@@ -57,5 +57,11 @@ namespace MVCProject.Controllers
             _mFacade.CreateComment(model.Id, _mFacade.GetUserById(user), model.NewComment.Content);
             return RedirectToAction("OpenDetails", "ArticleListing", new RouteValueDictionary() {{"id", model.Id}});
         }
+
+        public ActionResult DeleteArticle(int id)
+        {
+            _mFacade.DeleteArticle(id);
+            return Redirect("~/ArticleListing/Index");
+        }
     }
 }
