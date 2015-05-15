@@ -76,32 +76,32 @@ namespace FLS.MyFirstProject.Infrastructure
 
             var articles = new List<Article>();
 
-            for (var i = 0; i < 4; i++)
+            for (var i = 0; i < 3; i++)
             {
                 var article = new Article(i)
                 {
                     Content = string.Format("Text {0}", i + 1),
-                    Title = string.Format("Title {0}", i + 1)
+                    Title = string.Format("Title {0}", i + 1),
+                    Author = new Author()
                 };
 
-                article.Author = new Author();
 
-                if (i == 3)
-                {
-                    var newAuthor = new Author()
-                    {
-                        Age = 30,
-                        LastName = "Last Name",
-                        FirstName = "First Name",
-                        NickName = "Nick Name",
-                        Popularity = (decimal)1.4
-                    };
-                    newAuthor.Id = _mUserRepository.Save(newAuthor);
-                    article.Author = newAuthor;
-                    article.Id = _mArticleRepository.Save(article);
-                    articles.Add(article);
-                    break;                  
-                }
+                //if (i == 3)
+                //{
+                //    var newAuthor = new Author()
+                //    {
+                //        Age = 30,
+                //        LastName = "Last Name",
+                //        FirstName = "First Name",
+                //        NickName = "Nick Name",
+                //        Popularity = (decimal)1.4
+                //    };
+                //    newAuthor.Id = _mUserRepository.Save(newAuthor);
+                //    article.Author = newAuthor;
+                //    article.Id = _mArticleRepository.Save(article);
+                //    articles.Add(article);
+                //    break;                  
+                //}
 
                 article.Author = authors[i];
                 article.Id = _mArticleRepository.Save(article);
@@ -273,6 +273,11 @@ namespace FLS.MyFirstProject.Infrastructure
         public void DeleteArticle(int entityId)
         {
             _mArticleRepository.Delete(entityId);
+            var comments = _mCommentRepository.Get();
+            foreach (var comment in comments.Where(comment => comment.Article.Id == entityId))
+            {
+                _mCommentRepository.Delete(comment.Id);
+            }
         }
 
         public void DeleteComment(int commentId)

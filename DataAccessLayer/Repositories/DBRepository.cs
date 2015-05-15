@@ -568,7 +568,7 @@ namespace DataAccessLayer.Repositories
         public BaseComment GetById(int? id)
         {
             var commentData = AdoHelper.GetData("Comments", (int)id);
-            var commentTable = commentData.Rows[(int)id];
+            var commentTable = commentData.Rows[0];
             var comment = new DtoComment
             {
                 Id = (int)commentTable["Id"],
@@ -578,8 +578,8 @@ namespace DataAccessLayer.Repositories
             };
             var rating = AdoHelper.GetCellValue("Rating", "Value", "CommentId", commentTable["Id"]);
             var textRating = AdoHelper.GetCellValue("TextRating", "Value", "CommentId", commentTable["Id"]);
-            if (((int)rating != 0) && (textRating != DBNull.Value)) return DtoMapper.GetComment(comment);
-            if (((int)rating == 0))
+            if ((rating == null) && (textRating == null)) return DtoMapper.GetComment(comment);
+            if ((rating != null))
             {
                 comment.Rating = rating;
             }
