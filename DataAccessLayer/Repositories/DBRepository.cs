@@ -89,9 +89,11 @@ namespace DataAccessLayer.Repositories
 
         public void Delete(int userId)
         {
-            var data = Get();
+            var data = GetById(userId);
+            //var data = Get();
             var cmdText = new StringBuilder();
-            if (!(data[userId] is Admin) && !(data[userId] is Author))
+            //if (!(data[userId] is Admin) && !(data[userId] is Author))
+            if (!(data is Admin) && !(data is Author))
             {
                 cmdText.AppendFormat("DELETE FROM [dbo].[User] WHERE Id='{0}'", userId);
 
@@ -99,7 +101,8 @@ namespace DataAccessLayer.Repositories
             }
             else
             {
-                if (data[userId] is Admin)
+                //if (data[userId] is Admin)
+                if (data is Admin)
                 {
                     adminRepository.DeleteAdmin(userId);
                 }

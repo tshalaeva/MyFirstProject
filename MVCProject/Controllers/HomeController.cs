@@ -35,6 +35,6 @@ namespace MVCProject.Controllers
                     users[i].LastName.Trim(), users[i].Age);
             }
             return result;
-        }
+        }        
     }
 }

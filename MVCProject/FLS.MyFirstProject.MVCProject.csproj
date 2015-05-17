@@ -227,6 +227,9 @@
     <Content Include="Views\ArticleListing\OpenCreateUser.cshtml" />
     <Content Include="Views\User\UserList.cshtml" />
     <Content Include="Views\User\CreateUser.cshtml" />
+    <Content Include="Views\User\DeleteUser.cshtml" />
+    <Content Include="Views\User\EditUser.cshtml" />
+    <Content Include="Views\User\Submit.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

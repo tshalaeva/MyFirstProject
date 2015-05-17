@@ -85,24 +85,6 @@ namespace FLS.MyFirstProject.Infrastructure
                     Author = new Author()
                 };
 
-
-                //if (i == 3)
-                //{
-                //    var newAuthor = new Author()
-                //    {
-                //        Age = 30,
-                //        LastName = "Last Name",
-                //        FirstName = "First Name",
-                //        NickName = "Nick Name",
-                //        Popularity = (decimal)1.4
-                //    };
-                //    newAuthor.Id = _mUserRepository.Save(newAuthor);
-                //    article.Author = newAuthor;
-                //    article.Id = _mArticleRepository.Save(article);
-                //    articles.Add(article);
-                //    break;                  
-                //}
-
                 article.Author = authors[i];
                 article.Id = _mArticleRepository.Save(article);
                 articles.Add(article);
@@ -146,6 +128,11 @@ namespace FLS.MyFirstProject.Infrastructure
 
         public void DeleteUser(int entityId)
         {
+            var comments = _mCommentRepository.Get();
+            foreach (var comment in comments.Where(comment => comment.User.Id == entityId))
+            {
+                _mCommentRepository.Delete(comment.Id);
+            }
             _mUserRepository.Delete(entityId);
         }
 
@@ -158,6 +145,15 @@ namespace FLS.MyFirstProject.Infrastructure
                 Age = age
             };
             return SaveUser(user);
+        }
+
+        public int UpdateUser(int id, string firstName, string lastName, int age)
+        {
+            var user = _mUserRepository.GetById(id);
+            user.FirstName = firstName;
+            user.LastName = lastName;
+            user.Age = age;
+            return _mUserRepository.Update(id, user);
         }
 
         public int SaveUser(User entity)
