@@ -7,7 +7,7 @@
 
 <h2>Details</h2>
 
-@Html.ActionLink("Edit Article", "EditArticle", "ArticleDetails", new { id = @Model.Id }, new object { })
+@Html.ActionLink("Edit Article", "EditArticle", "ArticleDetails", new { id = @Model.Id }, new object())
 
 <h3>Articele title: @Model.Title</h3>
 
@@ -15,12 +15,14 @@
 
 <p>@Model.Content</p>
 
-@using (@Html.BeginForm("CreateComment", "ArticleDetails", FormMethod.Post, new{model = @Model}))
+@using (@Html.BeginForm("CreateComment", "ArticleDetails", FormMethod.Post, new { model = @Model }))
 {
     <h3>Comments and reviews:</h3>
     foreach (var comment in @Model.Comments)
     {
-    <p>@comment.Show()</p>
+        <div class="commentView">@comment.Show()</div>
+        <div class="editComment">@Html.ActionLink("Edit Comment", "OpenEditComment", "ArticleDetails", new {id = comment.Id}, new object())</div>
+        <div class="deleteComment">@Html.ActionLink("Delete Comment", "DeleteComment", "ArticleDetails", new { id = comment.Id }, new object())</div>   
     }
     <h1>Create comment</h1>
     @Html.HiddenFor(m => m.Id)

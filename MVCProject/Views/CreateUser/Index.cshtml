@@ -1,0 +1,30 @@
+﻿@model MVCProject.Models.UserViewModel
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Create new User</h2>
+
+<body>
+    @RenderBody()
+    @using (@Html.BeginForm("CreateUser", "User", FormMethod.Post, new { model = @Model}))
+    {
+        <p class="userFirstName">
+            <label>First Name:</label>
+            @Html.TextBoxFor(m => m.FirstName)
+        </p>
+
+        <p class="userLastName">
+            <label>Last Name:</label>
+            @Html.TextBoxFor(m => m.LastName)
+        </p>
+
+        <p class="userAge">
+            <label>Age:</label>
+            @Html.TextBoxFor(m => m.Age)
+        </p>
+    <button type="submit">Save</button>
+    }
+</body>

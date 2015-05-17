@@ -139,12 +139,14 @@
     <Compile Include="Controllers\CreateArticleController.cs" />
     <Compile Include="Controllers\EditArticleController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\WebReportController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\ArticleModel.cs" />
     <Compile Include="Models\CommentModel.cs" />
+    <Compile Include="Models\UserViewModel.cs" />
     <Compile Include="Models\WebReportModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -219,6 +221,12 @@
     <Content Include="Views\ArticleDetails\EditArticle.cshtml" />
     <Content Include="Views\ArticleDetails\CreateComment.cshtml" />
     <Content Include="Views\CreateArticle\Index.cshtml" />
+    <Content Include="Views\ArticleDetails\OpenEditComment.cshtml" />
+    <Content Include="Views\EditComment\Index.cshtml" />
+    <Content Include="Views\CreateUser\Index.cshtml" />
+    <Content Include="Views\ArticleListing\OpenCreateUser.cshtml" />
+    <Content Include="Views\User\UserList.cshtml" />
+    <Content Include="Views\User\CreateUser.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -1,0 +1,24 @@
+﻿@model MVCProject.Models.CommentViewModel
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Edit comment</h2>
+
+<body>
+    @RenderBody()
+    @using (@Html.BeginForm("EditComment", "ArticleDetails", FormMethod.Post, new { id = @Model.Id}))
+    {
+    @Html.HiddenFor(m => m.Id)
+    @Html.HiddenFor(m => m.ArticleId)
+    <p class="comment-content">
+        <label class="content">Content:</label>
+        @Html.TextAreaFor(m => m.Content)
+    </p>
+
+    <button type="submit">Save Changes</button>
+    }
+</body>
+

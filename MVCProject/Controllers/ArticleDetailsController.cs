@@ -20,7 +20,7 @@ namespace MVCProject.Controllers
         }
 
         public ActionResult ShowComments()
-        {            
+        {
             return View("Index");
         }
 
@@ -55,13 +55,42 @@ namespace MVCProject.Controllers
         {
             var user = _mFacade.CreateUser(model.NewComment.UserFirstName, model.NewComment.UserLastName, model.NewComment.UserAge);
             _mFacade.CreateComment(model.Id, _mFacade.GetUserById(user), model.NewComment.Content);
-            return RedirectToAction("OpenDetails", "ArticleListing", new RouteValueDictionary() {{"id", model.Id}});
+            return RedirectToAction("OpenDetails", "ArticleListing", new RouteValueDictionary() { { "id", model.Id } });
         }
 
         public ActionResult DeleteArticle(int id)
         {
             _mFacade.DeleteArticle(id);
             return Redirect("~/ArticleListing/Index");
+        }
+
+        public ActionResult DeleteComment(int id)
+        {
+            var articleId = _mFacade.GetCommentById(id).Article.Id;
+            _mFacade.DeleteComment(id);
+            return RedirectToAction("OpenDetails", "ArticleListing", new RouteValueDictionary() { { "id", articleId } });
+        }
+
+        public ActionResult EditComment(CommentViewModel model)
+        {
+            _mFacade.UpdateComment(model.Id, model.Content);
+            return RedirectToAction("OpenDetails", "ArticleListing", new RouteValueDictionary() { { "id", model.ArticleId} });
+        }
+
+        public ActionResult OpenEditComment(int? id)
+        {
+            var comment = _mFacade.GetCommentById(id);
+            var commentModel = new CommentViewModel()
+            {
+                Content = comment.Content,
+                UserFirstName = comment.User.FirstName,
+                UserLastName = comment.User.LastName,
+                Rating = null,
+                Id = comment.Id,
+                ArticleId = comment.Article.Id,
+                UserAge = comment.User.Age
+            };
+            return View(commentModel);
         }
     }
 }

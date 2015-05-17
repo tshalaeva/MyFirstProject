@@ -9,7 +9,7 @@ using ObjectRepository.Entities;
 
 namespace MVCProject.Controllers
 {
-    public class WebReportController : Controller
+    public class WebReportController : HomeController
     {
         //
         // GET: /WebReport/        
@@ -114,6 +114,12 @@ namespace MVCProject.Controllers
                     model.Content = TrimSpaces(model.Content);                 
                     break;
                 }
+
+                case "7":
+                {
+                    model.Content = ShowAllUsers();
+                    break;
+                }
             }
             return View(model);
         }
@@ -122,7 +128,7 @@ namespace MVCProject.Controllers
         {
             var result = "";
 
-            string pattern = "\\s{2,}";
+            var pattern = "\\s{2,}";
             var replacement = " ";
             var rgx = new Regex(pattern);
             result = rgx.Replace(input, replacement);

@@ -54,6 +54,11 @@ namespace MVCProject.Models
                 {
                     Text = "Print Random Article Id",
                     Value = "6"
+                },
+                new SelectListItem()
+                {
+                    Text = "Show all users",
+                    Value = "7"
                 }
             };
         }

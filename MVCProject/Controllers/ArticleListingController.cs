@@ -16,7 +16,7 @@ namespace MVCProject.Controllers
         public ActionResult Index()
         {
             var articles = _mFacade.GetArticles();
-            var articleModels = articles.Select(article => new ArticleViewModel() { Id = article.Id, Author = article.Author.NickName, Title = article.Title, Content = article.Content}).ToList();
+            var articleModels = articles.Select(article => new ArticleViewModel() { Id = article.Id, Author = article.Author.NickName, Title = article.Title, Content = article.Content }).ToList();
             return View(articleModels);
         }
 
@@ -42,7 +42,8 @@ namespace MVCProject.Controllers
             {
                 articleModel.Comments.Add(new CommentViewModel()
                 {
-                    Content = comment.Content, 
+                    Id = comment.Id,
+                    Content = comment.Content,
                     ArticleId = comment.Article.Id,
                     UserFirstName = comment.User.FirstName,
                     UserAge = comment.User.Age,
@@ -59,6 +60,11 @@ namespace MVCProject.Controllers
         }
 
         public ActionResult OpenCreateArticle()
+        {
+            return View();
+        }
+
+        public ActionResult OpenCreateUser()
         {
             return View();
         }

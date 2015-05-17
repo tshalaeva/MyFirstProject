@@ -236,6 +236,13 @@ namespace FLS.MyFirstProject.Infrastructure
             _mCommentRepository.Save(review);
         }
 
+        public int UpdateComment(int id, string content)
+        {
+            var oldComment = _mCommentRepository.GetById(id);
+            var newComment = new Comment(id, content, oldComment.User, oldComment.Article);
+            return _mCommentRepository.Update(id, newComment);
+        }        
+
         //public void UpdateArticle(int oldEntity, Article newEntity)
         public int UpdateArticle(int oldEntity, string articleTitle, string articleContent)
         {
