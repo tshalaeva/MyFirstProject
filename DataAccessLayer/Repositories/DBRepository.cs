@@ -78,7 +78,7 @@ namespace DataAccessLayer.Repositories
                 cmdText.AppendFormat(
                     "INSERT INTO [dbo].[User] (FirstName,LastName,Age) OUTPUT Inserted.Id VALUES('{0}','{1}',{2})",
                     entity.FirstName, entity.LastName, entity.Age);
-                return (int)AdoHelper.CrudOperation(cmdText.ToString(), "User");
+                return (int)AdoHelper.CrudOperation(cmdText.ToString());
             }
             if (entity is Admin)
             {
@@ -97,7 +97,7 @@ namespace DataAccessLayer.Repositories
             {
                 cmdText.AppendFormat("DELETE FROM [dbo].[User] WHERE Id='{0}'", userId);
 
-                AdoHelper.CrudOperation(cmdText.ToString(), "User");
+                AdoHelper.CrudOperation(cmdText.ToString());
             }
             else
             {
@@ -118,7 +118,7 @@ namespace DataAccessLayer.Repositories
             var commandText = string.Format("UPDATE [dbo].[User] SET FirstName='{0}',LastName='{1}',Age={2} WHERE Id={3}", newUser.FirstName, newUser.LastName, newUser.Age, oldUserId);
             if (!(newUser is Admin) && !(newUser is Author))
             {
-                return Convert.ToInt32(AdoHelper.CrudOperation(commandText, "User"));
+                return Convert.ToInt32(AdoHelper.CrudOperation(commandText));
             }
             if (newUser is Admin)
             {
@@ -212,29 +212,24 @@ namespace DataAccessLayer.Repositories
 
         public int SaveAdmin(Admin entity)
         {
-            var cmdText = new StringBuilder();
-            cmdText.AppendLine("BEGIN TRANSACTION");
-            cmdText.AppendLine("DECLARE @Privilegies uniqueidentifier;");
-            cmdText.AppendLine("SET @Privilegies=NEWID();");
-            cmdText.AppendFormat(
-                "INSERT INTO [dbo].[User] (FirstName,LastName,Age,PrivilegiesId) OUTPUT Inserted.Id VALUES ('{0}','{1}',{2},@Privilegies); ",
-                entity.FirstName, entity.LastName, entity.Age);
-            var privilegyList = entity.Privilegies;
-            cmdText.AppendFormat("INSERT INTO Privilegies (Id,List) VALUES (@Privilegies, '{0}'); ",
-                GetPrivilegiesString(privilegyList));
-            cmdText.AppendLine("COMMIT");
-            return (int)adminAdoHelper.CrudOperation(cmdText.ToString(), "User");
+            var privilegiesId = Guid.NewGuid();
+            
+            var cmdText1 =
+                string.Format(
+                    "INSERT INTO [dbo].[User] (FirstName,LastName,Age,PrivilegiesId) OUTPUT Inserted.Id VALUES ('{0}','{1}',{2},'{3}')",
+                    entity.FirstName, entity.LastName, entity.Age, privilegiesId);
+                    var privilegyList = entity.Privilegies;
+            var cmdText2 = string.Format("INSERT INTO Privilegies (Id,List) VALUES ('{0}', '{1}'); ",
+                privilegiesId, GetPrivilegiesString(privilegyList));
+            return (int) adminAdoHelper.CrudOperation(cmdText1, cmdText2);
         }
 
         public void DeleteAdmin(int adminId)
         {
-            var cmdText = new StringBuilder();
             var privilegyId = (Guid)AdoHelper.GetCellValue("User", "PrivilegiesId", adminId);
-            cmdText.AppendLine("BEGIN TRANSACTION");
-            cmdText.AppendFormat("DELETE FROM [dbo].[User] WHERE Id={0}) ", adminId);
-            cmdText.AppendFormat("DELETE FROM [dbo].[Privilegies] WHERE Id={0}", privilegyId);
-            cmdText.AppendLine("COMMIT");
-            adminAdoHelper.CrudOperation(cmdText.ToString(), "User");
+            var command1 = string.Format("DELETE FROM [dbo].[User] WHERE Id={0})", adminId);
+            var command2 = string.Format("DELETE FROM [dbo].[Privilegies] WHERE Id='{0}'", privilegyId);
+            adminAdoHelper.CrudOperation(command1, command2);
         }
 
         public int UpdateAdmin(int oldAdminId, Admin newAdmin)
@@ -242,8 +237,8 @@ namespace DataAccessLayer.Repositories
             var commandText = string.Format("UPDATE [dbo].[User] SET FirstName='{0}',LastName='{1}',Age={2} WHERE Id={3}", newAdmin.FirstName, newAdmin.LastName, newAdmin.Age, oldAdminId);
             var privilegiesId = (Guid)adminAdoHelper.GetCellValue("User", "PrivilegiesId", oldAdminId);
             var cmd = string.Format("UPDATE [dbo].[Privilegies] SET List='{0}' WHERE Id='{1}' ", GetPrivilegiesString(newAdmin.Privilegies), privilegiesId);
-            adminAdoHelper.CrudOperation(cmd, "Privilegies");
-            return Convert.ToInt32(adminAdoHelper.CrudOperation(commandText, "User"));
+            adminAdoHelper.CrudOperation(cmd);
+            return Convert.ToInt32(adminAdoHelper.CrudOperation(commandText));
         }
     }
 
@@ -273,29 +268,18 @@ namespace DataAccessLayer.Repositories
 
         public int SaveAuthor(Author entity)
         {
-            var cmdText = new StringBuilder();
-            cmdText.AppendLine("BEGIN TRANSACTION");
-            cmdText.AppendLine("DECLARE @AuthorID uniqueidentifier");
-            cmdText.AppendLine("SET @AuthorID=NEWID()");
-            cmdText.AppendFormat(
-                "INSERT INTO [dbo].[User](FirstName,LastName,Age,AuthorId) OUTPUT Inserted.Id VALUES ('{0}','{1}',{2},@AuthorID) ",
-                entity.FirstName, entity.LastName, entity.Age);
-            cmdText.AppendFormat(
-                "INSERT INTO [dbo].[Author](Id,NickName,Popularity) VALUES (@AuthorID,'{0}','{1}') ", entity.NickName,
-                entity.Popularity);
-            cmdText.AppendLine("COMMIT");
-            return (int)authorAdoHelper.CrudOperation(cmdText.ToString(), "User");
-        }
+            var authorId = Guid.NewGuid();
+            var command1 = string.Format("INSERT INTO [dbo].[User](FirstName,LastName,Age,AuthorId) OUTPUT Inserted.Id VALUES ('{0}','{1}',{2},'{3}')", entity.FirstName, entity.LastName, entity.Age, authorId);
+            var command2 = string.Format("INSERT INTO [dbo].[Author](Id,NickName,Popularity) VALUES ('{0}','{1}','{2}')", authorId, entity.NickName, entity.Popularity);
+            return (int) authorAdoHelper.CrudOperation(command1, command2);
+            }
 
         public void DeleteAuthor(int authorId)
         {
-            var cmdText = new StringBuilder();
             var authorGuid = (Guid)authorAdoHelper.GetCellValue("User", "AuthorId", authorId);
-            cmdText.AppendLine("BEGIN TRANSACTION");
-            cmdText.AppendFormat("DELETE FROM [dbo].[User] WHERE Id={0}) ", authorId);
-            cmdText.AppendFormat("DELETE FROM [dbo].[Author] WHERE Id={0}", authorGuid);
-            cmdText.AppendLine("COMMIT");
-            authorAdoHelper.CrudOperation(cmdText.ToString(), "User");
+            var command1 = string.Format("DELETE FROM [dbo].[User] WHERE Id={0})", authorId);
+            var command2 = string.Format("DELETE FROM [dbo].[Author] WHERE Id='{0}'", authorGuid);
+            authorAdoHelper.CrudOperation(command1, command2);
         }
 
         public int UpdateAuthor(int oldAuthorId, Author newAuthor)
@@ -303,8 +287,8 @@ namespace DataAccessLayer.Repositories
             var commandText = string.Format("UPDATE [dbo].[User] SET FirstName='{0}',LastName='{1}',Age={2} WHERE Id={3}", newAuthor.FirstName, newAuthor.LastName, newAuthor.Age, oldAuthorId);
             var authorId = authorAdoHelper.GetCellValue("User", "AuthorId", oldAuthorId);
             var authorCmd = string.Format("UPDATE [dbo].[Author] SET NickName='{0}',Popularity='{1}' WHERE Id='{2}'; ", newAuthor.NickName, newAuthor.Popularity, authorId);
-            authorAdoHelper.CrudOperation(authorCmd, "Author");
-            return Convert.ToInt32(authorAdoHelper.CrudOperation(commandText, "User"));
+            authorAdoHelper.CrudOperation(authorCmd);
+            return Convert.ToInt32(authorAdoHelper.CrudOperation(commandText));
         }
     }
 
@@ -382,27 +366,21 @@ namespace DataAccessLayer.Repositories
         public int Save(Article entity)
         {
             if (Exists(entity.Id)) return Update(entity.Id, entity);
-            var cmdText = new StringBuilder();
-            cmdText.AppendLine("BEGIN TRANSACTION");
-            cmdText.AppendLine("DECLARE @AuthorId uniqueidentifier");
-            cmdText.AppendFormat("SET @AuthorId='{0}' ", _adoHelper.GetCellValue("User", "AuthorId", entity.Author.Id));
-            cmdText.AppendFormat(
-                "INSERT INTO [dbo].[Article](Title,Content,AuthorId) OUTPUT Inserted.Id VALUES('{0}','{1}','{2}') ",
-                entity.Title, entity.Content, _adoHelper.GetCellValue("User", "AuthorId", entity.Author.Id));
-            cmdText.AppendLine("COMMIT");
-            return (int)_adoHelper.CrudOperation(cmdText.ToString(), "Article");
+            var authorId = (Guid)_adoHelper.GetCellValue("User", "AuthorId", entity.Author.Id);
+            var command = string.Format("INSERT INTO [dbo].[Article](Title,Content,AuthorId) OUTPUT Inserted.Id VALUES('{0}','{1}','{2}') ", entity.Title, entity.Content, authorId);
+            return (int) _adoHelper.CrudOperation(command);
         }
 
         public void Delete(int articleId)
         {
             var cmdText = string.Format("DELETE FROM [dbo].[Article] WHERE Id={0}", articleId);
-            _adoHelper.CrudOperation(cmdText, "Article");
+            _adoHelper.CrudOperation(cmdText);
         }
 
         public int Update(int oldArticleId, Article newArticle)
         {
             var commandText = string.Format("UPDATE [dbo].[Article] SET Title='{0}',Content='{1}' WHERE Id={2}", newArticle.Title, newArticle.Content, oldArticleId);
-            return Convert.ToInt32(_adoHelper.CrudOperation(commandText, "Article"));
+            return Convert.ToInt32(_adoHelper.CrudOperation(commandText));
         }
 
         public Article GetById(int? id)
@@ -522,7 +500,7 @@ namespace DataAccessLayer.Repositories
                 return
                     Convert.ToInt32(AdoHelper.CrudOperation(
                         string.Format("UPDATE [dbo].[Comments] SET Content='{0}' WHERE Id={1}",
-                            newComment.Content, oldComment), "Comments"));
+                            newComment.Content, oldComment)));
             }
             if (newComment is ReviewText)
             {
@@ -540,7 +518,7 @@ namespace DataAccessLayer.Repositories
                 cmdText.AppendFormat(
                     "INSERT INTO [dbo].[Comments](UserId,ArticleId,Content) OUTPUT Inserted.Id VALUES('{0}','{1}','{2}') ",
                     comment.User.Id, comment.Article.Id, comment.Content.Trim());
-                return (int)AdoHelper.CrudOperation(cmdText.ToString(), "Comments");
+                return (int)AdoHelper.CrudOperation(cmdText.ToString());
             }
             if (comment is ReviewText)
             {
@@ -623,7 +601,7 @@ namespace DataAccessLayer.Repositories
             if(!(entity is Review))
             {
                 var cmdText = string.Format("DELETE FROM [dbo].[Comments] WHERE Id={0}", commentId);
-                AdoHelper.CrudOperation(cmdText, "Comments");
+                AdoHelper.CrudOperation(cmdText);
             }
             else
             {
@@ -649,37 +627,25 @@ namespace DataAccessLayer.Repositories
 
         public int SaveReview(Review review)
         {
-            var cmdText = new StringBuilder();
-            cmdText.AppendLine("BEGIN TRANSACTION");
-            cmdText.AppendFormat(
-                "INSERT INTO [dbo].[Comments](UserId,ArticleId,Content) OUTPUT Inserted.Id VALUES({0},{1},'{2}') ",
-                review.User.Id, review.Article.Id, review.Content);
-            cmdText.AppendLine("COMMIT");
-            var commentId = reviewAdoHelper.CrudOperation(cmdText.ToString(), "Comments");
-            var ratingCommand = string.Format("INSERT INTO [dbo].[Rating](ArticleId,Value,CommentId) VALUES({0},{1},{2}) ", review.Article.Id, review.Rating.Value, commentId);
-            reviewAdoHelper.CrudOperation(ratingCommand, "Rating");
+            var command1 = string.Format("INSERT INTO [dbo].[Comments](UserId,ArticleId,Content) OUTPUT Inserted.Id VALUES({0},{1},'{2}')", review.User.Id, review.Article.Id, review.Content);
+            var commentId = reviewAdoHelper.CrudOperation(command1);
+            var command2 = string.Format("INSERT INTO [dbo].[Rating](ArticleId,Value,CommentId) VALUES({0},{1},{2}) ", review.Article.Id, review.Rating.Value, commentId);
+            reviewAdoHelper.CrudOperation(command2);
             return (int)commentId;
         }
 
         public int UpdateReview(int oldReviewId, Review newReview)
         {
-            var cmd = new StringBuilder();
-            cmd.AppendLine("BEGIN TRANSACTION");
-            cmd.AppendFormat("UPDATE [dbo].[Comments] SET Content='{0}' WHERE Id={1} ",
-                newReview.Content, oldReviewId);           
-            cmd.AppendFormat("UPDATE [dbo].[Rating] SET Value={0} WHERE CommentId={1} ", newReview.Rating.Value, oldReviewId);
-            cmd.AppendLine("COMMIT");
-            return Convert.ToInt32(reviewAdoHelper.CrudOperation(cmd.ToString(), "Comment"));
+            var command1 = string.Format("UPDATE [dbo].[Comments] SET Content='{0}' WHERE Id={1}", newReview.Content, oldReviewId);
+            var command2 = string.Format("UPDATE [dbo].[Rating] SET Value={0} WHERE CommentId={1}", newReview.Rating.Value, oldReviewId);
+            return Convert.ToInt32(reviewAdoHelper.CrudOperation(command1, command2));
         }
 
         public void DeleteReview(int id)
         {
-            var cmdText = new StringBuilder();
-            cmdText.AppendLine("BEGIN TRANSACTION");
-            cmdText.AppendFormat("DELETE FROM [dbo].[Comments] WHERE Id={0} ", id);
-            cmdText.AppendFormat("DELETE FROM [dbo].[Rating] WHERE CommentId={0} ", id);
-            cmdText.AppendLine("COMMIT");
-            reviewAdoHelper.CrudOperation(cmdText.ToString(), "Comments");
+            var command1 = string.Format("DELETE FROM [dbo].[Comments] WHERE Id={0}", id);
+            var command2 = string.Format("DELETE FROM [dbo].[Rating] WHERE CommentId={0}", id);
+            reviewAdoHelper.CrudOperation(command1, command2);
         }
     }
 
@@ -689,37 +655,27 @@ namespace DataAccessLayer.Repositories
 
         public int SaveReviewText(ReviewText reviewText)
         {
-            var cmdText = new StringBuilder();
-            cmdText.AppendLine("BEGIN TRANSACTION");
-            cmdText.AppendFormat(
-                "INSERT INTO [dbo].[Comments](UserId,ArticleId,Content) OUTPUT Inserted.Id VALUES('{0}','{1}','{2}') ",
-                reviewText.User.Id, reviewText.Article.Id, reviewText.Content);
-            cmdText.AppendLine("COMMIT");
-            var reviewTextId = reviewTextAdoHelper.CrudOperation(cmdText.ToString(), "Comments");
-            var ratingCmd = string.Format("INSERT INTO [dbo].[TextRating](ArticleId,Value,CommentId) VALUES({0},{1},{2}) ", reviewText.Article.Id, reviewText.Rating.Value, reviewTextId);
-            reviewTextAdoHelper.CrudOperation(ratingCmd, "Rating");
+            var command1 = string.Format(
+                "INSERT INTO [dbo].[Comments](UserId,ArticleId,Content) OUTPUT Inserted.Id VALUES({0},{1},'{2}')", reviewText.User.Id, reviewText.Article.Id, reviewText.Content);
+            var reviewTextId = reviewTextAdoHelper.CrudOperation(command1);
+            var command2 = string.Format("INSERT INTO [dbo].[TextRating](ArticleId,Value,CommentId) VALUES({0},{1},{2}) ", reviewText.Article.Id, reviewText.Rating.Value, reviewTextId);
+            reviewTextAdoHelper.CrudOperation(command2);
             return (int)reviewTextId;
         }
 
         public int UpdateReviewText(int oldReviewTextId, ReviewText reviewText)
         {
-            var cmd = new StringBuilder();
-            cmd.AppendLine("BEGIN TRANSACTION");
-            cmd.AppendFormat("UPDATE [dbo].[Comments] SET Content='{0}' WHERE Id={1} ",
+            var command1 = string.Format("UPDATE [dbo].[Comments] SET Content='{0}' WHERE Id={1} ",
                 reviewText.Content, oldReviewTextId);
-            cmd.AppendFormat("UPDATE [dbo].[TextRating] SET Value={0} WHERE CommentId={1} ", reviewText.Rating.Value, oldReviewTextId);
-            cmd.AppendLine("COMMIT");
-            return Convert.ToInt32(reviewTextAdoHelper.CrudOperation(cmd.ToString(), "Comment"));
+            var command2 = string.Format("UPDATE [dbo].[TextRating] SET Value={0} WHERE CommentId={1} ", reviewText.Rating.Value, oldReviewTextId);
+            return Convert.ToInt32(reviewTextAdoHelper.CrudOperation(command1, command2));
         }
 
         public void DeleteReviewText(int id)
         {
-            var cmdText = new StringBuilder();
-            cmdText.AppendLine("BEGIN TRANSACTION");
-            cmdText.AppendFormat("DELETE FROM [dbo].[Comments] WHERE Id={0} ", id);
-            cmdText.AppendFormat("DELETE FROM [dbo].[TextRating] WHERE CommentId={0} ", id);
-            cmdText.AppendLine("COMMIT");
-            reviewTextAdoHelper.CrudOperation(cmdText.ToString(), "Comments");
+            var command1 = string.Format("DELETE FROM [dbo].[Comments] WHERE Id={0} ", id);
+            var command2 = string.Format("DELETE FROM [dbo].[TextRating] WHERE CommentId={0} ", id);
+            reviewTextAdoHelper.CrudOperation(command1, command2);
         }
     }
 }

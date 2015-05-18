@@ -1,6 +1,7 @@
 ﻿using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
+using System.Transactions;
 
 namespace DataAccessLayer
 {
@@ -14,7 +15,7 @@ namespace DataAccessLayer
             }
         }
 
-        public object CrudOperation(string request, string tableName)
+        public object CrudOperation(string request)//, string tableName)
         {
             object elementId;
             using (var connection = new SqlConnection(ConnectionString))
@@ -27,6 +28,35 @@ namespace DataAccessLayer
                 }
                 connection.Close();
             }
+            return elementId;
+        }
+
+        public object CrudOperation(string request1, string request2)
+        {
+            object elementId;
+            using (var scope = new TransactionScope())
+            {
+                using (var connection1 = new SqlConnection(ConnectionString))
+                {
+                    connection1.Open();
+                    using (var command1 = new SqlCommand(request1, connection1))
+                    {
+                        command1.CommandType = CommandType.Text;
+                        elementId = command1.ExecuteScalar();
+                    }
+
+                    using (connection1)
+                    {
+                        using (var command2 = new SqlCommand(request2, connection1))
+                        {
+                            command2.CommandType = CommandType.Text;
+                            command2.ExecuteNonQuery();
+                        }
+                    }
+                }
+                scope.Complete();
+            }
+
             return elementId;
         }
 

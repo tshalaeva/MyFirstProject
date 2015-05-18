@@ -36,7 +36,7 @@ namespace MVCProject.Controllers
         }
 
         public ActionResult Submit(UserViewModel model)
-        {
+        {        
             m_Facade.UpdateUser(model.Id, model.FirstName, model.LastName, model.Age);
             return UserList();
         }
