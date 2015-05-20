@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 using FLS.MyFirstProject.Infrastructure;
+using MVCProject.Models;
 
 namespace MVCProject.Controllers
 {
@@ -24,6 +27,8 @@ namespace MVCProject.Controllers
         {
             return Redirect("~/ArticleListing/Index");
         }
+
+        
 
         public string ShowAllUsers()
         {

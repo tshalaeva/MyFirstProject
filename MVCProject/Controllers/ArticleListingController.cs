@@ -11,13 +11,37 @@ namespace MVCProject.Controllers
         //
         // GET: /ArticleListing/
 
-        private readonly Facade _mFacade = MvcApplication.Facade;
+        private readonly Facade m_facade = MvcApplication.Facade;
 
-        public ActionResult Index()
+        public ActionResult Index(int page = 1, int size = 2)
         {
-            var articles = _mFacade.GetArticles();
-            var articleModels = articles.Select(article => new ArticleViewModel() { Id = article.Id, Author = article.Author.NickName, Title = article.Title, Content = article.Content }).ToList();
-            return View(articleModels);
+            var articles = m_facade.GetArticles();
+            var from = size * (page - 1);
+            var model = new ArticleListingViewModel();
+            var count = articles.Count() / size;
+            if (articles.Count() > size * count)
+            {
+                count++;
+            }
+
+            model.TotalCount = count;
+            model.Articels =
+                articles.Skip(from)
+                    .Take(size)
+                    .Select(
+                        article =>
+                            new ArticleViewModel
+                            {
+                                Id = article.Id,
+                                Author = article.Author.NickName,
+                                Title = article.Title,
+                                Content = article.Content
+                            })
+                    .ToList();
+            model.PageNumber = page;
+            model.PageSize = size;
+
+            return View(model);
         }
 
         public RedirectResult GoBack()
@@ -27,20 +51,20 @@ namespace MVCProject.Controllers
 
         public ActionResult OpenDetails(int? id)
         {
-            if (!_mFacade.ArticleExists(id)) return Redirect("~/ArticleListing/Index");
-            var article = _mFacade.GetArticleById(id);
-            var articleModel = new ArticleViewModel()
+            if (!m_facade.ArticleExists(id)) return Redirect("~/ArticleListing/Index");
+            var article = m_facade.GetArticleById(id);
+            var articleModel = new ArticleViewModel
             {
                 Author = article.Author.NickName,
                 Content = article.Content,
                 Title = article.Title,
                 Id = article.Id
             };
-            var comments = _mFacade.FilterCommentsByArticle(article);
+            var comments = m_facade.FilterCommentsByArticle(article);
             articleModel.Comments = new List<CommentViewModel>();
             foreach (var comment in comments)
             {
-                articleModel.Comments.Add(new CommentViewModel()
+                articleModel.Comments.Add(new CommentViewModel
                 {
                     Id = comment.Id,
                     Content = comment.Content,

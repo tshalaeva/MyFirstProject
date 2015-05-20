@@ -1,5 +1,8 @@
 ﻿@using System.Web.Mvc.Html
 @using MVCProject.Models
+
+@model ArticleListingViewModel
+
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -11,17 +14,17 @@
 
 <table class="Articles">
     <thead>
-    <tr class="header">
-        <td class="article-title-header">
-            <b>Article</b>
-        </td>
-        <td class="article-author-header">
-            <b>Author</b>
-        </td>
-    </tr>
+        <tr class="header">
+            <td class="article-title-header">
+                <b>Article</b>
+            </td>
+            <td class="article-author-header">
+                <b>Author</b>
+            </td>
+        </tr>
     </thead>
-    <tbody>    
-    @foreach (ArticleViewModel article in Model)
+    <tbody>
+    @foreach (ArticleViewModel article in Model.Articels)
     {
         <tr>
             <td class="article-title">@Html.ActionLink(@article.Title, "OpenDetails", new {id = article.Id})</td>
@@ -29,6 +32,16 @@
         </tr>
     }
     </tbody>
+    <tfoot>
+    <tr>
+        <td colspan="2">
+            @for (int i = 1; i <= Model.TotalCount; i++)
+            {
+                @Html.ActionLink(i.ToString(), "Index", new {page = i, size = Model.PageSize})
+            }
+        </td>
+    </tr>
+    </tfoot>
 </table>
 
 <p>@Html.ActionLink("Create new article", "OpenCreateArticle")</p>

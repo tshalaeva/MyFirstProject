@@ -12,7 +12,7 @@ namespace MVCProject.Controllers
     {
         //
         // GET: /ArticleDetails/
-        private Facade _mFacade = MvcApplication.Facade;
+        private readonly Facade m_facade = MvcApplication.Facade;
 
         public ActionResult Index()
         {
@@ -26,7 +26,7 @@ namespace MVCProject.Controllers
 
         public ActionResult EditArticle(int? id)
         {
-            var article = _mFacade.GetArticleById(id);
+            var article = m_facade.GetArticleById(id);
             var articleModel = new ArticleViewModel()
             {
                 Author = article.Author.NickName,
@@ -34,7 +34,7 @@ namespace MVCProject.Controllers
                 Title = article.Title,
                 Id = article.Id
             };
-            var comments = _mFacade.FilterCommentsByArticle(article);
+            var comments = m_facade.FilterCommentsByArticle(article);
             articleModel.Comments = new List<CommentViewModel>();//
             foreach (var comment in comments)
             {
@@ -53,33 +53,33 @@ namespace MVCProject.Controllers
 
         public ActionResult CreateComment(ArticleViewModel model)
         {
-            var user = _mFacade.CreateUser(model.NewComment.UserFirstName, model.NewComment.UserLastName, model.NewComment.UserAge);
-            _mFacade.CreateComment(model.Id, _mFacade.GetUserById(user), model.NewComment.Content);
+            var user = m_facade.CreateUser(model.NewComment.UserFirstName, model.NewComment.UserLastName, model.NewComment.UserAge);
+            m_facade.CreateComment(model.Id, m_facade.GetUserById(user), model.NewComment.Content);
             return RedirectToAction("OpenDetails", "ArticleListing", new RouteValueDictionary() { { "id", model.Id } });
         }
 
         public ActionResult DeleteArticle(int id)
         {
-            _mFacade.DeleteArticle(id);
+            m_facade.DeleteArticle(id);
             return Redirect("~/ArticleListing/Index");
         }
 
         public ActionResult DeleteComment(int id)
         {
-            var articleId = _mFacade.GetCommentById(id).Article.Id;
-            _mFacade.DeleteComment(id);
+            var articleId = m_facade.GetCommentById(id).Article.Id;
+            m_facade.DeleteComment(id);
             return RedirectToAction("OpenDetails", "ArticleListing", new RouteValueDictionary() { { "id", articleId } });
         }
 
         public ActionResult EditComment(CommentViewModel model)
         {
-            _mFacade.UpdateComment(model.Id, model.Content);
+            m_facade.UpdateComment(model.Id, model.Content);
             return RedirectToAction("OpenDetails", "ArticleListing", new RouteValueDictionary() { { "id", model.ArticleId} });
         }
 
         public ActionResult OpenEditComment(int? id)
         {
-            var comment = _mFacade.GetCommentById(id);
+            var comment = m_facade.GetCommentById(id);
             var commentModel = new CommentViewModel()
             {
                 Content = comment.Content,
