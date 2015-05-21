@@ -7,50 +7,55 @@
 
 <h2>Details</h2>
 
-@Html.ActionLink("Edit Article", "EditArticle", "ArticleDetails", new { id = @Model.Id }, new object())
+<div class="ArticleDetails">
+    <ul class="ArticleDetailsLinks">
+        <li>@Html.ActionLink("Edit Article", "EditArticle", "ArticleDetails", new { id = @Model.Id }, new object())</li>
 
-<h3>Articele title: @Model.Title</h3>
+        <li>@Html.ActionLink("Delete", "DeleteArticle", "ArticleDetails", new { id = @Model.Id }, new object { })</li>
+    </ul>
+    <p><b>Articele title: </b>@Model.Title</p>
 
-<p><b>Article author: </b>@Model.Author</p>
+    <p><b>Article author: </b>@Model.Author</p>
 
-<p>@Model.Content</p>
+    <p>@Model.Content</p>
 
-@using (@Html.BeginForm("CreateComment", "ArticleDetails", FormMethod.Post, new { model = @Model }))
-{
-    <h3>Comments and reviews:</h3>
-    foreach (var comment in @Model.Comments)
+    @using (@Html.BeginForm("CreateComment", "ArticleDetails", FormMethod.Post, new { model = @Model }))
     {
+        <h3>Comments and reviews:</h3>
+        foreach (var comment in @Model.Comments)
+        {
         <div class="commentView">@comment.Show()</div>
-        <div class="editComment">@Html.ActionLink("Edit Comment", "OpenEditComment", "ArticleDetails", new {id = comment.Id}, new object())</div>
-        <div class="deleteComment">@Html.ActionLink("Delete Comment", "DeleteComment", "ArticleDetails", new { id = comment.Id }, new object())</div>   
+        <ul class="CommentLinks">
+            <li class="editComment">@Html.ActionLink("Edit Comment", "OpenEditComment", "ArticleDetails", new { id = comment.Id }, new object())</li>
+            <li class="deleteComment">@Html.ActionLink("Delete Comment", "DeleteComment", "ArticleDetails", new { id = comment.Id }, new object())</li>
+        </ul>
+        }
+        <h1>Create comment</h1>
+        @Html.HiddenFor(m => m.Id)
+        @Html.HiddenFor(m => m.Author)
+        @Html.HiddenFor(m => m.Comments)
+        @Html.HiddenFor(m => m.Content)
+        @Html.HiddenFor(m => m.Title)
+        <p class="user=firstname">
+            <label class="firstname">First Name:</label>
+            @Html.TextBoxFor(m => m.NewComment.UserFirstName)
+        </p>
+
+        <p class="user=lastname">
+            <label class="lastname">Last Name:</label>
+            @Html.TextBoxFor(m => m.NewComment.UserLastName)
+        </p>
+
+        <p class="user-age">
+            <label class="age">Age:</label>
+            @Html.TextBoxFor(m => m.NewComment.UserAge)
+        </p>
+
+        <p class="comment-content">
+            <label class="content">Content:</label>
+            @Html.TextAreaFor(m => m.NewComment.Content)
+        </p>
+
+        <button type="submit">Save</button>
     }
-    <h1>Create comment</h1>
-    @Html.HiddenFor(m => m.Id)
-    @Html.HiddenFor(m => m.Author)
-    @Html.HiddenFor(m => m.Comments)
-    @Html.HiddenFor(m => m.Content)
-    @Html.HiddenFor(m => m.Title)
-    <p class="user=firstname">
-        <label class="firstname">First Name:</label>
-        @Html.TextBoxFor(m => m.NewComment.UserFirstName)
-    </p>
-
-    <p class="user=lastname">
-        <label class="lastname">Last Name:</label>
-        @Html.TextBoxFor(m => m.NewComment.UserLastName)
-    </p>
-
-    <p class="user-age">
-        <label class="age">Age:</label>
-        @Html.TextBoxFor(m => m.NewComment.UserAge)
-    </p>
-
-    <p class="comment-content">
-        <label class="content">Content:</label>
-        @Html.TextAreaFor(m => m.NewComment.Content)
-    </p>
-
-    <button type="submit">Save</button>
-}
-
-@Html.ActionLink("Delete", "DeleteArticle", "ArticleDetails", new { id = @Model.Id }, new object { })
+</div>

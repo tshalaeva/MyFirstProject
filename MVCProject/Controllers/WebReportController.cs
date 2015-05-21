@@ -61,7 +61,10 @@ namespace MVCProject.Controllers
                         }
                         model.Content = string.Format("{0}\nPrivilegies of {1} {2}: {3}", model.Content, admin.FirstName, admin.LastName, privilegies);
                     }
-                    model.Content = TrimSpaces(model.Content);
+                    if (model.Content != null)
+                    {
+                        model.Content = TrimSpaces(model.Content);
+                    }
                     break;
                 }
                 case "4":

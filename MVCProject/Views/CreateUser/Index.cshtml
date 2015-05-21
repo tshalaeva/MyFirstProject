@@ -9,22 +9,24 @@
 
 <body>
     @RenderBody()
-    @using (@Html.BeginForm("CreateUser", "User", FormMethod.Post, new { model = @Model}))
+    @using (@Html.BeginForm("CreateUser", "User", FormMethod.Post, new { model = @Model }))
     {
-        <p class="userFirstName">
-            <label>First Name:</label>
-            @Html.TextBoxFor(m => m.FirstName)
-        </p>
+        <div class="CreateUser">
+            <p class="userFirstName">
+                <label>First Name:</label>
+                @Html.TextBoxFor(m => m.FirstName)
+            </p>
 
-        <p class="userLastName">
-            <label>Last Name:</label>
-            @Html.TextBoxFor(m => m.LastName)
-        </p>
+            <p class="userLastName">
+                <label>Last Name:</label>
+                @Html.TextBoxFor(m => m.LastName)
+            </p>
 
-        <p class="userAge">
-            <label>Age:</label>
-            @Html.TextBoxFor(m => m.Age)
-        </p>
-    <button type="submit">Save</button>
+            <p class="userAge">
+                <label>Age:</label>
+                @Html.TextBoxFor(m => m.Age)
+            </p>
+            <button type="submit">Save</button>
+        </div>
     }
 </body>

@@ -10,21 +10,29 @@
 
 <h2>Article Listing</h2>
 
-<p>@Html.ActionLink("Reports", "OpenReports")</p>
+<ul class="links">
+    <li>@Html.ActionLink("Reports", "OpenReports")</li>
+
+    <li>@Html.ActionLink("Create new article", "OpenCreateArticle")</li>
+
+    <li>@Html.ActionLink("Create new user", "OpenCreateUser")</li>
+
+<li>@Html.ActionLink("Go Home", "GoBack")</li>
+</ul>
 
 <table class="Articles">
     <thead>
         <tr class="header">
             <td class="article-title-header">
-                <b>Article</b>
+                <h3>Article</h3>
             </td>
             <td class="article-author-header">
-                <b>Author</b>
+                <h3>Author</h3>
             </td>
         </tr>
     </thead>
     <tbody>
-    @foreach (ArticleViewModel article in Model.Articels)
+    @foreach (var article in Model.Articels)
     {
         <tr>
             <td class="article-title">@Html.ActionLink(@article.Title, "OpenDetails", new {id = article.Id})</td>
@@ -33,7 +41,7 @@
     }
     </tbody>
     <tfoot>
-    <tr>
+    <tr class="pages">
         <td colspan="2">
             @for (int i = 1; i <= Model.TotalCount; i++)
             {
@@ -43,9 +51,3 @@
     </tr>
     </tfoot>
 </table>
-
-<p>@Html.ActionLink("Create new article", "OpenCreateArticle")</p>
-
-<p>@Html.ActionLink("Create new user", "OpenCreateUser")</p>
-
-<p>@Html.ActionLink("Go Home", "GoBack")</p>

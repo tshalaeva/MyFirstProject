@@ -8,20 +8,22 @@
 <body>
     @RenderBody()
     <h2>Create Article</h2>
-    @using (@Html.BeginForm("Submit", "CreateArticle", FormMethod.Post, new { @model = @Model}))
+    @using (@Html.BeginForm("Submit", "CreateArticle", FormMethod.Post, new { @model = @Model }))
     {
         @Html.HiddenFor(m => m.Author)
-        <p class="article-title">
-            <label>Title: </label>
-            @Html.TextBoxFor(m => m.Title)
-        </p>
-        <p class="article-content">
-            <label>Content: </label>
-            @Html.TextAreaFor(m => m.Content)
-        </p>
-                    
-        @Html.Hidden("returnUrl", Request.Url.ToString(), new {@model = @Model})
-        <input type="Submit" value="Create" onclick="@("window.location.href='" + @Url.Action("Submit") + "'");"/>
+        <div id="CreateArticle">
+            <p class="article-title">
+                <label>Title: </label>
+                @Html.TextBoxFor(m => m.Title)
+            </p>
+            <p class="article-content">
+                <label>Content: </label>
+                @Html.TextAreaFor(m => m.Content)
+            </p>
+
+            @Html.Hidden("returnUrl", Request.Url.ToString(), new { @model = @Model })
+            <input type="Submit" id="CreateArticle" value="Create" onclick="@("window.location.href='" + @Url.Action("Submit") + "'")    ; "/>
+        </div>
     }
 </body>
 

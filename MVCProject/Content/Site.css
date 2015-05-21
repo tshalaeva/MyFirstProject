@@ -1,8 +1,8 @@
 ﻿body {
     font-size: .85em;
     font-family: "Segoe UI", Verdana, Helvetica, Sans-Serif;
-    color: #232323;
-    background-color: #fff;
+    color: #696969;
+    background-color: #dddddd;
 }
 
 header, footer, nav, section {
@@ -10,11 +10,11 @@ header, footer, nav, section {
 }
 
 pre {
-font-size: inherit;
-color: inherit;
-border: initial;
-padding: initial;
-font-family: inherit;
+    font-size: inherit;
+    color: inherit;
+    border: initial;
+    padding: initial;
+    font-family: inherit;
 }
 
 /* Styles for basic forms
@@ -69,4 +69,191 @@ textarea {
 
 .result {
     white-space: pre-wrap;
+}
+
+/* --- */
+h2 {
+    width: 40%;
+    margin-left: 30%;
+    text-align: center;
+    color: steelblue;
+    font-size: 30pt;
+}
+
+h3 {
+    color: steelblue;
+    clear: left;
+}
+
+li {
+    list-style-type: none;
+    float: left;
+    padding: 10px;
+}
+
+table {
+    clear: left;
+}
+
+a, a:visited {
+    color: #696969;
+    text-decoration: none;
+    font-size: 18px;
+    text-align: center;
+}
+
+    a:hover {
+        color: lightsteelblue;
+    }
+
+/* Article Listing */
+.links {
+    width: 40%;
+    margin: 0 0 5% 5%;
+    font-weight: bold;
+}
+
+.Articles {
+    width: 80%;
+    margin-left: 10%;
+    border-spacing: 10px;
+}
+
+    .Articles > thead {
+        font-size: 18px;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    .Articles td {
+        width: 50%;
+        padding: 5px;
+        background: blanchedalmond;
+        -ms-border-radius: 10px;
+        border-radius: 10px;
+    }
+
+    .Articles > tbody td {
+    }
+
+    .Articles > tfoot td {
+        background: none;
+        padding-left: 10%;
+        padding-right: 10%;
+    }
+
+    .Articles > thead td {
+        background: none;
+    }
+
+    .Articles > tfoot a {
+        padding: 10px;
+    }
+
+.pages {
+    font-weight: bold;
+}
+
+/* WebReports */
+#SelectedOption_Value {
+    width: 300px;
+    background: blanchedalmond;
+    border-radius: 5px;
+    color: #696969;
+    padding: 10px;
+    margin: 10px;
+    font-size: 16px;
+}
+
+#submitWebReport, button, #CreateArticle {
+    width: 150px;
+    background: blanchedalmond;
+    border-radius: 5px;
+    color: #696969;
+    padding: 10px;
+    margin: 10px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+#WebReportOptions {
+    width: 30%;
+    margin-left: 35%;
+}
+
+#WebReport {
+    width: 60%;
+    margin-left: 20%;
+}
+
+#WebReport td {    
+    padding: 15px;
+    background: blanchedalmond;
+    -ms-border-radius: 25px;
+    border-radius: 25px;
+    font-size: 16pt;
+}
+
+pre {
+    margin: 0;
+}
+
+/* CreateUser CreateArticle*/
+input, textarea {
+    width: 300px;
+    background: blanchedalmond;
+    border-radius: 5px;
+    color: #696969;
+    padding: 10px;
+    margin: 10px;
+    font-size: 16px;
+    vertical-align: middle;
+}
+
+label {
+    color: #696969;
+    padding: 10px;
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+div#CreateArticle, .CreateUser {
+    width: 60%;
+    margin-left: 20%;
+    background: none;    
+}
+
+label {
+    width: 100px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+/* User List*/
+.user-list {
+    width: 20%;
+    background: blanchedalmond;
+    border-radius: 25px;
+    color: #696969;
+    padding: 10px;
+    margin-left: 40%;
+    font-size: 16px;
+    vertical-align: middle;
+}
+
+.UserListButtons a {
+    font-weight: bold;
+    padding: 15px;
+}
+
+/* Article Details */
+.ArticleDetails {
+    width: 40%;
+    margin-left: 30%;
+    font-size: 16pt;
+}
+
+p, h1 {
+    clear: left;
 }
