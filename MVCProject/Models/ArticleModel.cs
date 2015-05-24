@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace MVCProject.Models
 {
@@ -12,12 +13,14 @@ namespace MVCProject.Models
 
         public string Author { get; set; }
 
+        [Required]
         public string Title
         {
             get;
             set;
         }
 
+        [Required]
         public string Content
         {
             get;

@@ -10,20 +10,27 @@
     <h2>Create Article</h2>
     @using (@Html.BeginForm("Submit", "CreateArticle", FormMethod.Post, new { @model = @Model }))
     {
+        @Html.ValidationSummary(true)
         @Html.HiddenFor(m => m.Author)
-        <div id="CreateArticle">
+        <div id="createArticle">
             <p class="article-title">
                 <label>Title: </label>
-                @Html.TextBoxFor(m => m.Title)
+                @Html.TextBoxFor(m => m.Title, new {maxlength = 10, required = "required"})
+                @Html.ValidationMessageFor(m => m.Title, "Please enter title")
             </p>
             <p class="article-content">
                 <label>Content: </label>
-                @Html.TextAreaFor(m => m.Content)
+                @Html.TextAreaFor(m => m.Content, new {maxlength = 200, required = "required"})
+                @Html.ValidationMessageFor(m => m.Content, "Please enter content")
             </p>
 
             @Html.Hidden("returnUrl", Request.Url.ToString(), new { @model = @Model })
-            <input type="Submit" id="CreateArticle" value="Create" onclick="@("window.location.href='" + @Url.Action("Submit") + "'")    ; "/>
+            @*<input type="Submit" id="CreateArticle" value="Create" onclick="@("window.location.href='" + @Url.Action("Submit") + "'")    ; "/>*@
+            <button type="submit">Create</button>
         </div>
     }
 </body>
-
+@section Scripts 
+{
+    @Scripts.Render("~/bundles/jqueryval")
+}

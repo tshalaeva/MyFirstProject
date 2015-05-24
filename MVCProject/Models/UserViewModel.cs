@@ -1,4 +1,6 @@
-﻿namespace MVCProject.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace MVCProject.Models
 {
     public class UserViewModel
     {
@@ -12,6 +14,7 @@
 
         public string LastName { get; set; }
 
+        [Range(1,150)]
         public int Age { get; set; }
     }
 }

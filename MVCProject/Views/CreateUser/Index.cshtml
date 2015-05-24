@@ -8,25 +8,32 @@
 <h2>Create new User</h2>
 
 <body>
-    @RenderBody()
-    @using (@Html.BeginForm("CreateUser", "User", FormMethod.Post, new { model = @Model }))
-    {
-        <div class="CreateUser">
-            <p class="userFirstName">
-                <label>First Name:</label>
-                @Html.TextBoxFor(m => m.FirstName)
-            </p>
+@RenderBody()
+@using (@Html.BeginForm("CreateUser", "User", FormMethod.Post, new {model = @Model}))
+{
+    <div class="CreateUser">
+        <p class="userFirstName">
+            <label>First Name:</label>
+            @Html.TextBoxFor(m => m.FirstName, new {maxlength = 10, required = "required"})
+            @Html.ValidationMessageFor(m => m.FirstName, "Please enter first name")
+        </p>
 
-            <p class="userLastName">
-                <label>Last Name:</label>
-                @Html.TextBoxFor(m => m.LastName)
-            </p>
+        <p class="userLastName">
+            <label>Last Name:</label>
+            @Html.TextBoxFor(m => m.LastName, new {maxlength = 10, required = "required"})
+            @Html.ValidationMessageFor(m => m.LastName, "Please enter last name")
+        </p>
 
-            <p class="userAge">
-                <label>Age:</label>
-                @Html.TextBoxFor(m => m.Age)
-            </p>
-            <button type="submit">Save</button>
-        </div>
-    }
+        <p class="userAge">
+            <label>Age:</label>
+            @Html.TextBoxFor(m => m.Age, new {maxlength = 3, required = "required"})
+            @Html.ValidationMessageFor(m => m.Age, "Please enter integer bigger than 0")
+        </p>
+        <button type="submit">Save</button>
+    </div>
+}
 </body>
+@section Scripts 
+{
+    @Scripts.Render("~/bundles/jqueryval")
+}

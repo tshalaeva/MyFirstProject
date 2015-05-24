@@ -17,11 +17,18 @@ namespace MVCProject.Controllers
             return View();
         }
 
-        [HttpPost]
+        [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult Submit(ArticleViewModel model)
         {
-            _mFacade.CreateArticle(0, _mFacade.GetAuthors().First(), model.Title, model.Content);
-            return Redirect("~/ArticleListing/Index");
+            if (ModelState.IsValid)
+            {
+                _mFacade.CreateArticle(0, _mFacade.GetAuthors().First(), model.Title, model.Content);
+                return Redirect("~/ArticleListing/Index");
+            }
+            else
+            {
+                return View("CreateArticle");
+            }
         }
     }
 }

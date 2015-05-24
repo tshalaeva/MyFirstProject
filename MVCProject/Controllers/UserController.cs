@@ -13,15 +13,22 @@ namespace MVCProject.Controllers
 
         public ActionResult CreateUser(UserViewModel model)
         {
-            m_Facade.CreateUser(model.FirstName, model.LastName, model.Age);
-            return UserList();
+            if (ModelState.IsValid)
+            {
+                m_Facade.CreateUser(model.FirstName, model.LastName, model.Age);
+                return UserList();
+            }
+            else
+            {
+                return View("CreateUser");
+            }
         }
 
         public ActionResult UserList()
         {
             var users = m_Facade.GetAllUsers();
-            var userModels = users.Select(user => new UserViewModel() {Id = user.Id, FirstName = user.FirstName, LastName = user.LastName, Age = user.Age}).ToList();
-            return View(userModels);
+            var userModels = users.Select(user => new UserViewModel() {Id = user.Id, FirstName = user.FirstName, LastName = user.LastName, Age = user.Age}).ToList();         
+            return View("UserList", userModels);
         }
 
         public ActionResult DeleteUser(int? id)
@@ -35,8 +42,9 @@ namespace MVCProject.Controllers
             return View();
         }
 
+        [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult Submit(UserViewModel model)
-        {        
+        {
             m_Facade.UpdateUser(model.Id, model.FirstName, model.LastName, model.Age);
             return UserList();
         }

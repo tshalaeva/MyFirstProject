@@ -17,7 +17,9 @@
 
     <li>@Html.ActionLink("Create new user", "OpenCreateUser")</li>
 
-<li>@Html.ActionLink("Go Home", "GoBack")</li>
+    <li>@Html.ActionLink("Go Home", "GoBack")</li>
+
+    <li>@Html.ActionLink("User List", "UserList", "User")</li>
 </ul>
 
 <table class="Articles">
@@ -32,22 +34,22 @@
         </tr>
     </thead>
     <tbody>
-    @foreach (var article in Model.Articels)
-    {
-        <tr>
-            <td class="article-title">@Html.ActionLink(@article.Title, "OpenDetails", new {id = article.Id})</td>
-            <td class="article-author">@article.Author</td>
-        </tr>
-    }
+        @foreach (var article in Model.Articels)
+        {
+            <tr>
+                <td class="article-title">@Html.ActionLink(@article.Title, "OpenDetails", new { id = article.Id })</td>
+                <td class="article-author">@article.Author</td>
+            </tr>
+        }
     </tbody>
     <tfoot>
-    <tr class="pages">
-        <td colspan="2">
-            @for (int i = 1; i <= Model.TotalCount; i++)
-            {
-                @Html.ActionLink(i.ToString(), "Index", new {page = i, size = Model.PageSize})
-            }
-        </td>
-    </tr>
+        <tr class="pages">
+            <td colspan="2">
+                @for (int i = 1; i <= Model.TotalCount; i++)
+                {
+                    @Html.ActionLink(i.ToString(), "Index", new { page = i, size = Model.PageSize })
+                }
+            </td>
+        </tr>
     </tfoot>
 </table>
