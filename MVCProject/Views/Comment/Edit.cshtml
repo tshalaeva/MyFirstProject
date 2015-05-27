@@ -8,8 +8,7 @@
 <h2>Edit comment</h2>
 
 <body>
-    @RenderBody()
-    @using (@Html.BeginForm("EditComment", "ArticleDetails", FormMethod.Post, new { id = @Model.Id}))
+    @using (@Html.BeginForm("SaveChanges", "Comment", FormMethod.Post, new { id = @Model.Id}))
     {
     @Html.HiddenFor(m => m.Id)
     @Html.HiddenFor(m => m.ArticleId)

@@ -1,31 +1,30 @@
-﻿@using System.Web.Mvc.Html
+﻿@using MVCProject.Models
+@using System.Web.Mvc.Html
 @{
     ViewBag.Title = "WebReport";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-@model MVCProject.Models.WebReportModel
-
+@model WebReportModel
 <body>
-    @RenderBody()
-    <h2>WebReport</h2>
-    @using (@Html.BeginForm("Submit", "WebReport", FormMethod.Post, new { @model = @Model }))
-    {
-        <table id="WebReport">
-            <thead>
-                <tr>
-                    <ul id="WebReportOptions">
-                        <li class="select-method">@Html.DropDownListFor(m => m.SelectedOption.Value, @Model.Options)</li>
-                        <li>@Html.Hidden("returnUrl", Request.Url.ToString())
-                            <button id="submitWebReport" type="submit">Submit</button></li>
-                    </ul>
-                </tr>
-            </thead>
-            <tbody>
-                <tr class="result">
-                    <td>
-                        <pre>@Model.Content</pre>
-                    </td>
-                </tr>
-            </tbody>
-        </table>}
+<h2>WebReport</h2>
+@using (@Html.BeginForm("Submit", "WebReport", FormMethod.Post, new {model = @Model}))
+{
+    <table id="WebReport">
+        <thead>
+        <tr>
+            <ul id="WebReportOptions">
+                <li class="select-method">@Html.DropDownListFor(m => m.SelectedOption.Value, @Model.Options)</li>
+                <li><button id="submitWebReport" type="submit">Submit</button></li>
+            </ul>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="result">
+            <td>
+                <pre>@Model.Content</pre>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+}
 </body>

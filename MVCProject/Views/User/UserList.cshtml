@@ -15,8 +15,8 @@
                 @Html.Raw(string.Format("{0}. {1} {2}, {3}", i + 1, Model[i].FirstName, Model[i].LastName, Model[i].Age))
                 @Html.HiddenFor(m => m[i].Id)
                 <div class="UserListButtons">
-                    @Html.ActionLink("Delete user", "DeleteUser", "User", new { id = Model[i].Id }, new object())
-                    @Html.ActionLink("Edit User", "EditUser", "User", new { id = @Model[i].Id }, new object())
+                    @Html.ActionLink("Delete user", "Delete", "User", new { id = Model[i].Id }, new object())
+                    @Html.ActionLink("Edit User", "Edit", "User", new { id = @Model[i].Id }, new object())
                 </div>
             </div>
         }

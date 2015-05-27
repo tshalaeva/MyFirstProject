@@ -9,44 +9,51 @@ namespace MVCProject.Controllers
     {
         //
         // GET: /User/
-        private Facade m_Facade = MvcApplication.Facade;
+        private readonly Facade m_facade = MvcApplication.Facade;
 
-        public ActionResult CreateUser(UserViewModel model)
+        public ActionResult Create()
         {
-            if (ModelState.IsValid)
-            {
-                m_Facade.CreateUser(model.FirstName, model.LastName, model.Age);
-                return UserList();
-            }
-            else
-            {
-                return View("CreateUser");
-            }
+            return View("~/Views/User/CreateUser.cshtml");
         }
 
-        public ActionResult UserList()
+        public ActionResult Save(UserViewModel model)
         {
-            var users = m_Facade.GetAllUsers();
-            var userModels = users.Select(user => new UserViewModel() {Id = user.Id, FirstName = user.FirstName, LastName = user.LastName, Age = user.Age}).ToList();         
-            return View("UserList", userModels);
-        }
+            if (!ModelState.IsValid) return View("CreateUser");
+            m_facade.CreateUser(model.FirstName, model.LastName, model.Age);
+            return UserList();
+        }        
 
-        public ActionResult DeleteUser(int? id)
+        public ActionResult Delete(int? id)
         {
-            m_Facade.DeleteUser((int)id);
+            m_facade.DeleteUser((int)id);
             return UserList();
         }
 
-        public ActionResult EditUser(int id)
+        public ActionResult Edit(int id)
         {
-            return View();
+            var user = m_facade.GetUserById(id);
+            var userModel = new UserViewModel()
+            {
+                Age = user.Age,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Id = id
+            };
+            return View("~/Views/User/EditUser.cshtml", userModel);
         }
 
         [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult Submit(UserViewModel model)
         {
-            m_Facade.UpdateUser(model.Id, model.FirstName, model.LastName, model.Age);
+            m_facade.UpdateUser(model.Id, model.FirstName, model.LastName, model.Age);
             return UserList();
         }
+
+        public ActionResult UserList()
+        {
+            var users = m_facade.GetAllUsers();
+            var userModels = users.Select(user => new UserViewModel { Id = user.Id, FirstName = user.FirstName, LastName = user.LastName, Age = user.Age }).ToList();
+            return View("~/Views/User/UserList.cshtml", userModels);
+        }        
     }
 }

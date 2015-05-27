@@ -11,13 +11,13 @@
 <h2>Article Listing</h2>
 
 <ul class="links">
-    <li>@Html.ActionLink("Reports", "OpenReports")</li>
+    <li>@Html.ActionLink("Reports", "Reports")</li>
 
-    <li>@Html.ActionLink("Create new article", "OpenCreateArticle")</li>
+    <li>@Html.ActionLink("Create new article", "Create")</li>
 
-    <li>@Html.ActionLink("Create new user", "OpenCreateUser")</li>
+    <li>@Html.ActionLink("Create new user", "Create", "User")</li>
 
-    <li>@Html.ActionLink("Go Home", "GoBack")</li>
+    <li>@Html.ActionLink("Go Home", "Home")</li>
 
     <li>@Html.ActionLink("User List", "UserList", "User")</li>
 </ul>
@@ -34,10 +34,10 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var article in Model.Articels)
+        @foreach (var article in Model.Articles)
         {
             <tr>
-                <td class="article-title">@Html.ActionLink(@article.Title, "OpenDetails", new { id = article.Id })</td>
+                <td class="article-title">@Html.ActionLink(@article.Title, "Details", new { id = article.Id })</td>
                 <td class="article-author">@article.Author</td>
             </tr>
         }

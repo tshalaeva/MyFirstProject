@@ -4,7 +4,7 @@ namespace MVCProject.Models
 {
     public class ArticleListingViewModel
     {
-        public List<ArticleViewModel> Articels { get; set; }
+        public List<ArticleViewModel> Articles { get; set; }
 
         public int PageNumber { get; set; }
 

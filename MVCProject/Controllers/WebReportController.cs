@@ -13,12 +13,7 @@ namespace MVCProject.Controllers
     {
         //
         // GET: /WebReport/        
-        private readonly Facade _mFacade = MvcApplication.Facade;
-
-        public ActionResult Index()
-        {
-            return View();
-        }
+        private readonly Facade m_facade = MvcApplication.Facade;
 
         [HttpPost]
         public ViewResult Submit(WebReportModel model)
@@ -27,7 +22,7 @@ namespace MVCProject.Controllers
             {
                 case "1":
                     {
-                        var articles = _mFacade.GetArticles();
+                        var articles = m_facade.GetArticles();
                         model.Content = TrimSpaces(string.Format("Title of article {0}: {1}", articles.First().Id,
                             articles.First().Title));
                         for (var i = 1; i < articles.Count; i++)
@@ -40,7 +35,7 @@ namespace MVCProject.Controllers
                     }
                 case "2":
                     {
-                        var articles = _mFacade.GetArticles();
+                        var articles = m_facade.GetArticles();
                         foreach (var article in articles)
                         {
                             model.Content = string.Format("{0}\nAverage rating of article {1}: {2}", model.Content,
@@ -51,7 +46,7 @@ namespace MVCProject.Controllers
                     }
                 case "3":
                 {
-                    var admins = _mFacade.GetAdmins();
+                    var admins = m_facade.GetAdmins();
                     foreach (var admin in admins)
                     {
                         var privilegies = admin.Privilegies.First();
@@ -69,14 +64,14 @@ namespace MVCProject.Controllers
                 }
                 case "4":
                 {
-                    var articles = _mFacade.GetArticles();
+                    var articles = m_facade.GetArticles();
                     model.Content = "List of comments for each article:";
                     foreach (var article in articles)
                     {
                         model.Content = string.Format("{0}\nArticle {1}: ", model.Content, article.Title);                        
-                        var articleComments = _mFacade.FilterCommentsByArticle(article).OfType<Comment>().ToList();
-                        var articleReviews = _mFacade.FilterCommentsByArticle(article).OfType<Review>().ToList();
-                        var articleReviewTexts = _mFacade.FilterCommentsByArticle(article).OfType<ReviewText>().ToList();
+                        var articleComments = m_facade.FilterCommentsByArticle(article).OfType<Comment>().ToList();
+                        var articleReviews = m_facade.FilterCommentsByArticle(article).OfType<Review>().ToList();
+                        var articleReviewTexts = m_facade.FilterCommentsByArticle(article).OfType<ReviewText>().ToList();
                         var allArticleComments = new List<BaseComment>(articleComments.Count + articleReviews.Count + articleReviewTexts.Count);
                         allArticleComments.AddRange(articleComments);
                         allArticleComments.AddRange(articleReviews);
@@ -93,18 +88,18 @@ namespace MVCProject.Controllers
                 {
                     model.Content = "Entity Codes:";
 
-                    foreach (var comment in _mFacade.GetComments())
+                    foreach (var comment in m_facade.GetComments())
                     {
                         model.Content = string.Format("{0}\n{1}: {2}", model.Content, comment.Content, comment.GetEntityCode());
                     }
 
-                    var reviews = _mFacade.GetReviews();
+                    var reviews = m_facade.GetReviews();
                     foreach (var comment in reviews.Where(comment => !(comment is ReviewText)))
                     {
                         model.Content = string.Format("{0}\n{1}: {2}", model.Content, comment.Content, comment.GetEntityCode());
                     }
 
-                    foreach (var comment in _mFacade.GetReviewTexts())
+                    foreach (var comment in m_facade.GetReviewTexts())
                     {
                         model.Content = string.Format("{0}\n{1}: {2}", model.Content, comment.Content, comment.GetEntityCode());
                     }
@@ -113,7 +108,7 @@ namespace MVCProject.Controllers
                 }
                 case "6":
                 {
-                    model.Content = string.Format("Random article id = {0}", _mFacade.GetRandomArticle().Id);
+                    model.Content = string.Format("Random article id = {0}", m_facade.GetRandomArticle().Id);
                     model.Content = TrimSpaces(model.Content);                 
                     break;
                 }
@@ -124,17 +119,15 @@ namespace MVCProject.Controllers
                     break;
                 }
             }
-            return View(model);
+            return View("~/Views/WebReport/WebReport.cshtml", model);
         }
 
-        private string TrimSpaces(string input)
+        private static string TrimSpaces(string input)
         {
-            var result = "";
-
-            var pattern = "\\s{2,}";
-            var replacement = " ";
+            const string pattern = "\\s{2,}";
+            const string replacement = " ";
             var rgx = new Regex(pattern);
-            result = rgx.Replace(input, replacement);
+            var result = rgx.Replace(input, replacement);
 
             return result;
         }

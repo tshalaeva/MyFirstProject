@@ -7,10 +7,6 @@ namespace MVCProject.Models
     {
         public int Id { get; set; }
 
-        public ArticleViewModel()
-        {
-        }
-
         public string Author { get; set; }
 
         [Required]

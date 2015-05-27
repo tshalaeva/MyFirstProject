@@ -89,10 +89,8 @@ namespace DataAccessLayer.Repositories
 
         public void Delete(int userId)
         {
-            var data = GetById(userId);
-            //var data = Get();
-            var cmdText = new StringBuilder();
-            //if (!(data[userId] is Admin) && !(data[userId] is Author))
+            var data = GetById(userId);            
+            var cmdText = new StringBuilder();            
             if (!(data is Admin) && !(data is Author))
             {
                 cmdText.AppendFormat("DELETE FROM [dbo].[User] WHERE Id='{0}'", userId);
@@ -100,8 +98,7 @@ namespace DataAccessLayer.Repositories
                 AdoHelper.CrudOperation(cmdText.ToString());
             }
             else
-            {
-                //if (data[userId] is Admin)
+            {                
                 if (data is Admin)
                 {
                     adminRepository.DeleteAdmin(userId);
@@ -277,7 +274,7 @@ namespace DataAccessLayer.Repositories
         public void DeleteAuthor(int authorId)
         {
             var authorGuid = (Guid)authorAdoHelper.GetCellValue("User", "AuthorId", authorId);
-            var command1 = string.Format("DELETE FROM [dbo].[User] WHERE Id={0})", authorId);
+            var command1 = string.Format("DELETE FROM [dbo].[User] WHERE Id={0}", authorId);
             var command2 = string.Format("DELETE FROM [dbo].[Author] WHERE Id='{0}'", authorGuid);
             authorAdoHelper.CrudOperation(command1, command2);
         }

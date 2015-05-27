@@ -2,16 +2,16 @@
 @model ArticleViewModel
 @{
     ViewBag.Title = "Details";
-    Layout = "~/Views/ArticleDetails/Index.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h2>Details</h2>
 
 <div class="ArticleDetails">
     <ul class="ArticleDetailsLinks">
-        <li>@Html.ActionLink("Edit Article", "EditArticle", "ArticleDetails", new { id = @Model.Id }, new object())</li>
+        <li>@Html.ActionLink("Edit Article", "Edit", "Article", new { id = @Model.Id }, new object())</li>
 
-        <li>@Html.ActionLink("Delete", "DeleteArticle", "ArticleDetails", new { id = @Model.Id }, new object { })</li>
+        <li>@Html.ActionLink("Delete", "Delete", "Article", new { id = @Model.Id }, new object { })</li>
     </ul>
     <p><b>Articele title: </b>@Model.Title</p>
 
@@ -19,15 +19,15 @@
 
     <p>@Model.Content</p>
 
-    @using (@Html.BeginForm("CreateComment", "ArticleDetails", FormMethod.Post, new { model = @Model }))
+    @using (@Html.BeginForm("Save", "Comment", FormMethod.Post, new { model = @Model }))
     {
         <h3>Comments and reviews:</h3>
         foreach (var comment in @Model.Comments)
         {
         <div class="commentView">@comment.Show()</div>
         <ul class="CommentLinks">
-            <li class="editComment">@Html.ActionLink("Edit Comment", "OpenEditComment", "ArticleDetails", new { id = comment.Id }, new object())</li>
-            <li class="deleteComment">@Html.ActionLink("Delete Comment", "DeleteComment", "ArticleDetails", new { id = comment.Id }, new object())</li>
+            <li class="editComment">@Html.ActionLink("Edit Comment", "Edit", "Comment", new { id = comment.Id }, new object())</li>
+            <li class="deleteComment">@Html.ActionLink("Delete Comment", "Delete", "Comment", new { id = comment.Id }, new object())</li>
         </ul>
         }
         <h1>Create comment</h1>
