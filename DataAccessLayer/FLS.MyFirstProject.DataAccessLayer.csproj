@@ -73,7 +73,13 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="Repositories\DBRepository.cs" />
+    <Compile Include="Repositories\DbAdminRepository.cs" />
+    <Compile Include="Repositories\DbAuthorRepository.cs" />
+    <Compile Include="Repositories\DbArticleRepository.cs" />
+    <Compile Include="Repositories\DbCommentRepository.cs" />
+    <Compile Include="Repositories\DbReviewRepository.cs" />
+    <Compile Include="Repositories\DbReviewTextRepository.cs" />
+    <Compile Include="Repositories\DbUserRepository.cs" />
     <Compile Include="Repositories\IRepository.cs" />
     <Compile Include="Repositories\Repository.cs" />
   </ItemGroup>

@@ -133,10 +133,7 @@ a, a:visited {
         border-radius: 10px;
     }
 
-    .Articles > tbody td {
-    }
-
-    .Articles > tfoot td {
+.Articles > tfoot td {
         background: none;
         padding-left: 10%;
         padding-right: 10%;
@@ -254,6 +251,6 @@ label {
     font-size: 16pt;
 }
 
-p, h1 {
+p, h1, div {
     clear: left;
 }

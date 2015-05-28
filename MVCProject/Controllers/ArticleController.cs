@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-using System.Web.Routing;
 using FLS.MyFirstProject.Infrastructure;
 using MVCProject.Models;
 
@@ -100,7 +99,7 @@ namespace MVCProject.Controllers
 
         public ActionResult ShowComments()
         {
-            return View("~/Views/ArticleDetails/Index.cshtml");
+            return View("~/Views/Article/Details.cshtml");
         }
 
         public ActionResult Edit(int? id)

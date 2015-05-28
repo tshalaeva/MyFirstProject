@@ -1,4 +1,5 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Transactions;
@@ -15,7 +16,7 @@ namespace DataAccessLayer
             }
         }
 
-        public object CrudOperation(string request)//, string tableName)
+        public object CrudOperation(string request)
         {
             object elementId;
             using (var connection = new SqlConnection(ConnectionString))
@@ -45,15 +46,13 @@ namespace DataAccessLayer
                         elementId = command1.ExecuteScalar();
                     }
 
-                    using (connection1)
+                    using (var command2 = new SqlCommand(request2, connection1))
                     {
-                        using (var command2 = new SqlCommand(request2, connection1))
-                        {
-                            command2.CommandType = CommandType.Text;
-                            command2.ExecuteNonQuery();
-                        }
+                        command2.CommandType = CommandType.Text;
+                        command2.ExecuteNonQuery();
                     }
-                }
+                    connection1.Close();
+               }
                 scope.Complete();
             }
 
@@ -94,9 +93,17 @@ namespace DataAccessLayer
                 var cmdText = new SqlCommand(string.Format("SELECT * FROM [dbo].[{0}]", tableName), connection);
                 connection.Open();
                 var dataAdapter = new SqlDataAdapter(cmdText);
-                dataAdapter.Fill(table);
+                try
+                {
+                    dataAdapter.Fill(table);
+                    connection.Close();
+                    dataAdapter.Dispose();
+                }
+                catch (Exception)
+                {
+                    dataAdapter.Dispose(); 
+                }                
                 connection.Close();
-                dataAdapter.Dispose();
             }
             return table;
         }
@@ -106,12 +113,20 @@ namespace DataAccessLayer
             var table = new DataTable();
             using (var connection = new SqlConnection(ConnectionString))
             {
-                var cmdText = new SqlCommand(string.Format("SELECT * FROM [dbo].[{0}] WHERE Id={1}", tableName,id), connection);
+                var cmdText = new SqlCommand(string.Format("SELECT * FROM [dbo].[{0}] WHERE Id={1}", tableName, id), connection);
                 connection.Open();
                 var dataAdapter = new SqlDataAdapter(cmdText);
-                dataAdapter.Fill(table);
+                try
+                {
+                    dataAdapter.Fill(table);
+                    connection.Close();
+                    dataAdapter.Dispose();
+                }
+                catch (Exception)
+                {
+                    dataAdapter.Dispose();
+                }
                 connection.Close();
-                dataAdapter.Dispose();
             }
             return table;
         }

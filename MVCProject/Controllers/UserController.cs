@@ -32,7 +32,7 @@ namespace MVCProject.Controllers
         public ActionResult Edit(int id)
         {
             var user = m_facade.GetUserById(id);
-            var userModel = new UserViewModel()
+            var userModel = new UserViewModel
             {
                 Age = user.Age,
                 FirstName = user.FirstName,

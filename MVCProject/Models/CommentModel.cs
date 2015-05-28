@@ -1,19 +1,21 @@
-﻿namespace MVCProject.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace MVCProject.Models
 {
     public class CommentViewModel
     {
-        public CommentViewModel()
-        {
-        }
-
         public int Id { get; set; }
 
+        [Required]
         public string UserFirstName { get; set; }
 
+        [Required]
         public string UserLastName { get; set; }
 
+        [Required]
         public int UserAge { get; set; }
 
+        [Required]
         public string Content { get; set; }
 
         public int ArticleId { get; set; }
