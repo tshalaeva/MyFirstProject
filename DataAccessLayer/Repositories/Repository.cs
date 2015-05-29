@@ -22,8 +22,19 @@ namespace DataAccessLayer.Repositories
             }
         }
 
+        public int GetCount()
+        {
+            return Data.Count;
+        }
+
         public List<User> Get()
         {
+            return Data;
+        }
+
+        public List<User> Get(int from, int count)
+        {
+            //
             return Data;
         }
 
@@ -75,10 +86,21 @@ namespace DataAccessLayer.Repositories
             }
         }
 
+        public int GetCount()
+        {
+            return Data.Count;
+        }
+
         public List<Article> Get()
         {
             return Data;
         }
+
+        public List<Article> Get(int from, int count)
+        {
+        //
+            return Data;
+        } 
 
         public int Save(Article entity)
         {
@@ -120,6 +142,11 @@ namespace DataAccessLayer.Repositories
             Data = new List<BaseComment>();
         }
 
+        public int GetCount()
+        {
+            return Data.Count;
+        }
+
         public bool Initialized
         {
             get
@@ -131,6 +158,12 @@ namespace DataAccessLayer.Repositories
         public List<BaseComment> Get()
         {
             return Data;
+        }
+
+        public List<BaseComment> Get(int from, int count)
+        {
+        //
+            return Get();
         }
 
         public int Save(BaseComment entity)

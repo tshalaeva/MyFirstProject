@@ -14,30 +14,22 @@ namespace MVCProject.Controllers
         private readonly Facade m_facade = MvcApplication.Facade;
 
         public ActionResult Index(int page = 1, int size = 8)
-        {
-            var articles = m_facade.GetArticles();
-            var from = size * (page - 1);
-            var model = new ArticleListingViewModel();
-            var count = articles.Count() / size;
-            if (articles.Count() > size * count)
+        {                                               
+            var from = size * (page - 1) + 1;
+            var articles = m_facade.GetArticles(from, size - 1);
+            var model = new ArticleListingViewModel();            
+            var count = m_facade.GetArticlesCount()/size;
+            if (m_facade.GetArticlesCount() > size * count)
             {
                 count++;
             }
-
             model.TotalCount = count;
-            model.Articles =
-                articles.Skip(from)
-                    .Take(size)
-                    .Select(
-                        article =>
-                            new ArticleViewModel
-                            {
-                                Id = article.Id,
-                                Author = article.Author.NickName,
-                                Title = article.Title,
-                                Content = article.Content
-                            })
-                    .ToList();
+            model.Articles = new List<ArticleViewModel>();
+            
+            foreach (var article in articles)
+            {
+                model.Articles.Add(new ArticleViewModel {Id = article.Id, Author = article.Author.NickName, Title = article.Title, Content = article.Content});
+            }
             model.PageNumber = page;
             model.PageSize = size;
 

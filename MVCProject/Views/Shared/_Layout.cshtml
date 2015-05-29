@@ -10,8 +10,13 @@
     @Html.ActionLink("Article Listing", "Index", "Article")
 </head>
 <body>
-    @RenderBody()
-    @Scripts.Render("~/bundles/jquery")
-    @RenderSection("scripts", required: false)
+    <div class="wrapper site-size">
+        @RenderBody()
+        @Scripts.Render("~/bundles/jquery")
+        @RenderSection("scripts", required: false)
+    </div>
+<div class="footer site-size">
+    Footer
+</div>
 </body>
 </html>

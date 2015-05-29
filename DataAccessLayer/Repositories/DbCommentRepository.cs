@@ -30,6 +30,11 @@ namespace DataAccessLayer.Repositories
             m_reviewTextRepository = reviewTextRepository;
         }
 
+        public int GetCount()
+        {
+            return AdoHelper.GetCount("Comment");
+        }
+
         public bool Initialized
         {
             get
@@ -142,6 +147,12 @@ namespace DataAccessLayer.Repositories
                 comments.Add(DtoMapper.GetComment(dtoComment));
             }
             return comments;
+        }
+
+        public List<BaseComment> Get(int from, int count)
+        {
+            //
+            return Get();
         }
 
         public void Delete(int commentId)

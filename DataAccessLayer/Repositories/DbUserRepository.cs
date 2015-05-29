@@ -23,7 +23,7 @@ namespace DataAccessLayer.Repositories
         }
 
         [DefaultConstructor]
-        public DbUserRepository(DbAdminRepository adminRepo, DbAuthorRepository authorRepo)
+        public DbUserRepository(DbAdminRepository adminRepo, DbAuthorRepository authorRepo) : base()
         {
             AdoHelper = new AdoHelper();
             DtoMapper = new DtoMapper();
@@ -38,6 +38,11 @@ namespace DataAccessLayer.Repositories
                 var table = AdoHelper.GetData("User").Rows.Count;
                 return table != 0;
             }
+        }
+
+        public int GetCount()
+        {
+            return AdoHelper.GetCount("User");
         }
 
         public List<User> Get()
@@ -67,6 +72,12 @@ namespace DataAccessLayer.Repositories
                 users.Add(DtoMapper.GetUser(tmpUser));
             }
             return users;
+        }
+
+        public List<User> Get(int from, int count)
+        {
+        //
+            return Get();
         }
 
         public int Save(User entity)

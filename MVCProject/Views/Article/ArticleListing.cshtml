@@ -45,7 +45,7 @@
     <tfoot>
         <tr class="pages">
             <td colspan="2">
-                @for (int i = 1; i <= Model.TotalCount; i++)
+                @for (var i = 1; i <= Model.TotalCount; i++)
                 {
                     @Html.ActionLink(i.ToString(), "Index", new { page = i, size = Model.PageSize })
                 }

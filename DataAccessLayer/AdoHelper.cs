@@ -130,5 +130,44 @@ namespace DataAccessLayer
             }
             return table;
         }
+
+        public DataTable GetData(string tableName, int from, int count)
+        {
+            var table = new DataTable();
+            using (var connection = new SqlConnection(ConnectionString))
+            {
+                var command =
+                    new SqlCommand(
+                        string.Format(
+                            "SELECT * FROM (SELECT *, ROW_NUMBER() OVER (ORDER BY Id) AS RowNum FROM [dbo].[{0}]) AS MyDerivedTable WHERE MyDerivedTable.RowNum BETWEEN {1} AND {2}", tableName, from, from + count), connection);                
+                connection.Open();
+                var dataAdapter = new SqlDataAdapter(command);
+                try
+                {
+                    dataAdapter.Fill(table);
+                    connection.Close();
+                    dataAdapter.Dispose();
+                }
+                catch (Exception)
+                {
+                    dataAdapter.Dispose();
+                }
+                connection.Close();
+            }
+            return table;
+        }
+
+        public int GetCount(string tableName)
+        {
+            int result;
+            using (var connection = new SqlConnection(ConnectionString))
+            {
+                var cmdText = new SqlCommand(string.Format("SELECT COUNT(*) FROM [dbo].[{0}]", tableName), connection);
+                connection.Open();
+                result = (int)cmdText.ExecuteScalar();
+                connection.Close();
+            }
+            return result;
+        }
     }
 }

@@ -9,9 +9,9 @@ namespace FLS.MyFirstProject.Infrastructure
 {
     public class Facade
     {
-        private readonly IRepository<User> _mUserRepository;
-        private readonly IRepository<Article> _mArticleRepository;
-        private readonly IRepository<BaseComment> _mCommentRepository;
+        private readonly IRepository<User> m_userRepository;
+        private readonly IRepository<Article> m_articleRepository;
+        private readonly IRepository<BaseComment> m_commentRepository;
 
         private void Initialize()
         {
@@ -32,7 +32,7 @@ namespace FLS.MyFirstProject.Infrastructure
 
             foreach (var author in authors)
             {
-                author.Id = _mUserRepository.Save(author);
+                author.Id = m_userRepository.Save(author);
             }
 
             var users = new List<User>();
@@ -48,12 +48,12 @@ namespace FLS.MyFirstProject.Infrastructure
                 user.FirstName = "User";
                 user.LastName = string.Format("{0}", j++);
                 user.Age = 30 + j;
-                user.Id = _mUserRepository.Save(user);
+                user.Id = m_userRepository.Save(user);
             }
 
             var updatedUser = users[0];
             updatedUser.FirstName = "Updated";
-            _mUserRepository.Save(updatedUser);
+            m_userRepository.Save(updatedUser);
 
             var admin = new Admin(4)
             {
@@ -63,16 +63,16 @@ namespace FLS.MyFirstProject.Infrastructure
                 Privilegies = new List<string> { "edit", "read", "delete" }
             };
 
-            admin.Id = _mUserRepository.Save(admin);
+            admin.Id = m_userRepository.Save(admin);
 
             var updatedAdmin = admin;
             updatedAdmin.FirstName = "Updated Admin";
             updatedAdmin.Privilegies = new List<string> { "Edit", "Read" };
-            _mUserRepository.Save(updatedAdmin);
+            m_userRepository.Save(updatedAdmin);
 
             var updatedAuthor = authors[0];
             updatedAuthor.NickName = "Updated Nick";
-            _mUserRepository.Save(updatedAuthor);
+            m_userRepository.Save(updatedAuthor);
 
             var articles = new List<Article>();
 
@@ -86,54 +86,64 @@ namespace FLS.MyFirstProject.Infrastructure
                 };
 
                 article.Author = authors[i];
-                article.Id = _mArticleRepository.Save(article);
+                article.Id = m_articleRepository.Save(article);
                 articles.Add(article);
             }
 
             var updatedArticle = articles[1];
             updatedArticle.Title = "Updated Article";
-            _mArticleRepository.Save(updatedArticle);
+            m_articleRepository.Save(updatedArticle);
 
-            _mCommentRepository.Save(new Comment(0, "Content 0", users[0], articles[0]));
-            _mCommentRepository.Save(new Review(1, "Review Content 1", users[0], articles[0], new Rating(4)));
-            _mCommentRepository.Save(new ReviewText(2, "Review text 2", users[1], articles[0], new Rating(4)));
+            m_commentRepository.Save(new Comment(0, "Content 0", users[0], articles[0]));
+            m_commentRepository.Save(new Review(1, "Review Content 1", users[0], articles[0], new Rating(4)));
+            m_commentRepository.Save(new ReviewText(2, "Review text 2", users[1], articles[0], new Rating(4)));
         }
 
         [DefaultConstructor]
         public Facade(IRepository<User> userRepository, IRepository<Article> articleRepository, IRepository<BaseComment> commentRepository)
         {
-            _mUserRepository = userRepository;
-            _mArticleRepository = articleRepository;
-            _mCommentRepository = commentRepository;
-            if (!(_mCommentRepository.Initialized) && !(_mArticleRepository.Initialized) && !(_mUserRepository.Initialized))
+            m_userRepository = userRepository;
+            m_articleRepository = articleRepository;
+            m_commentRepository = commentRepository;
+            if (!(m_commentRepository.Initialized) && !(m_articleRepository.Initialized) && !(m_userRepository.Initialized))
             {
                 Initialize();
             }
         }
 
+        public List<Article> GetArticles(int from, int count)
+        {
+            return m_articleRepository.Get(from, count);
+        }
+
+        public int GetArticlesCount()
+        {
+            return m_articleRepository.GetCount();
+        }
+
         public List<User> GetAllUsers()
         {
-            return _mUserRepository.Get();
+            return m_userRepository.Get();
         }
 
         public List<Author> GetAuthors()
         {
-            return _mUserRepository.Get().OfType<Author>().ToList();
+            return m_userRepository.Get().OfType<Author>().ToList();
         }
 
         public List<Admin> GetAdmins()
         {
-            return _mUserRepository.Get().OfType<Admin>().ToList();
+            return m_userRepository.Get().OfType<Admin>().ToList();
         }
 
         public void DeleteUser(int entityId)
         {
-            var comments = _mCommentRepository.Get();
+            var comments = m_commentRepository.Get();
             foreach (var comment in comments.Where(comment => comment.User.Id == entityId))
             {
-                _mCommentRepository.Delete(comment.Id);
+                m_commentRepository.Delete(comment.Id);
             }
-            _mUserRepository.Delete(entityId);
+            m_userRepository.Delete(entityId);
         }
 
         public int CreateUser(string firstName, string lastName, int age)
@@ -149,46 +159,46 @@ namespace FLS.MyFirstProject.Infrastructure
 
         public int UpdateUser(int id, string firstName, string lastName, int age)
         {
-            var user = _mUserRepository.GetById(id);
+            var user = m_userRepository.GetById(id);
             user.FirstName = firstName;
             user.LastName = lastName;
             user.Age = age;
-            return _mUserRepository.Update(id, user);
+            return m_userRepository.Update(id, user);
         }
 
         public int SaveUser(User entity)
         {
-            return _mUserRepository.Save(entity);
+            return m_userRepository.Save(entity);
         }
 
         public User GetUserById(int id)
         {
-            return _mUserRepository.GetById(id);
+            return m_userRepository.GetById(id);
         }
 
         public List<Article> GetArticles()
         {
-            return _mArticleRepository.Get();
+            return m_articleRepository.Get();
         }
 
         public List<BaseComment> GetAllComments()
         {
-            return _mCommentRepository.Get();
+            return m_commentRepository.Get();
         }
 
         public List<Comment> GetComments()
         {
-            return _mCommentRepository.Get().OfType<Comment>().ToList();
+            return m_commentRepository.Get().OfType<Comment>().ToList();
         }
 
         public List<Review> GetReviews()
         {
-            return _mCommentRepository.Get().OfType<Review>().ToList();
+            return m_commentRepository.Get().OfType<Review>().ToList();
         }
 
         public List<ReviewText> GetReviewTexts()
         {
-            return _mCommentRepository.Get().OfType<ReviewText>().ToList();
+            return m_commentRepository.Get().OfType<ReviewText>().ToList();
         }
 
         public List<BaseComment> FilterCommentsByArticle(Article article)
@@ -203,40 +213,40 @@ namespace FLS.MyFirstProject.Infrastructure
         public int CreateArticle(int id, Author author, string title, string content)
         {
             var article = new Article(id) { Author = author, Title = title, Content = content };
-            return _mArticleRepository.Save(article);
+            return m_articleRepository.Save(article);
         }
 
         public int CreateComment(int articleId, User user, string content)
         {
-            //var comment = new Comment(id, content, user, _mArticleRepository.GetById(articleId));
+            //var comment = new Comment(id, content, user, m_articleRepository.GetById(articleId));
             var comment = new Comment()
             {
                 User = user,
-                Article = _mArticleRepository.GetById(articleId),
+                Article = m_articleRepository.GetById(articleId),
                 Content = content
             };
-            return _mCommentRepository.Save(comment);
+            return m_commentRepository.Save(comment);
         }
 
         public void CreateReview(int id, string content, Rating rating, User user, Article article)
         {
             var review = new Review(id, content, user, article, rating);
             UpdateRating(rating, article, user);
-            _mCommentRepository.Save(review);
+            m_commentRepository.Save(review);
         }
 
         public void CreateReviewText(int id, string content, Rating rating, User user, Article article)
         {
             var review = new ReviewText(id, content, user, article, rating);
             UpdateRating(rating, article, user);
-            _mCommentRepository.Save(review);
+            m_commentRepository.Save(review);
         }
 
         public int UpdateComment(int id, string content)
         {
-            var oldComment = _mCommentRepository.GetById(id);
+            var oldComment = m_commentRepository.GetById(id);
             var newComment = new Comment(id, content, oldComment.User, oldComment.Article);
-            return _mCommentRepository.Update(id, newComment);
+            return m_commentRepository.Update(id, newComment);
         }        
 
         //public void UpdateArticle(int oldEntity, Article newEntity)
@@ -249,53 +259,53 @@ namespace FLS.MyFirstProject.Infrastructure
                 Ratings = GetArticleById(oldEntity).Ratings,
                 Title = articleTitle
             };
-            return _mArticleRepository.Update(oldEntity, newEntity);
+            return m_articleRepository.Update(oldEntity, newEntity);
         }
 
         public Article GetArticleById(int? id)
         {
-            return _mArticleRepository.GetById(id);
+            return m_articleRepository.GetById(id);
         }
 
         public BaseComment GetCommentById(int? id)
         {
-            return _mCommentRepository.GetById(id);
+            return m_commentRepository.GetById(id);
         }
 
         public Article GetRandomArticle()
         {
-            return _mArticleRepository.GetRandom();
+            return m_articleRepository.GetRandom();
         }
 
         public bool ArticleExists(int? id)
         {
-            var elements = _mArticleRepository.Get();
+            var elements = m_articleRepository.Get();
             return elements.Any(element => element.Id == id);
         }
 
         public void DeleteArticle(int entityId)
         {
-            _mArticleRepository.Delete(entityId);
-            var comments = _mCommentRepository.Get();
+            m_articleRepository.Delete(entityId);
+            var comments = m_commentRepository.Get();
             foreach (var comment in comments.Where(comment => comment.Article.Id == entityId))
             {
-                _mCommentRepository.Delete(comment.Id);
+                m_commentRepository.Delete(comment.Id);
             }
         }
 
         public void DeleteComment(int commentId)
         {
-            _mCommentRepository.Delete(commentId);
+            m_commentRepository.Delete(commentId);
         }
 
         public void SaveArticle(Article entity)
         {
-            _mArticleRepository.Save(entity);
+            m_articleRepository.Save(entity);
         }
 
         public void SaveComment(BaseComment comment)
         {
-            _mCommentRepository.Save(comment);
+            m_commentRepository.Save(comment);
         }
 
         private void UpdateRating(Rating rating, Article article, User user)

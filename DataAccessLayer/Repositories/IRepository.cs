@@ -9,9 +9,10 @@ namespace DataAccessLayer.Repositories
 
         List<T> Get();
 
-        int Save(T entity);
+        List<T> Get(int from, int count);
 
-        //void Delete(T entity);
+        int Save(T entity);
+        
         void Delete(int id);
 
         int Update(int existingEntityId, T newEntity);
@@ -19,5 +20,7 @@ namespace DataAccessLayer.Repositories
         T GetById(int? id);
 
         T GetRandom();
+
+        int GetCount();
     }
 }
