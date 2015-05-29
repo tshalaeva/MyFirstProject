@@ -6,25 +6,20 @@
 }
 @model WebReportModel
 <body>
-<h2>WebReport</h2>
-@using (@Html.BeginForm("Submit", "WebReport", FormMethod.Post, new {model = @Model}))
-{
-    <table id="WebReport">
-        <thead>
-        <tr>
-            <ul id="WebReportOptions">
-                <li class="select-method">@Html.DropDownListFor(m => m.SelectedOption.Value, @Model.Options)</li>
-                <li><button id="submitWebReport" type="submit">Submit</button></li>
-            </ul>
-        </tr>
-        </thead>
-        <tbody>
-        <tr class="result">
-            <td>
+    <h2>WebReport</h2>
+    @using (@Html.BeginForm("Submit", "WebReport", FormMethod.Post, new { model = @Model }))
+    {
+        <div id="WebReport">
+            <div>
+                <ul id="WebReportOptions">
+                    <li class="select-method">@Html.DropDownListFor(m => m.SelectedOption.Value, @Model.Options)</li>
+                    <li>
+                        <button id="submitWebReport" type="submit">Submit</button></li>
+                </ul>
+            </div>
+            <div class="result">
                 <pre>@Model.Content</pre>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-}
+            </div>
+        </div>
+    }
 </body>

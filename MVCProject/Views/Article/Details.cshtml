@@ -13,57 +13,59 @@
 
         <li>@Html.ActionLink("Delete", "Delete", "Article", new { id = @Model.Id }, new object { })</li>
     </ul>
-    <p><b>Articele title: </b>@Model.Title</p>
+    <div class="information">
+        <p><b>Articele title: </b>@Model.Title</p>
 
-    <p><b>Article author: </b>@Model.Author</p>
+        <p><b>Article author: </b>@Model.Author</p>
 
-    <p>@Model.Content</p>
+        <p>@Model.Content</p>
 
-    @using (@Html.BeginForm("Save", "Comment", FormMethod.Post, new { model = @Model }))
-    {
-        <h3>Comments and reviews:</h3>
-        foreach (var comment in @Model.Comments)
+        @using (@Html.BeginForm("Save", "Comment", FormMethod.Post, new { model = @Model }))
         {
-        <div class="comment-item">
-            <div class="commentView">@comment.Show()</div>
-            <ul class="CommentLinks">
-                <li class="editComment">@Html.ActionLink("Edit Comment", "Edit", "Comment", new { id = comment.Id }, new object())</li>
-                <li class="deleteComment">@Html.ActionLink("Delete Comment", "Delete", "Comment", new { id = comment.Id }, new object())</li>
-            </ul>
-        </div>
+            <h3>Comments and reviews:</h3>
+            foreach (var comment in @Model.Comments)
+            {
+            <div class="comment-item">
+                <div class="commentView">@comment.Show()</div>
+                <ul class="CommentLinks">
+                    <li class="editComment">@Html.ActionLink("Edit Comment", "Edit", "Comment", new { id = comment.Id }, new object())</li>
+                    <li class="deleteComment">@Html.ActionLink("Delete Comment", "Delete", "Comment", new { id = comment.Id }, new object())</li>
+                </ul>
+            </div>
+            }
+            <h1>Create comment</h1>
+            @Html.HiddenFor(m => m.Id)
+            @Html.HiddenFor(m => m.Author)
+            @Html.HiddenFor(m => m.Comments)
+            @Html.HiddenFor(m => m.Content)
+            @Html.HiddenFor(m => m.Title)
+            <p class="user=firstname">
+                <label class="firstname">First Name:</label>
+                @Html.TextBoxFor(m => m.NewComment.UserFirstName)
+                @Html.ValidationMessageFor(m => m.NewComment.UserFirstName, "Please enter first name")
+            </p>
+
+            <p class="user=lastname">
+                <label class="lastname">Last Name:</label>
+                @Html.TextBoxFor(m => m.NewComment.UserLastName)
+                @Html.ValidationMessageFor(m => m.NewComment.UserLastName, "Please enter last name")
+            </p>
+
+            <p class="user-age">
+                <label class="age">Age:</label>
+                @Html.TextBoxFor(m => m.NewComment.UserAge)
+                @Html.ValidationMessageFor(m => m.NewComment.UserAge, "Please enter age")
+            </p>
+
+            <p class="comment-content">
+                <label class="content">Content:</label>
+                @Html.TextAreaFor(m => m.NewComment.Content)
+                @Html.ValidationMessageFor(m => m.NewComment.Content, "Please enter content")
+            </p>
+
+            <button type="submit">Save</button>
         }
-        <h1>Create comment</h1>
-        @Html.HiddenFor(m => m.Id)
-        @Html.HiddenFor(m => m.Author)
-        @Html.HiddenFor(m => m.Comments)
-        @Html.HiddenFor(m => m.Content)
-        @Html.HiddenFor(m => m.Title)
-        <p class="user=firstname">
-            <label class="firstname">First Name:</label>
-            @Html.TextBoxFor(m => m.NewComment.UserFirstName)
-            @Html.ValidationMessageFor(m => m.NewComment.UserFirstName, "Please enter first name")
-        </p>
-
-        <p class="user=lastname">
-            <label class="lastname">Last Name:</label>
-            @Html.TextBoxFor(m => m.NewComment.UserLastName)
-            @Html.ValidationMessageFor(m => m.NewComment.UserLastName, "Please enter last name")
-        </p>
-
-        <p class="user-age">
-            <label class="age">Age:</label>
-            @Html.TextBoxFor(m => m.NewComment.UserAge)
-            @Html.ValidationMessageFor(m => m.NewComment.UserAge, "Please enter age")
-        </p>
-
-        <p class="comment-content">
-            <label class="content">Content:</label>
-            @Html.TextAreaFor(m => m.NewComment.Content)
-            @Html.ValidationMessageFor(m => m.NewComment.Content, "Please enter content")
-        </p>
-
-        <button type="submit">Save</button>
-    }
+    </div>
 </div>
 @section Scripts 
 {

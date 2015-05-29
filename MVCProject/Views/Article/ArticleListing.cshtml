@@ -22,34 +22,32 @@
     <li>@Html.ActionLink("User List", "UserList", "User")</li>
 </ul>
 
-<table class="Articles">
-    <thead>
-        <tr class="header">
-            <td class="article-title-header">
+<div class="Articles">
+    <div class="ArticlesHead">        
+            <span class="article-title-header">
                 <h3>Article</h3>
-            </td>
-            <td class="article-author-header">
+            </span>
+            <span class="article-author-header">
                 <h3>Author</h3>
-            </td>
-        </tr>
-    </thead>
-    <tbody>
+            </span>        
+    </div>
+    <div class="ArticlesBody">
         @foreach (var article in Model.Articles)
         {
-            <tr>
-                <td class="article-title">@Html.ActionLink(@article.Title, "Details", new { id = article.Id })</td>
-                <td class="article-author">@article.Author</td>
-            </tr>
+            <div>
+                <span class="article-title">@Html.ActionLink(@article.Title, "Details", new { id = article.Id })</span>
+                <span class="article-author">@article.Author</span>
+            </div>
         }
-    </tbody>
-    <tfoot>
-        <tr class="pages">
-            <td colspan="2">
+    </div>
+    <div class="ArticlesFooter">
+        <div class="pages">
+            <span>
                 @for (var i = 1; i <= Model.TotalCount; i++)
                 {
                     @Html.ActionLink(i.ToString(), "Index", new { page = i, size = Model.PageSize })
                 }
-            </td>
-        </tr>
-    </tfoot>
-</table>
+            </span>
+        </div>
+    </div>
+</div>

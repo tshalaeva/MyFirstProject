@@ -7,7 +7,7 @@
 
 <h2>Edit comment</h2>
 
-<body>
+<div class="edit-comment">
     @using (@Html.BeginForm("SaveChanges", "Comment", FormMethod.Post, new { id = @Model.Id}))
     {
     @Html.HiddenFor(m => m.Id)
@@ -19,5 +19,5 @@
 
     <button type="submit">Save Changes</button>
     }
-</body>
+</div>
 

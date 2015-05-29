@@ -13,7 +13,7 @@ pre {
     font-size: inherit;
     color: inherit;
     border: initial;
-    padding: initial;
+    padding: 10px;
     font-family: inherit;
 }
 
@@ -22,8 +22,7 @@ pre {
     margin: auto;
 }
 
-.wrapper.site-size {        
-    border: 1px solid #F2EFCF;
+.wrapper.site-size {
     -ms-border-radius: 10px;
     border-radius: 10px;
     padding-bottom: 100px;
@@ -33,4 +32,148 @@ pre {
 .footer.site-size {
     margin-top: -100px;
     height: 100px;
+}
+
+a {
+    color: #7EC3C5;
+    text-decoration: none;
+}
+
+    a:hover {
+        color: #9DC9A2;
+    }
+
+ul {
+    list-style: none;
+}
+
+li {
+    float: left;
+    padding: 5px;
+}
+
+.Articles {
+    clear: left;
+    background-color: #F2EFCF;
+    border-radius: 5px;
+}
+
+h1, h2, h3 {
+    color: #D7A262;
+    text-align: center;
+    clear: left;
+}
+
+select, input, button, textarea {
+    background-color: #F2EFCF;
+    border: 1px solid #F1E79A;
+    border-radius: 3px;
+    color: #879378;
+    text-align: center;
+    font-weight: bold;    
+}
+
+input, textarea {
+    width: 200px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+label {
+    width: 100px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+/* Styles for validation helpers
+-----------------------------------------------------------*/
+.field-validation-error {
+    color: #f00;
+}
+
+.field-validation-valid {
+    display: none;
+}
+
+.input-validation-error {
+    border: 1px solid #f00;
+    background-color: #fee;
+}
+
+.validation-summary-errors {
+    font-weight: bold;
+    color: #f00;
+}
+
+.validation-summary-valid {
+    display: none;
+}
+
+.result {
+    white-space: pre-wrap;
+}
+
+/*Article Listing*/
+.ArticlesHead {
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    background-color: #DCCF92;
+    height: 50px;
+}
+
+    .ArticlesHead > span {
+        float: left;
+        display: block;
+        width: 450px;
+        text-align: center;
+    }
+
+.ArticlesBody span {
+    float: left;
+    width: 450px;
+}
+
+.pages a {
+    padding: 5px;
+}
+
+.pages span {
+    margin: 0 50px;
+}
+
+.ArticlesBody a {
+    padding: 5px 10px;
+}
+
+.links {
+    width: 500px;
+    margin-left: 200px;
+}
+
+/*WebReport*/
+#WebReportOptions {
+    width: 500px;
+    height: 50px;
+    margin-left: 200px;
+}
+
+#WebReport {
+    clear: left;
+}
+
+.result {
+    width: 500px;
+    margin-left: 200px;
+    background-color: #F2EFCF;
+    border-radius: 5px;
+}
+
+#createArticle, .CreateUser, .user-list, .EditUser, .information, .ArticleDetailsLinks, .edit-comment {
+    width: 500px;
+    margin-left: 200px;
+}
+
+/*Article Details*/
+.ArticleDetailsLinks {
+    height: 50px;    
 }

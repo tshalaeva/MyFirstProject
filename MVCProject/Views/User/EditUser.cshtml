@@ -7,9 +7,10 @@
 
 <h2>Edit User</h2>
 
-@using(@Html.BeginForm("Submit", "User", FormMethod.Post, new {model = @Model}))
+<div class="EditUser">
+    @using (@Html.BeginForm("Submit", "User", FormMethod.Post, new { model = @Model }))
     {
-    @Html.HiddenFor(m => m.Id)
+        @Html.HiddenFor(m => m.Id)
         <p class="user-firstname">
             <label>First Name:</label>
             @Html.TextBoxFor(m => m.FirstName)
@@ -24,6 +25,7 @@
             @Html.TextBoxFor(m => m.Age)
         </p>
 
-    @Html.Hidden("returnUrl", Request.Url.ToString())   
-    <button type="submit">Submit</button>
+        @Html.Hidden("returnUrl", Request.Url.ToString())   
+        <button type="submit">Submit</button>
     }
+</div>
