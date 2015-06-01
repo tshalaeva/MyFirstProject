@@ -55,6 +55,7 @@ li {
 .Articles {
     clear: left;
     background-color: #F2EFCF;
+    -ms-border-radius: 5px;
     border-radius: 5px;
 }
 
@@ -67,10 +68,11 @@ h1, h2, h3 {
 select, input, button, textarea {
     background-color: #F2EFCF;
     border: 1px solid #F1E79A;
+    -ms-border-radius: 3px;
     border-radius: 3px;
     color: #879378;
     text-align: center;
-    font-weight: bold;    
+    font-weight: bold;
 }
 
 input, textarea {
@@ -115,13 +117,15 @@ label {
 
 /*Article Listing*/
 .ArticlesHead {
+    -ms-border-top-left-radius: 5px;
     border-top-left-radius: 5px;
+    -ms-border-top-right-radius: 5px;
     border-top-right-radius: 5px;
     background-color: #DCCF92;
     height: 50px;
 }
 
-    .ArticlesHead > span {
+.ArticlesHead > span {
         float: left;
         display: block;
         width: 450px;
@@ -165,6 +169,7 @@ label {
     width: 500px;
     margin-left: 200px;
     background-color: #F2EFCF;
+    -ms-border-radius: 5px;
     border-radius: 5px;
 }
 

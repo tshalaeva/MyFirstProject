@@ -54,6 +54,12 @@ namespace Tests
             return m_data;
         }
 
+        public List<Article> Get(int from)
+        {
+            //
+            return m_data;
+        }
+
         public int Save(Article entity)
         {
             m_data.Add(entity);
@@ -124,6 +130,12 @@ namespace Tests
         }
 
         public List<User> Get(int from, int count)
+        {
+            //
+            return m_data;
+        }
+
+        public List<User> Get(int from)
         {
             //
             return m_data;
@@ -206,6 +218,12 @@ namespace Tests
         }
 
         public List<BaseComment> Get(int from, int count)
+        {
+            //
+            return m_data;
+        }
+
+        public List<BaseComment> Get(int from)
         {
             //
             return m_data;

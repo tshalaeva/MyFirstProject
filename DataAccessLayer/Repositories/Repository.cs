@@ -32,6 +32,12 @@ namespace DataAccessLayer.Repositories
             return Data;
         }
 
+        public List<User> Get(int id)
+        {
+        //
+            return Data;
+        }
+
         public List<User> Get(int from, int count)
         {
             //
@@ -98,7 +104,13 @@ namespace DataAccessLayer.Repositories
 
         public List<Article> Get(int from, int count)
         {
-        //
+            //
+            return Data;
+        }
+
+        public List<Article> Get(int from)
+        {
+            //
             return Data;
         } 
 
@@ -162,7 +174,13 @@ namespace DataAccessLayer.Repositories
 
         public List<BaseComment> Get(int from, int count)
         {
-        //
+            //
+            return Get();
+        }
+
+        public List<BaseComment> Get(int from)
+        {
+            //
             return Get();
         }
 

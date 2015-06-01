@@ -119,6 +119,12 @@ namespace DataAccessLayer.Repositories
             return articles;
         }
 
+        public List<Article> Get(int id)
+        {
+            //
+            return Get();
+        }
+
         public int GetCount()
         {
             return m_adoHelper.GetCount("Article");

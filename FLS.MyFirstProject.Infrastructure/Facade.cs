@@ -138,7 +138,7 @@ namespace FLS.MyFirstProject.Infrastructure
 
         public void DeleteUser(int entityId)
         {
-            var comments = m_commentRepository.Get();
+            var comments = m_commentRepository.Get(entityId);
             foreach (var comment in comments.Where(comment => comment.User.Id == entityId))
             {
                 m_commentRepository.Delete(comment.Id);

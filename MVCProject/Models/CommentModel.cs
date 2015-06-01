@@ -12,7 +12,7 @@ namespace MVCProject.Models
         [Required]
         public string UserLastName { get; set; }
 
-        [Required]
+        [Range(1, 999)]
         public int UserAge { get; set; }
 
         [Required]

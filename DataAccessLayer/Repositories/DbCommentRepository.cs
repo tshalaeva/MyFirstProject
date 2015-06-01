@@ -22,7 +22,7 @@ namespace DataAccessLayer.Repositories
         }
 
         [DefaultConstructor]
-        public DbCommentRepository(DbReviewRepository reviewRepository, DbReviewTextRepository reviewTextRepository)
+        public DbCommentRepository(DbReviewRepository reviewRepository, DbReviewTextRepository reviewTextRepository) : base()
         {
             AdoHelper = new AdoHelper();
             DtoMapper = new DtoMapper();
@@ -148,6 +148,33 @@ namespace DataAccessLayer.Repositories
             }
             return comments;
         }
+
+        public List<BaseComment> Get(int filteredByUserId)
+        {
+            var comments = new List<BaseComment>();
+            var commentsTable = AdoHelper.GetData("Comments", "UserId", filteredByUserId);
+            for (var i = 0; i < commentsTable.Rows.Count; i++)
+            {
+                var dtoComment = new DtoComment
+                {
+                    Id = (int)commentsTable.Rows[i]["Id"],
+                    Content = commentsTable.Rows[i]["Content"].ToString(),
+                    ArticleId = (int)commentsTable.Rows[i]["ArticleId"],
+                    UserId = (int)commentsTable.Rows[i]["UserId"],
+                    UserName = AdoHelper.GetCellValue("User", "FirstName", (int)commentsTable.Rows[i]["UserId"]).ToString(),
+                    UserLastName = AdoHelper.GetCellValue("User", "LastName", (int)commentsTable.Rows[i]["UserId"]).ToString(),
+                    UserAge = (int)AdoHelper.GetCellValue("User", "Age", (int)commentsTable.Rows[i]["UserId"])
+                };
+                var rating = AdoHelper.GetCellValue("Rating", "Value", "CommentId", commentsTable.Rows[i]["Id"]);
+                var textRating = AdoHelper.GetCellValue("TextRating", "Value", "CommentId", commentsTable.Rows[i]["Id"]);
+                if (rating != null || textRating != null)
+                {
+                    dtoComment.Rating = rating ?? textRating;
+                }
+                comments.Add(DtoMapper.GetComment(dtoComment));
+            }
+            return comments;
+        } 
 
         public List<BaseComment> Get(int from, int count)
         {

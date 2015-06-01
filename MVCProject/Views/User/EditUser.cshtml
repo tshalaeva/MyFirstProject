@@ -14,15 +14,18 @@
         <p class="user-firstname">
             <label>First Name:</label>
             @Html.TextBoxFor(m => m.FirstName)
+            @Html.ValidationMessageFor(m => m.FirstName, "Please enter first name")
         </p>
 
         <p class="user-lastname">
             <label>Last Name:</label>
             @Html.TextBoxFor(m => m.LastName)
+            @Html.ValidationMessageFor(m => m.LastName, "Please enter last name")
         </p>
         <p class="user-age">
             <label>Age:</label>
             @Html.TextBoxFor(m => m.Age)
+            @Html.ValidationMessageFor(m => m.Age, "Please enter age")
         </p>
 
         @Html.Hidden("returnUrl", Request.Url.ToString())   

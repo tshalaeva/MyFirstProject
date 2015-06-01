@@ -1,13 +1,18 @@
 ﻿using System;
+using System.CodeDom;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Transactions;
+using log4net;
+using log4net.Config;
 
 namespace DataAccessLayer
 {
     public class AdoHelper
     {
+        private static readonly ILog Logger = LogManager.GetLogger(typeof(AdoHelper));        
+
         protected virtual string ConnectionString
         {
             get
@@ -157,6 +162,29 @@ namespace DataAccessLayer
             return table;
         }
 
+        public DataTable GetData(string tableName, string filterByColumnName, int filterByValue)
+        {
+            var table = new DataTable();
+            using (var connection = new SqlConnection(ConnectionString))
+            {
+                var cmdText = new SqlCommand(string.Format("SELECT * FROM [dbo].[{0}] WHERE {1}={2}", tableName, filterByColumnName, filterByValue), connection);
+                connection.Open();
+                var dataAdapter = new SqlDataAdapter(cmdText);
+                try
+                {
+                    dataAdapter.Fill(table);
+                    connection.Close();
+                    dataAdapter.Dispose();
+                }
+                catch (Exception)
+                {
+                    dataAdapter.Dispose();
+                }
+                connection.Close();
+            }
+            return table;
+        }
+
         public int GetCount(string tableName)
         {
             int result;
@@ -164,8 +192,19 @@ namespace DataAccessLayer
             {
                 var cmdText = new SqlCommand(string.Format("SELECT COUNT(*) FROM [dbo].[{0}]", tableName), connection);
                 connection.Open();
-                result = (int)cmdText.ExecuteScalar();
-                connection.Close();
+                try
+                {
+                    result = (int) cmdText.ExecuteScalar();
+                }
+                catch (Exception)
+                {
+                    Logger.Error("Error - ExecuteScalar method failed");
+                    throw;
+                }
+                finally
+                {
+                    connection.Close();
+                }
             }
             return result;
         }

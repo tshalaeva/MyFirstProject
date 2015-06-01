@@ -80,6 +80,12 @@ namespace DataAccessLayer.Repositories
             return Get();
         }
 
+        public List<User> Get(int id)
+        {
+            //
+            return new List<User>();
+        }
+
         public int Save(User entity)
         {
             if (Exists(entity.Id)) return Update(entity.Id, entity);
@@ -144,6 +150,7 @@ namespace DataAccessLayer.Repositories
                 Id = (int)userData["Id"],
                 FirstName = userData["FirstName"].ToString(),
                 LastName = userData["LastName"].ToString(),
+                Age = (int)userData["Age"], 
                 Privilegies = (!userData.IsNull("PrivilegiesId")) ? AdoHelper.GetCellValue("Privilegies", "List", "Id", userData["PrivilegiesId"]).ToString() : string.Empty,
                 NickName = (!userData.IsNull("AuthorId")) ? AdoHelper.GetCellValue("Author", "NickName", "Id", userData["AuthorId"]).ToString() : string.Empty,
                 Popularity = (!userData.IsNull("AuthorId")) ?

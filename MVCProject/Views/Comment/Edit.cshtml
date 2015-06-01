@@ -15,9 +15,13 @@
     <p class="comment-content">
         <label class="content">Content:</label>
         @Html.TextAreaFor(m => m.Content)
+        @Html.ValidationMessageFor(m => m.Content, "Please enter content")
     </p>
 
     <button type="submit">Save Changes</button>
     }
 </div>
-
+@section Scripts 
+{
+    @Scripts.Render("~/bundles/jqueryval")
+}

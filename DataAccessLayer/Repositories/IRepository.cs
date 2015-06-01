@@ -11,6 +11,8 @@ namespace DataAccessLayer.Repositories
 
         List<T> Get(int from, int count);
 
+        List<T> Get(int filteredById);
+
         int Save(T entity);
         
         void Delete(int id);

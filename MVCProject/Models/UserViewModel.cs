@@ -14,7 +14,7 @@ namespace MVCProject.Models
 
         public string LastName { get; set; }
 
-        [Range(1,150)]
+        [Range(1,999)]
         public int Age { get; set; }
     }
 }
