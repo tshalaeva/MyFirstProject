@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Web.Mvc;
 using FLS.MyFirstProject.Infrastructure;
 using MVCProject.Models;
@@ -10,6 +11,8 @@ namespace MVCProject.Controllers
         //
         // GET: /User/
         private readonly Facade m_facade = MvcApplication.Facade;
+
+        private readonly NLog.Logger m_logger = NLog.LogManager.GetCurrentClassLogger();
 
         public ActionResult Create()
         {
@@ -31,22 +34,40 @@ namespace MVCProject.Controllers
 
         public ActionResult Edit(int id)
         {
-            var user = m_facade.GetUserById(id);
-            var userModel = new UserViewModel
+            try
             {
-                Age = user.Age,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                Id = id
-            };
-            return View("~/Views/User/EditUser.cshtml", userModel);
+                var user = m_facade.GetUserById(id);
+                var userModel = new UserViewModel
+                {
+                    Age = user.Age,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    Id = id
+                };
+                return View("~/Views/User/EditUser.cshtml", userModel);
+            }
+            catch (Exception)
+            {
+                m_logger.Error("Incorrect value");
+                return View("~/Views/Shared/Error.cshtml");
+                throw;
+            }
+            
         }
 
         [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult Submit(UserViewModel model)
         {
-            m_facade.UpdateUser(model.Id, model.FirstName, model.LastName, model.Age);
-            return UserList();
+            try
+            {
+                m_facade.UpdateUser(model.Id, model.FirstName, model.LastName, model.Age);
+                return UserList();
+            }
+            catch (Exception)
+            {
+                m_logger.Error("Incorrect value");
+                return View("~/Views/Shared/Error.cshtml");
+            }
         }
 
         public ActionResult UserList()

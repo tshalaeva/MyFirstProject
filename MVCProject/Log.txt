@@ -1,0 +1,8 @@
+2015-06-03 22:49:38.9594|INFO|MVCProject.MvcApplication|Start!
+2015-06-03 22:55:25.5732|INFO|MVCProject.MvcApplication|Start!
+2015-06-03 22:57:05.8740|INFO|MVCProject.MvcApplication|Start!
+2015-06-03 22:57:14.8415|INFO|MVCProject.MvcApplication|Start!
+2015-06-03 22:57:57.3209|INFO|MVCProject.MvcApplication|Start!
+2015-06-03 23:02:06.8432|INFO|MVCProject.MvcApplication|Start!
+2015-06-03 23:02:13.6756|ERROR|MVCProject.Controllers.ArticleController|Article with this id was not found
+2015-06-03 23:02:58.1991|INFO|MVCProject.MvcApplication|Start!

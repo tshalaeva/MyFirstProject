@@ -1,18 +1,13 @@
 ﻿using System;
-using System.CodeDom;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Transactions;
-using log4net;
-using log4net.Config;
 
 namespace DataAccessLayer
 {
     public class AdoHelper
     {
-        private static readonly ILog Logger = LogManager.GetLogger(typeof(AdoHelper));        
-
         protected virtual string ConnectionString
         {
             get
@@ -197,8 +192,7 @@ namespace DataAccessLayer
                     result = (int) cmdText.ExecuteScalar();
                 }
                 catch (Exception)
-                {
-                    Logger.Error("Error - ExecuteScalar method failed");
+                {                    
                     throw;
                 }
                 finally

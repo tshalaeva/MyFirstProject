@@ -218,7 +218,6 @@ namespace FLS.MyFirstProject.Infrastructure
 
         public int CreateComment(int articleId, User user, string content)
         {
-            //var comment = new Comment(id, content, user, m_articleRepository.GetById(articleId));
             var comment = new Comment()
             {
                 User = user,
@@ -249,7 +248,6 @@ namespace FLS.MyFirstProject.Infrastructure
             return m_commentRepository.Update(id, newComment);
         }        
 
-        //public void UpdateArticle(int oldEntity, Article newEntity)
         public int UpdateArticle(int oldEntity, string articleTitle, string articleContent)
         {
             var newEntity = new Article(oldEntity)

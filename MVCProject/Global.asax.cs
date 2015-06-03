@@ -14,6 +14,8 @@ namespace MVCProject
 
     public class MvcApplication : HttpApplication
     {
+        private readonly NLog.Logger m_logger = NLog.LogManager.GetCurrentClassLogger();
+
         public static Facade Facade
         {
             get
@@ -24,6 +26,7 @@ namespace MVCProject
 
         protected void Application_Start()
         {
+            m_logger.Info("Start!");
             AreaRegistration.RegisterAllAreas();
 
             WebApiConfig.Register(GlobalConfiguration.Configuration);

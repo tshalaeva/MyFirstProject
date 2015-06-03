@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using FLS.MyFirstProject.Infrastructure;
 using MVCProject.Models;
+using NLog;
 
 namespace MVCProject.Controllers
 {
@@ -12,6 +14,8 @@ namespace MVCProject.Controllers
         // GET: /ArticleListing/
 
         private readonly Facade m_facade = MvcApplication.Facade;
+
+        private readonly NLog.Logger m_logger = LogManager.GetCurrentClassLogger();
 
         public ActionResult Index(int page = 1, int size = 8)
         {                                               
@@ -43,30 +47,39 @@ namespace MVCProject.Controllers
 
         public ActionResult Details(int? id)
         {
-            if (!m_facade.ArticleExists(id)) return Redirect("~/Article/ArticleListing");
-            var article = m_facade.GetArticleById(id);
-            var articleModel = new ArticleViewModel
+            //if (!m_facade.ArticleExists(id)) return Redirect("~/Article/ArticleListing");
+            try
             {
-                Author = article.Author.NickName,
-                Content = article.Content,
-                Title = article.Title,
-                Id = article.Id
-            };
-            var comments = m_facade.FilterCommentsByArticle(article);
-            articleModel.Comments = new List<CommentViewModel>();
-            foreach (var comment in comments)
-            {
-                articleModel.Comments.Add(new CommentViewModel
+                var article = m_facade.GetArticleById(id);
+                var articleModel = new ArticleViewModel
                 {
-                    Id = comment.Id,
-                    Content = comment.Content,
-                    ArticleId = comment.Article.Id,
-                    UserFirstName = comment.User.FirstName,
-                    UserAge = comment.User.Age,
-                    UserLastName = comment.User.LastName
-                });
+                    Author = article.Author.NickName,
+                    Content = article.Content,
+                    Title = article.Title,
+                    Id = article.Id
+                };
+                var comments = m_facade.FilterCommentsByArticle(article);
+                articleModel.Comments = new List<CommentViewModel>();
+                foreach (var comment in comments)
+                {
+                    articleModel.Comments.Add(new CommentViewModel
+                    {
+                        Id = comment.Id,
+                        Content = comment.Content,
+                        ArticleId = comment.Article.Id,
+                        UserFirstName = comment.User.FirstName,
+                        UserAge = comment.User.Age,
+                        UserLastName = comment.User.LastName
+                    });
+                }
+                return View("~/Views/Article/Details.cshtml", articleModel);
             }
-            return View("~/Views/Article/Details.cshtml", articleModel);
+            catch (Exception)
+            {
+                m_logger.Error("Article with this id was not found");
+                return View("~/Views/Shared/Error.cshtml");
+                throw;
+            }            
         }
 
         public ActionResult Reports()
