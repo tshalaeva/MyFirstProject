@@ -13,22 +13,16 @@ namespace DataAccessLayer.Repositories
 
         protected readonly DtoMapper DtoMapper;
 
-        private readonly DbAdminRepository m_adminRepository;
-
-        private readonly DbAuthorRepository m_authorRepository;
+        [DefaultConstructor]
+        public DbUserRepository(AdoHelper ado, DtoMapper dtoMapper)
+        {
+            AdoHelper = ado;
+            DtoMapper = dtoMapper;
+        }
 
         public DbUserRepository()
         {
-
-        }
-
-        [DefaultConstructor]
-        public DbUserRepository(DbAdminRepository adminRepo, DbAuthorRepository authorRepo) : base()
-        {
-            AdoHelper = new AdoHelper();
-            DtoMapper = new DtoMapper();
-            m_adminRepository = adminRepo;
-            m_authorRepository = authorRepo;
+                        
         }
 
         public bool Initialized
@@ -90,55 +84,55 @@ namespace DataAccessLayer.Repositories
         {
             if (Exists(entity.Id)) return Update(entity.Id, entity);
             var cmdText = new StringBuilder();
-            if (!(entity is Admin) && !(entity is Author))
-            {
+            //if (!(entity is Admin) && !(entity is Author))
+            //{
                 cmdText.AppendFormat(
                     "INSERT INTO [dbo].[User] (FirstName,LastName,Age) OUTPUT Inserted.Id VALUES('{0}','{1}',{2})",
                     entity.FirstName, entity.LastName, entity.Age);
                 return (int)AdoHelper.CrudOperation(cmdText.ToString());
-            }
-            if (entity is Admin)
-            {
-                return m_adminRepository.SaveAdmin((Admin)entity);
-            }
-            return m_authorRepository.SaveAuthor((Author)entity);
+            //}
+            //if (entity is Admin)
+            //{
+            //    return m_adminRepository.SaveAdmin((Admin)entity);
+            //}
+            //return m_authorRepository.SaveAuthor((Author)entity);
         }
 
         public void Delete(int userId)
         {
             var data = GetById(userId);
             var cmdText = new StringBuilder();
-            if (!(data is Admin) && !(data is Author))
-            {
+            //if (!(data is Admin) && !(data is Author))
+            //{
                 cmdText.AppendFormat("DELETE FROM [dbo].[User] WHERE Id='{0}'", userId);
 
                 AdoHelper.CrudOperation(cmdText.ToString());
-            }
-            else
-            {
-                if (data is Admin)
-                {
-                    m_adminRepository.DeleteAdmin(userId);
-                }
-                else
-                {
-                    m_authorRepository.DeleteAuthor(userId);
-                }
-            }
+            //}
+            //else
+            //{
+            //    if (data is Admin)
+            //    {
+            //        m_adminRepository.DeleteAdmin(userId);
+            //    }
+            //    else
+            //    {
+            //        m_authorRepository.DeleteAuthor(userId);
+            //    }
+            //}
         }
 
         public int Update(int oldUserId, User newUser)
         {
             var commandText = string.Format("UPDATE [dbo].[User] SET FirstName='{0}',LastName='{1}',Age={2} WHERE Id={3}", newUser.FirstName, newUser.LastName, newUser.Age, oldUserId);
-            if (!(newUser is Admin) && !(newUser is Author))
-            {
+            //if (!(newUser is Admin) && !(newUser is Author))
+            //{
                 return Convert.ToInt32(AdoHelper.CrudOperation(commandText));
-            }
-            if (newUser is Admin)
-            {
-                return m_adminRepository.UpdateAdmin(oldUserId, (Admin)newUser);
-            }
-            return m_authorRepository.UpdateAuthor(oldUserId, (Author)newUser);
+            //}
+            //if (newUser is Admin)
+            //{
+            //    return m_adminRepository.UpdateAdmin(oldUserId, (Admin)newUser);
+            //}
+            //return m_authorRepository.UpdateAuthor(oldUserId, (Author)newUser);
         }
 
         public User GetById(int? id)

@@ -179,24 +179,30 @@ namespace Tests
     {
         private bool m_flag;
         private BaseComment m_entity;
-        private readonly List<BaseComment> m_data;
+        protected List<BaseComment> Data;
 
-        public bool Initialized { get { return m_data.Count != 0; }
+        public bool Initialized
+        {
+            get { return Data.Count != 0; }
         }
 
-        public CommentMock(List<BaseComment> users)
+        public CommentMock(List<BaseComment> comments)
         {
-            m_data = users;
+            Data = comments;
+        }
+
+        public CommentMock()
+        {
         }
 
         public int GetCount()
         {
-            return m_data.Count;
+            return Data.Count;
         }
 
         public BaseComment GetById(int? id)
         {
-            foreach (var item in m_data)
+            foreach (var item in Data)
             {
                 if (item.Id == id)
                 {
@@ -209,29 +215,29 @@ namespace Tests
         public BaseComment GetRandom()
         {
             var random = new Random();
-            return m_data[random.Next(0, m_data.Count)];
+            return Data[random.Next(0, Data.Count)];
         }
 
         public List<BaseComment> Get()
         {
-            return m_data;
+            return Data;
         }
 
         public List<BaseComment> Get(int from, int count)
         {
             //
-            return m_data;
+            return Data;
         }
 
         public List<BaseComment> Get(int from)
         {
             //
-            return m_data;
+            return Data;
         }
 
         public int Save(BaseComment entity)
         {
-            m_data.Add(entity);
+            Data.Add(entity);
             m_flag = true;
             m_entity = entity;
             return entity.Id;
@@ -239,7 +245,7 @@ namespace Tests
 
         public int Update(int oldEntity, BaseComment newEntity)
         {
-            m_data[oldEntity] = newEntity;
+            Data[oldEntity] = newEntity;
             m_entity = newEntity;
             m_flag = true;
             return oldEntity;
@@ -247,8 +253,8 @@ namespace Tests
 
         public void Delete(int entityId)
         {
-            m_entity = m_data[entityId];
-            m_data.Remove(m_entity);           
+            m_entity = Data[entityId];
+            Data.Remove(m_entity);
             m_flag = true;
         }
 
@@ -260,6 +266,143 @@ namespace Tests
                 return true;
             }
             return false;
+        }
+    }
+
+    public class ReviewMock : CommentMock, IRepository<Review>
+    {
+        private bool m_flag;
+        private BaseComment m_entity;
+
+        public ReviewMock(List<BaseComment> comments)
+        {
+            Data = comments;
+        }
+
+        public new Review GetById(int? id)
+        {
+            return Data.Where(item => item.Id == id).Cast<Review>().FirstOrDefault();
+        }
+
+        public new Review GetRandom()
+        {
+            var random = new Random();
+            return (Review)Data[random.Next(0, Data.Count)];
+        }
+
+        public new List<Review> Get()
+        {
+            return Data.OfType<Review>().ToList();
+        }
+
+        public new List<Review> Get(int @from, int count)
+        {
+            throw new NotImplementedException();
+        }
+
+        public new List<Review> Get(int filteredById)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int Save(Review entity)
+        {
+            Data.Add(entity);
+            m_flag = true;
+            m_entity = entity;
+            return entity.Id;
+        }
+
+        public int Update(int oldEntity, Review newEntity)
+        {
+            Data[oldEntity] = newEntity;
+            m_entity = newEntity;
+            m_flag = true;
+            return oldEntity;
+        }
+
+        public new void Delete(int entityId)
+        {
+            m_entity = Data[entityId];
+            Data.Remove(m_entity);
+            m_flag = true;
+        }
+
+        public new bool MethodIsCalled(int id)
+        {
+            if (m_flag && m_entity.Id == id)
+            {
+                m_flag = false;
+                return true;
+            }
+            return false;
+        }
+    }
+
+    public class ReviewTextMock : CommentMock, IRepository<ReviewText>
+    {
+        private bool m_flag;
+        private BaseComment m_entity;
+
+        public ReviewTextMock(List<BaseComment> comments)
+        {
+            Data = comments;
+        }
+
+        public new ReviewText GetById(int? id)
+        {
+            return Data.Where(item => item.Id == id).Cast<ReviewText>().FirstOrDefault();
+        }
+
+        public new ReviewText GetRandom()
+        {
+            var random = new Random();
+            return (ReviewText)Data[random.Next(0, Data.Count)];
+        }
+
+        public new List<ReviewText> Get()
+        {
+            return Data.OfType<ReviewText>().ToList();
+        }
+
+        public new List<ReviewText> Get(int @from, int count)
+        {
+            throw new NotImplementedException();
+        }
+
+        public new List<ReviewText> Get(int filteredById)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int Save(ReviewText entity)
+        {
+            Data.Add(entity);
+            m_flag = true;
+            m_entity = entity;
+            return entity.Id;
+        }
+
+        public int Update(int oldEntity, ReviewText newEntity)
+        {
+            Data[oldEntity] = newEntity;
+            m_entity = newEntity;
+            m_flag = true;
+            return oldEntity;
+        }
+
+        public new void Delete(int entityId)
+        {
+            m_entity = Data[entityId];
+            Data.Remove(m_entity);
+            m_flag = true;
+        }
+
+        public new bool MethodIsCalled(int id)
+        {
+            if (!m_flag || m_entity.Id != id) return false;
+            m_flag = false;
+            return true;
         }
     }
 }

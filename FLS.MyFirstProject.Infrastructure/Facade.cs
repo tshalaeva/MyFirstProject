@@ -10,8 +10,12 @@ namespace FLS.MyFirstProject.Infrastructure
     public class Facade
     {
         private readonly IRepository<User> m_userRepository;
+        private readonly IRepository<Admin> m_adminRepository;
+        private readonly IRepository<Author> m_authorRepository;
         private readonly IRepository<Article> m_articleRepository;
         private readonly IRepository<BaseComment> m_commentRepository;
+        private readonly IRepository<Review> m_reviewRepository;
+        private readonly IRepository<ReviewText> m_reviewTextRepository;
 
         private void Initialize()
         {
@@ -100,12 +104,16 @@ namespace FLS.MyFirstProject.Infrastructure
         }
 
         [DefaultConstructor]
-        public Facade(IRepository<User> userRepository, IRepository<Article> articleRepository, IRepository<BaseComment> commentRepository)
+        public Facade(IRepository<User> userRepository, IRepository<Article> articleRepository, IRepository<BaseComment> commentRepository, IRepository<Admin> adminRepository, IRepository<Author> authorRepository, IRepository<Review> reviewRepository, IRepository<ReviewText> reviewTextRepository)
         {
             m_userRepository = userRepository;
+            m_adminRepository = adminRepository;
+            m_authorRepository = authorRepository;
             m_articleRepository = articleRepository;
             m_commentRepository = commentRepository;
-            if (!(m_commentRepository.Initialized) && !(m_articleRepository.Initialized) && !(m_userRepository.Initialized))
+            m_reviewRepository = reviewRepository;
+            m_reviewTextRepository = reviewTextRepository;
+            if (!(m_commentRepository.Initialized) && !(m_articleRepository.Initialized) && !(m_userRepository.Initialized) && !(m_adminRepository.Initialized) && !(m_authorRepository.Initialized) && !(m_reviewRepository.Initialized) && !(m_reviewTextRepository.Initialized))
             {
                 Initialize();
             }
@@ -128,12 +136,12 @@ namespace FLS.MyFirstProject.Infrastructure
 
         public List<Author> GetAuthors()
         {
-            return m_userRepository.Get().OfType<Author>().ToList();
+            return m_authorRepository.Get();
         }
 
         public List<Admin> GetAdmins()
         {
-            return m_userRepository.Get().OfType<Admin>().ToList();
+            return m_adminRepository.Get();
         }
 
         public void DeleteUser(int entityId)
@@ -193,12 +201,12 @@ namespace FLS.MyFirstProject.Infrastructure
 
         public List<Review> GetReviews()
         {
-            return m_commentRepository.Get().OfType<Review>().ToList();
+            return m_reviewRepository.Get();
         }
 
         public List<ReviewText> GetReviewTexts()
         {
-            return m_commentRepository.Get().OfType<ReviewText>().ToList();
+            return m_reviewTextRepository.Get();
         }
 
         public List<BaseComment> FilterCommentsByArticle(Article article)
@@ -231,14 +239,14 @@ namespace FLS.MyFirstProject.Infrastructure
         {
             var review = new Review(id, content, user, article, rating);
             UpdateRating(rating, article, user);
-            m_commentRepository.Save(review);
+            m_reviewRepository.Save(review);
         }
 
         public void CreateReviewText(int id, string content, Rating rating, User user, Article article)
         {
             var review = new ReviewText(id, content, user, article, rating);
             UpdateRating(rating, article, user);
-            m_commentRepository.Save(review);
+            m_reviewTextRepository.Save(review);
         }
 
         public int UpdateComment(int id, string content)

@@ -13,9 +13,9 @@ namespace DataAccessLayer.Repositories
 
         public readonly DtoMapper DtoMapper;
 
-        private readonly DbReviewRepository m_reviewRepository;
+        //private readonly DbReviewRepository m_reviewRepository;
 
-        private readonly DbReviewTextRepository m_reviewTextRepository;
+        //private readonly DbReviewTextRepository m_reviewTextRepository;
 
         public DbCommentRepository()
         {
@@ -26,8 +26,8 @@ namespace DataAccessLayer.Repositories
         {
             AdoHelper = new AdoHelper();
             DtoMapper = new DtoMapper();
-            m_reviewRepository = reviewRepository;
-            m_reviewTextRepository = reviewTextRepository;
+            //m_reviewRepository = reviewRepository;
+            //m_reviewTextRepository = reviewTextRepository;
         }
 
         public int GetCount()
@@ -49,36 +49,36 @@ namespace DataAccessLayer.Repositories
 
         public int Update(int oldComment, BaseComment newComment)
         {
-            if (!(newComment is Review))
-            {
+            //if (!(newComment is Review))
+            //{
                 return
                     Convert.ToInt32(AdoHelper.CrudOperation(
                         string.Format("UPDATE [dbo].[Comments] SET Content='{0}' WHERE Id={1}",
                             newComment.Content, oldComment)));
-            }
-            if (newComment is ReviewText)
-            {
-                return m_reviewTextRepository.UpdateReviewText(oldComment, (ReviewText)newComment);
-            }
-            return m_reviewRepository.UpdateReview(oldComment, (Review)newComment);
+            //}
+            //if (newComment is ReviewText)
+            //{
+            //    return m_reviewTextRepository.UpdateReviewText(oldComment, (ReviewText)newComment);
+            //}
+            //return m_reviewRepository.UpdateReview(oldComment, (Review)newComment);
         }
 
         public int Save(BaseComment comment)
         {
             if (Exists(comment.Id)) return Update(comment.Id, comment);
             var cmdText = new StringBuilder();
-            if (!(comment is Review))
-            {
+            //if (!(comment is Review))
+            //{
                 cmdText.AppendFormat(
                     "INSERT INTO [dbo].[Comments](UserId,ArticleId,Content) OUTPUT Inserted.Id VALUES('{0}','{1}','{2}') ",
                     comment.User.Id, comment.Article.Id, comment.Content.Trim());
                 return (int)AdoHelper.CrudOperation(cmdText.ToString());
-            }
-            if (comment is ReviewText)
-            {
-                return m_reviewTextRepository.SaveReviewText((ReviewText)comment);
-            }
-            return m_reviewRepository.SaveReview((Review)comment);
+            //}
+            //if (comment is ReviewText)
+            //{
+            //    return m_reviewTextRepository.SaveReviewText((ReviewText)comment);
+            //}
+            //return m_reviewRepository.SaveReview((Review)comment);
         }
 
         public BaseComment GetRandom()
@@ -185,20 +185,20 @@ namespace DataAccessLayer.Repositories
         public void Delete(int commentId)
         {
             var entity = GetById(commentId);
-            if (!(entity is Review))
-            {
+            //if (!(entity is Review))
+            //{
                 var cmdText = string.Format("DELETE FROM [dbo].[Comments] WHERE Id={0}", commentId);
                 AdoHelper.CrudOperation(cmdText);
-            }
-            else
-            {
-                if (entity is ReviewText)
-                {
-                    m_reviewTextRepository.Delete(commentId);
-                    return;
-                }
-                m_reviewRepository.Delete(commentId);
-            }
+            //}
+            //else
+            //{
+            //    if (entity is ReviewText)
+            //    {
+            //        m_reviewTextRepository.Delete(commentId);
+            //        return;
+            //    }
+            //    m_reviewRepository.Delete(commentId);
+            //}
         }
 
         private bool Exists(int id)

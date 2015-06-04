@@ -35,10 +35,10 @@ namespace FLS.MyFirstProject.Infrastructure
             container.Configure(x => x.For<IRepository<User>>().Use<DbUserRepository>());
             container.Configure(y => y.For <IRepository<Article>>().Use<DbArticleRepository>());
             container.Configure(z => z.For<IRepository<BaseComment>>().Use<DbCommentRepository>());      
-            container.Configure(i => i.For<DbAdminRepository>().Use<DbAdminRepository>());
-            container.Configure(j => j.For<DbAuthorRepository>().Use<DbAuthorRepository>());
-            container.Configure(k => k.For<DbReviewRepository>().Use<DbReviewRepository>());
-            container.Configure(l => l.For<DbReviewTextRepository>().Use<DbReviewTextRepository>());
+            container.Configure(i => i.For<IRepository<Admin>>().Use<DbAdminRepository>());
+            container.Configure(j => j.For<IRepository<Author>>().Use<DbAuthorRepository>());
+            container.Configure(k => k.For<IRepository<Review>>().Use<DbReviewRepository>());
+            container.Configure(l => l.For<IRepository<ReviewText>>().Use<DbReviewTextRepository>());
 
             container.Configure(ado => ado.For<AdoHelper>().Use<AdoHelper>());
             container.Configure(dto => dto.For<DtoMapper>().Use<DtoMapper>());

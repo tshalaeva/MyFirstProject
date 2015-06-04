@@ -2,14 +2,30 @@
 using System.Collections.Generic;
 using DataAccessLayer.DtoEntities;
 using ObjectRepository.Entities;
+using StructureMap;
 
 namespace DataAccessLayer.Repositories
 {
-    public class DbAdminRepository : DbUserRepository
+    public class DbAdminRepository : DbUserRepository, IRepository<Admin>
     {
-        private readonly AdoHelper adminAdoHelper = new AdoHelper();
+        public DbAdminRepository()
+        {
+        }
 
-        public List<Admin> GetAdmins()
+        [DefaultConstructor]
+        public DbAdminRepository(AdoHelper adoHelper, DtoMapper dto) : base(adoHelper, dto)
+        {
+        }
+
+        public void DeleteAdmin(int adminId)
+        {
+            var privilegyId = (Guid)AdoHelper.GetCellValue("User", "PrivilegiesId", adminId);
+            var command1 = string.Format("DELETE FROM [dbo].[User] WHERE Id={0})", adminId);
+            var command2 = string.Format("DELETE FROM [dbo].[Privilegies] WHERE Id='{0}'", privilegyId);
+            AdoHelper.CrudOperation(command1, command2);
+        }
+
+        public new List<Admin> Get()
         {
             var adminTable = AdoHelper.GetData("Privilegies");
             var admins = new List<Admin>();
@@ -28,7 +44,17 @@ namespace DataAccessLayer.Repositories
             return admins;
         }
 
-        public int SaveAdmin(Admin entity)
+        public new List<Admin> Get(int @from, int count)
+        {
+            throw new NotImplementedException();
+        }
+
+        public new List<Admin> Get(int filteredById)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int Save(Admin entity)
         {
             var privilegiesId = Guid.NewGuid();
 
@@ -39,24 +65,26 @@ namespace DataAccessLayer.Repositories
             var privilegyList = entity.Privilegies;
             var cmdText2 = string.Format("INSERT INTO Privilegies (Id,List) VALUES ('{0}', '{1}'); ",
                 privilegiesId, GetPrivilegiesString(privilegyList));
-            return (int)adminAdoHelper.CrudOperation(cmdText1, cmdText2);
+            return (int)AdoHelper.CrudOperation(cmdText1, cmdText2);
         }
 
-        public void DeleteAdmin(int adminId)
+        public int Update(int existingEntityId, Admin newAdmin)
         {
-            var privilegyId = (Guid)AdoHelper.GetCellValue("User", "PrivilegiesId", adminId);
-            var command1 = string.Format("DELETE FROM [dbo].[User] WHERE Id={0})", adminId);
-            var command2 = string.Format("DELETE FROM [dbo].[Privilegies] WHERE Id='{0}'", privilegyId);
-            adminAdoHelper.CrudOperation(command1, command2);
-        }
-
-        public int UpdateAdmin(int oldAdminId, Admin newAdmin)
-        {
-            var commandText = string.Format("UPDATE [dbo].[User] SET FirstName='{0}',LastName='{1}',Age={2} WHERE Id={3}", newAdmin.FirstName, newAdmin.LastName, newAdmin.Age, oldAdminId);
-            var privilegiesId = (Guid)adminAdoHelper.GetCellValue("User", "PrivilegiesId", oldAdminId);
+            var commandText = string.Format("UPDATE [dbo].[User] SET FirstName='{0}',LastName='{1}',Age={2} WHERE Id={3}", newAdmin.FirstName, newAdmin.LastName, newAdmin.Age, existingEntityId);
+            var privilegiesId = (Guid)AdoHelper.GetCellValue("User", "PrivilegiesId", existingEntityId);
             var cmd = string.Format("UPDATE [dbo].[Privilegies] SET List='{0}' WHERE Id='{1}' ", GetPrivilegiesString(newAdmin.Privilegies), privilegiesId);
-            adminAdoHelper.CrudOperation(cmd);
-            return Convert.ToInt32(adminAdoHelper.CrudOperation(commandText));
+            AdoHelper.CrudOperation(cmd);
+            return Convert.ToInt32(AdoHelper.CrudOperation(commandText));
+        }
+
+        public new Admin GetById(int? id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public new Admin GetRandom()
+        {
+            throw new NotImplementedException();
         }
     }
 }
