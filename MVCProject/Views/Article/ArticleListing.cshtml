@@ -5,7 +5,7 @@
 
 @{
     ViewBag.Title = "Index";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml";    
 }
 
 <h2>Article Listing</h2>
@@ -29,14 +29,26 @@
             </span>
             <span class="article-author-header">
                 <h3>Author</h3>
-            </span>        
+            </span>          
+            @if (Model.View == "Grid")
+            {
+                <div id="list-grid-view" class="list-view">@Html.ActionLink("List", "ChangeView", new {Model.View})</div>
+            }
+            else
+            {
+                <div id="list-grid-view" class="grid-view">@Html.ActionLink("Grid", "ChangeView", new {Model.View})</div>
+            }
     </div>
     <div class="ArticlesBody">
         @foreach (var article in Model.Articles)
         {
-            <div>
+            <div class="article-item @Model.View">
                 <span class="article-title">@Html.ActionLink(@article.Title, "Details", new { id = article.Id })</span>
                 <span class="article-author">@article.Author</span>
+                @if (Model.View == "Grid")
+                {
+                    <span >@article.Content</span>
+                }
             </div>
         }
     </div>

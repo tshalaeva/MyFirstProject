@@ -128,9 +128,16 @@ label {
 .ArticlesHead > span {
         float: left;
         display: block;
-        width: 450px;
+        width: 400px;
         text-align: center;
     }
+
+#list-grid-view {
+    width: 70px;
+    float: left;
+    text-align: center;
+    padding: 15px;
+}
 
 .ArticlesBody span {
     float: left;
@@ -152,6 +159,18 @@ label {
 .links {
     width: 500px;
     margin-left: 200px;
+}
+
+.Grid {
+    float: left;
+    margin-left: auto;
+    margin-top: 15px;
+}
+
+.Grid span {
+    width: 225px!important;
+    display: block;
+    clear: both !important;    
 }
 
 /*WebReport*/

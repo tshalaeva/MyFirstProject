@@ -15,9 +15,9 @@ namespace MVCProject.Controllers
 
         private readonly Facade m_facade = MvcApplication.Facade;
 
-        private readonly NLog.Logger m_logger = LogManager.GetCurrentClassLogger();
+        private readonly Logger m_logger = LogManager.GetCurrentClassLogger();
 
-        public ActionResult Index(int page = 1, int size = 8)
+        public ActionResult Index(int page = 1, int size = 8, string view = "List")
         {                                               
             var from = size * (page - 1) + 1;
             var articles = m_facade.GetArticles(from, size - 1);
@@ -36,6 +36,7 @@ namespace MVCProject.Controllers
             }
             model.PageNumber = page;
             model.PageSize = size;
+            model.View = view;
 
             return View("~/Views/Article/ArticleListing.cshtml", model);
         }
@@ -47,7 +48,6 @@ namespace MVCProject.Controllers
 
         public ActionResult Details(int? id)
         {
-            //if (!m_facade.ArticleExists(id)) return Redirect("~/Article/ArticleListing");
             try
             {
                 var article = m_facade.GetArticleById(id);
@@ -143,6 +143,22 @@ namespace MVCProject.Controllers
         {
             m_facade.UpdateArticle(model.Id, model.Title, model.Content);
             return Index();
+        }
+
+        public ActionResult ChangeView(string view)
+        {
+            switch (view)
+            {
+                case "List":
+                    return Index(1, 8, "Grid");
+                case "Grid":
+                    return Index();
+                default:
+                {
+                    m_logger.Error("Incorrect page view");
+                    return View("~/Views/Shared/Error.cshtml");
+                }
+            }
         }
     }
 }
