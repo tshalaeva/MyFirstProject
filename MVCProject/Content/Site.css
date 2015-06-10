@@ -3,6 +3,7 @@
     font-family: "Segoe UI", Verdana, Helvetica, Sans-Serif;
     color: #879378;
     background-color: #FEFEFA;
+    word-break: break-all;
 }
 
 header, footer, nav, section {
@@ -139,6 +140,10 @@ label {
     padding: 15px;
 }
 
+.ArticlesBody {
+    min-height: 150px;
+}
+
 .ArticlesBody span {
     float: left;
     width: 450px;
@@ -171,6 +176,13 @@ label {
     width: 225px!important;
     display: block;
     clear: both !important;    
+}
+
+.article-content {
+    width: 225px!important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 /*WebReport*/

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web;
 using System.Web.Mvc;
 using FLS.MyFirstProject.Infrastructure;
 using MVCProject.Models;
@@ -17,22 +18,22 @@ namespace MVCProject.Controllers
 
         private readonly Logger m_logger = LogManager.GetCurrentClassLogger();
 
-        public ActionResult Index(int page = 1, int size = 8, string view = "List")
-        {                                               
+        public ActionResult Index(string view, int page = 1, int size = 8)
+        {
             var from = size * (page - 1) + 1;
             var articles = m_facade.GetArticles(from, size - 1);
-            var model = new ArticleListingViewModel();            
-            var count = m_facade.GetArticlesCount()/size;
+            var model = new ArticleListingViewModel();
+            var count = m_facade.GetArticlesCount() / size;
             if (m_facade.GetArticlesCount() > size * count)
             {
                 count++;
             }
             model.TotalCount = count;
             model.Articles = new List<ArticleViewModel>();
-            
+
             foreach (var article in articles)
             {
-                model.Articles.Add(new ArticleViewModel {Id = article.Id, Author = article.Author.NickName, Title = article.Title, Content = article.Content});
+                model.Articles.Add(new ArticleViewModel { Id = article.Id, Author = article.Author.NickName, Title = article.Title, Content = article.Content });
             }
             model.PageNumber = page;
             model.PageSize = size;
@@ -79,7 +80,7 @@ namespace MVCProject.Controllers
                 m_logger.Error("Article with this id was not found");
                 return View("~/Views/Shared/Error.cshtml");
                 throw;
-            }            
+            }
         }
 
         public ActionResult Reports()
@@ -91,7 +92,7 @@ namespace MVCProject.Controllers
         public ActionResult Create()
         {
             return View("~/Views/Article/Create.cshtml");
-        }        
+        }
 
         [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult Save(ArticleViewModel articleModel)
@@ -99,7 +100,7 @@ namespace MVCProject.Controllers
             if (!ModelState.IsValid) return View("~/Views/User/CreateUser.cshtml");
             m_facade.CreateArticle(0, m_facade.GetAuthors().First(), articleModel.Title, articleModel.Content);
 
-            return Index();
+            return Index("List");
         }
 
         public ActionResult ShowComments()
@@ -131,18 +132,18 @@ namespace MVCProject.Controllers
                 });
             }
             return View("~/Views/Article/Edit.cshtml", articleModel);
-        }        
+        }
 
         public ActionResult Delete(int id)
         {
             m_facade.DeleteArticle(id);
-            return Index();
-        }                
+            return Index("List");
+        }
 
         public ActionResult SaveChanges(ArticleViewModel model)
         {
             m_facade.UpdateArticle(model.Id, model.Title, model.Content);
-            return Index();
+            return Index("List");
         }
 
         public ActionResult ChangeView(string view)
@@ -150,14 +151,22 @@ namespace MVCProject.Controllers
             switch (view)
             {
                 case "List":
-                    return Index(1, 8, "Grid");
-                case "Grid":
-                    return Index();
-                default:
                 {
-                    m_logger.Error("Incorrect page view");
-                    return View("~/Views/Shared/Error.cshtml");
+                    MvcApplication.Cookie.Value = "Grid";
+                    HttpContext.Response.SetCookie(MvcApplication.Cookie);
+                    return Index("Grid");
                 }
+                case "Grid":
+                    {
+                        MvcApplication.Cookie.Value = "List";
+                        HttpContext.Response.SetCookie(MvcApplication.Cookie);
+                        return Index("List");
+                    }
+                default:
+                    {
+                        m_logger.Error("Incorrect page view");
+                        return View("~/Views/Shared/Error.cshtml");
+                    }
             }
         }
     }

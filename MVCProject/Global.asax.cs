@@ -14,7 +14,16 @@ namespace MVCProject
 
     public class MvcApplication : HttpApplication
     {
+
         private readonly NLog.Logger m_logger = NLog.LogManager.GetCurrentClassLogger();
+
+        private static readonly HttpCookie m_cookie = new HttpCookie("viewState");
+
+        public static HttpCookie Cookie
+        {
+            get { return m_cookie; }
+            
+        }
 
         public static Facade Facade
         {
@@ -36,7 +45,7 @@ namespace MVCProject
 
             var baseProjectPath = AppDomain.CurrentDomain.BaseDirectory;
             var appDataPath = Path.Combine(baseProjectPath, ".\\..\\App_Data");
-            AppDomain.CurrentDomain.SetData("DataDirectory", Path.GetFullPath(appDataPath));
+            AppDomain.CurrentDomain.SetData("DataDirectory", Path.GetFullPath(appDataPath));            
         }
     }
 }

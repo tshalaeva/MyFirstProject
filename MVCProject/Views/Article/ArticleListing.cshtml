@@ -1,4 +1,5 @@
 ﻿@using System.Web.Mvc.Html
+@using MVCProject
 @using MVCProject.Models
 
 @model ArticleListingViewModel
@@ -6,6 +7,11 @@
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";    
+}
+
+@if (Model.View == null)
+{
+    Model.View = "List";
 }
 
 <h2>Article Listing</h2>
@@ -23,21 +29,27 @@
 </ul>
 
 <div class="Articles">
-    <div class="ArticlesHead">        
+    <div class="ArticlesHead">
+        @if (Model.View == "List")
+        {
             <span class="article-title-header">
                 <h3>Article</h3>
             </span>
+        }
+        @if (Model.View == "List")
+        {
             <span class="article-author-header">
                 <h3>Author</h3>
-            </span>          
-            @if (Model.View == "Grid")
-            {
-                <div id="list-grid-view" class="list-view">@Html.ActionLink("List", "ChangeView", new {Model.View})</div>
-            }
-            else
-            {
-                <div id="list-grid-view" class="grid-view">@Html.ActionLink("Grid", "ChangeView", new {Model.View})</div>
-            }
+            </span>
+        }
+        @if (Model.View == "Grid")
+        {
+            <div id="list-grid-view" class="list-view">@Html.ActionLink("List", "ChangeView", new { Model.View })</div>
+        }
+        else
+        {
+            <div id="list-grid-view" class="grid-view">@Html.ActionLink("Grid", "ChangeView", new { Model.View })</div>
+        }
     </div>
     <div class="ArticlesBody">
         @foreach (var article in Model.Articles)
@@ -47,7 +59,7 @@
                 <span class="article-author">@article.Author</span>
                 @if (Model.View == "Grid")
                 {
-                    <span >@article.Content</span>
+                    <span class="article-content">@article.Content</span>
                 }
             </div>
         }
@@ -57,7 +69,7 @@
             <span>
                 @for (var i = 1; i <= Model.TotalCount; i++)
                 {
-                    @Html.ActionLink(i.ToString(), "Index", new { page = i, size = Model.PageSize })
+                    @Html.ActionLink(i.ToString(), "Index", new { page = i, size = Model.PageSize, view = MvcApplication.Cookie.Value })
                 }
             </span>
         </div>
