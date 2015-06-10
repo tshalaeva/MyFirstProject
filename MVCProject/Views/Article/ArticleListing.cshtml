@@ -14,6 +14,11 @@
     Model.View = "List";
 }
 
+@if (Model.PageNumber == null)
+{
+    Model.PageNumber = 1;
+}
+
 <h2>Article Listing</h2>
 
 <ul class="links">

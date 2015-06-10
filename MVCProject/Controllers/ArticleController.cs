@@ -20,6 +20,7 @@ namespace MVCProject.Controllers
 
         public ActionResult Index(string view, int page = 1, int size = 8)
         {
+            if (page == 0) page = 1;
             var from = size * (page - 1) + 1;
             var articles = m_facade.GetArticles(from, size - 1);
             var model = new ArticleListingViewModel();
@@ -38,6 +39,9 @@ namespace MVCProject.Controllers
             model.PageNumber = page;
             model.PageSize = size;
             model.View = view;
+
+            MvcApplication.PageCookie.Value = model.PageNumber.ToString();
+            HttpContext.Response.SetCookie(MvcApplication.PageCookie);
 
             return View("~/Views/Article/ArticleListing.cshtml", model);
         }
@@ -100,7 +104,7 @@ namespace MVCProject.Controllers
             if (!ModelState.IsValid) return View("~/Views/User/CreateUser.cshtml");
             m_facade.CreateArticle(0, m_facade.GetAuthors().First(), articleModel.Title, articleModel.Content);
 
-            return Index("List");
+            return Index(MvcApplication.Cookie.Value, Convert.ToInt32(MvcApplication.PageCookie.Value));
         }
 
         public ActionResult ShowComments()
@@ -137,13 +141,13 @@ namespace MVCProject.Controllers
         public ActionResult Delete(int id)
         {
             m_facade.DeleteArticle(id);
-            return Index("List");
+            return Index(MvcApplication.Cookie.Value, Convert.ToInt32(MvcApplication.PageCookie.Value));
         }
 
         public ActionResult SaveChanges(ArticleViewModel model)
         {
             m_facade.UpdateArticle(model.Id, model.Title, model.Content);
-            return Index("List");
+            return Index(MvcApplication.Cookie.Value, Convert.ToInt32(MvcApplication.PageCookie.Value));
         }
 
         public ActionResult ChangeView(string view)
@@ -154,13 +158,13 @@ namespace MVCProject.Controllers
                 {
                     MvcApplication.Cookie.Value = "Grid";
                     HttpContext.Response.SetCookie(MvcApplication.Cookie);
-                    return Index("Grid");
+                    return Index("Grid", Convert.ToInt32(MvcApplication.PageCookie.Value));
                 }
                 case "Grid":
                     {
                         MvcApplication.Cookie.Value = "List";
                         HttpContext.Response.SetCookie(MvcApplication.Cookie);
-                        return Index("List");
+                        return Index("List", Convert.ToInt32(MvcApplication.PageCookie.Value));
                     }
                 default:
                     {

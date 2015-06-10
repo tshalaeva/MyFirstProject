@@ -178,7 +178,7 @@ label {
     clear: both !important;    
 }
 
-.article-content {
+span.article-content {
     width: 225px!important;
     white-space: nowrap;
     overflow: hidden;

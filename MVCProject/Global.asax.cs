@@ -19,10 +19,17 @@ namespace MVCProject
 
         private static readonly HttpCookie m_cookie = new HttpCookie("viewState");
 
+        private static readonly HttpCookie m_pageCookie = new HttpCookie("pageNumber");
+
         public static HttpCookie Cookie
         {
             get { return m_cookie; }
             
+        }
+
+        public static HttpCookie PageCookie
+        {
+            get { return m_pageCookie; }
         }
 
         public static Facade Facade
