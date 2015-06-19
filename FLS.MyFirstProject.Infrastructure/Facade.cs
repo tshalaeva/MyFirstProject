@@ -119,6 +119,11 @@ namespace FLS.MyFirstProject.Infrastructure
             }
         }
 
+        public List<Article> GetArticles(string sortBy, int from, int count, string order)
+        {
+            return m_articleRepository.GetSorted(sortBy, from, count, order);
+        }
+
         public List<Article> GetArticles(int from, int count)
         {
             return m_articleRepository.Get(from, count);

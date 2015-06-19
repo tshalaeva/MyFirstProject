@@ -55,6 +55,11 @@ namespace DataAccessLayer.Repositories
             throw new NotImplementedException();
         }
 
+        public new List<ReviewText> GetSorted(string sortBy, int from, int count, string order)
+        {
+            throw new NotImplementedException();
+        }
+
         public int Save(ReviewText reviewText)
         {
             var command1 = string.Format(

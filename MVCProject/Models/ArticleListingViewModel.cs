@@ -13,5 +13,7 @@ namespace MVCProject.Models
         public int TotalCount { get; set; }
 
         public string View { get; set; }
+
+        public string SortOrder { get; set; }
     }
 }

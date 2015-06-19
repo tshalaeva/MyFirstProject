@@ -14,6 +14,11 @@
     Model.View = "List";
 }
 
+@if (Model.SortOrder == null)
+{
+    Model.SortOrder = MvcApplication.Cookie.Values["sortOrder"];
+}
+
 <h2>Article Listing</h2>
 
 <ul class="links">
@@ -30,12 +35,22 @@
 
 <div class="Articles">
     <div class="ArticlesHead">
-        @if (Model.View == "List")
-        {
-            <span class="article-title-header">
+        <span class="article-title-header">
+            @if (Model.View == "List")
+            {
                 <h3>Article</h3>
+            }            
+            <span class="icon-sort-alpha-asc">
+                @if (Model.SortOrder == "" || Model.SortOrder == "asc")
+                {
+                    @Html.ActionLink("Z to A", "Sort", new { order = "desc", sortBy = "Title", view = MvcApplication.Cookie.Values["view"], page = Model.PageNumber })
+                }
+                else
+                {
+                    @Html.ActionLink("A to Z", "Sort", new { order = "asc", sortBy = "Title", view = MvcApplication.Cookie.Values["view"], page = Model.PageNumber })
+                }
             </span>
-        }
+        </span>
         @if (Model.View == "List")
         {
             <span class="article-author-header">
@@ -44,11 +59,11 @@
         }
         @if (Model.View == "Grid")
         {
-            <div id="list-grid-view" class="list-view">@Html.ActionLink("List", "ChangeView", new { Model.View })</div>
+            <div id="list-grid-view" class="list-view">@Html.ActionLink("List", "ChangeView", new { view = Model.View, sortBy = "Title", order = MvcApplication.Cookie.Values["sortOrder"], page = MvcApplication.Cookie.Values["page"] })</div>
         }
         else
         {
-            <div id="list-grid-view" class="grid-view">@Html.ActionLink("Grid", "ChangeView", new { Model.View })</div>
+            <div id="list-grid-view" class="grid-view">@Html.ActionLink("Grid", "ChangeView", new { view = Model.View, sortBy = "Title", order = MvcApplication.Cookie.Values["sortOrder"], page = MvcApplication.Cookie.Values["page"] })</div>
         }
     </div>
     <div class="ArticlesBody">
@@ -69,7 +84,7 @@
             <span>
                 @for (var i = 1; i <= Model.TotalCount; i++)
                 {
-                    @Html.ActionLink(i.ToString(), "Index", new { page = i, size = Model.PageSize, view = MvcApplication.Cookie.Value })
+                    @Html.ActionLink(i.ToString(), "Index", routeValues: new { page = i, size = Model.PageSize, view = MvcApplication.Cookie.Values["view"], order = MvcApplication.Cookie.Values["sortOrder"], sortBy = "Title"})
                 }
             </span>
         </div>

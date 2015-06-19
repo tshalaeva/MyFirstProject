@@ -60,6 +60,11 @@ namespace Tests
             return m_data;
         }
 
+        public List<Article> GetSorted(string sortBy, int from, int count, string order)
+        {
+            throw new NotImplementedException();
+        }
+
         public int Save(Article entity)
         {
             m_data.Add(entity);
@@ -139,7 +144,12 @@ namespace Tests
         {
             //
             return m_data;
-        } 
+        }
+
+        public List<User> GetSorted(string sortBy, int from, int count, string order)
+        {
+            throw new NotImplementedException();
+        }
 
         public int Save(User entity)
         {
@@ -235,6 +245,11 @@ namespace Tests
             return Data;
         }
 
+        public List<BaseComment> GetSorted(string sortBy, int from, int count, string order)
+        {
+            throw new NotImplementedException();
+        }
+
         public int Save(BaseComment entity)
         {
             Data.Add(entity);
@@ -305,6 +320,11 @@ namespace Tests
             throw new NotImplementedException();
         }
 
+        public new List<Review> GetSorted(string sortBy, int from, int count, string order)
+        {
+            throw new NotImplementedException();
+        }
+
         public int Save(Review entity)
         {
             Data.Add(entity);
@@ -371,6 +391,11 @@ namespace Tests
         }
 
         public new List<ReviewText> Get(int filteredById)
+        {
+            throw new NotImplementedException();
+        }
+
+        public new List<ReviewText> GetSorted(string sortBy, int from, int count, string order)
         {
             throw new NotImplementedException();
         }

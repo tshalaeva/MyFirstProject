@@ -56,6 +56,11 @@ namespace DataAccessLayer.Repositories
             throw new NotImplementedException();
         }
 
+        public new List<Review> GetSorted(string sortBy, int from, int count, string order)
+        {
+            throw new NotImplementedException();
+        }
+
         public int Save(Review review)
         {
             var command1 = string.Format("INSERT INTO [dbo].[Comments](UserId,ArticleId,Content) OUTPUT Inserted.Id VALUES({0},{1},'{2}')", review.User.Id, review.Article.Id, review.Content);

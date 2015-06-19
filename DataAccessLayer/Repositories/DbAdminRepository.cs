@@ -54,6 +54,11 @@ namespace DataAccessLayer.Repositories
             throw new NotImplementedException();
         }
 
+        public new List<Admin> GetSorted(string sortBy, int from, int count, string order)
+        {
+            throw new NotImplementedException();
+        }
+
         public int Save(Admin entity)
         {
             var privilegiesId = Guid.NewGuid();

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using DataAccessLayer.DtoEntities;
 using ObjectRepository.Entities;
 using StructureMap;
@@ -118,6 +119,60 @@ namespace DataAccessLayer.Repositories
             }
             return articles;
         }
+
+        public List<Article> GetSorted(string sortBy, int from, int count, string order)
+        {
+            var articles = new List<Article>();
+            DataTable articlesTable;
+            if (sortBy != "" && order != "")
+            {
+                articlesTable = m_adoHelper.GetSortedData("Article", sortBy, from, count, order);
+            }
+            else
+            {
+                articlesTable = m_adoHelper.GetData("Article", from, count);
+            }
+            for (var i = 0; i < articlesTable.Rows.Count; i++)
+            {
+                var dtoArticle = new DtoArticle
+                {
+                    Id = (int)articlesTable.Rows[i]["Id"],
+                    Title = articlesTable.Rows[i]["Title"].ToString(),
+                    Content = articlesTable.Rows[i]["Content"].ToString(),
+                    AuthorId = Convert.ToInt32(m_adoHelper.GetCellValue("User", "Id", "AuthorId", articlesTable.Rows[i]["AuthorId"])),
+                    Ratings = new List<object>()
+                };
+                var rating = m_adoHelper.GetData("Rating").Rows;
+                for (int j = 0; j < rating.Count; j++)
+                {
+                    if ((int)rating[j]["ArticleId"] == (int)articlesTable.Rows[i]["Id"])
+                    {
+                        dtoArticle.Ratings.Add((int)rating[j]["Value"]);
+                    }
+                }
+                var textRating = m_adoHelper.GetData("TextRating").Rows;
+                for (var j = 0; j < textRating.Count; j++)
+                {
+                    if ((int)textRating[j]["ArticleId"] == (int)articlesTable.Rows[i]["Id"])
+                    {
+                        dtoArticle.Ratings.Add(textRating[j]["Value"]);
+                    }
+                }
+                var currentArticle = m_dtoMapper.GetArticle(dtoArticle);
+                currentArticle.Author = new Author()
+                {
+                    Id = dtoArticle.AuthorId,
+                    FirstName = m_adoHelper.GetCellValue("User", "FirstName", dtoArticle.AuthorId).ToString(),
+                    LastName = m_adoHelper.GetCellValue("User", "LastName", dtoArticle.AuthorId).ToString(),
+                    Age = Convert.ToInt32(m_adoHelper.GetCellValue("User", "Age", dtoArticle.AuthorId)),
+                    NickName = m_adoHelper.GetCellValue("Author", "NickName", "Id", m_adoHelper.GetCellValue("User", "AuthorId", dtoArticle.AuthorId)).ToString(),
+                    Popularity = Convert.ToDecimal(m_adoHelper.GetCellValue("Author", "Popularity", "Id", m_adoHelper.GetCellValue("User", "AuthorId", dtoArticle.AuthorId)))
+                };
+
+                articles.Add(currentArticle);
+            }
+            return articles;
+        } 
 
         public List<Article> Get(int id)
         {

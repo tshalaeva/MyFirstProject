@@ -185,6 +185,16 @@ label {
     text-overflow: ellipsis;
 }
 
+.article-title-header > h3 {
+    width: 300px!important;
+    float: left;
+    text-align: right;
+}
+
+.icon-sort-alpha-asc {
+    width: 100px;
+}
+
 /*WebReport*/
 #WebReportOptions {
     width: 500px;

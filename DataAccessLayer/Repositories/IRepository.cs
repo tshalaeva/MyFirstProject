@@ -13,6 +13,8 @@ namespace DataAccessLayer.Repositories
 
         List<T> Get(int filteredById);
 
+        List<T> GetSorted(string sortBy, int from, int count, string order); 
+
         int Save(T entity);
         
         void Delete(int id);

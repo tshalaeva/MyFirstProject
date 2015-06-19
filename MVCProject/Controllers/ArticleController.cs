@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.UI.WebControls;
 using FLS.MyFirstProject.Infrastructure;
 using MVCProject.Models;
 using NLog;
@@ -18,10 +19,17 @@ namespace MVCProject.Controllers
 
         private readonly Logger m_logger = LogManager.GetCurrentClassLogger();
 
-        public ActionResult Index(string view, int page = 1, int size = 8)
+        public ActionResult Index(string view, string sortBy = "", string order = "", int page = 1, int size = 8)
         {
+            MvcApplication.Cookie.Values["page"] = page.ToString();
+            if (view == null)
+            {
+                view = "List";
+                MvcApplication.Cookie.Values["view"] = view;
+            }
+
             var from = size * (page - 1) + 1;
-            var articles = m_facade.GetArticles(from, size - 1);
+            var articles = m_facade.GetArticles(sortBy, from, size - 1, order);
             var model = new ArticleListingViewModel();
             var count = m_facade.GetArticlesCount() / size;
             if (m_facade.GetArticlesCount() > size * count)
@@ -146,25 +154,50 @@ namespace MVCProject.Controllers
             return Index("List");
         }
 
-        public ActionResult ChangeView(string view)
+        public ActionResult ChangeView(string view, string sortBy,string order, string page)
         {
             switch (view)
             {
                 case "List":
-                {
-                    MvcApplication.Cookie.Value = "Grid";
-                    HttpContext.Response.SetCookie(MvcApplication.Cookie);
-                    return Index("Grid");
-                }
+                    {
+                        MvcApplication.Cookie.Values["view"] = "Grid";
+                        HttpContext.Response.SetCookie(MvcApplication.Cookie);
+                        return Index("Grid",sortBy, order, Convert.ToInt32(page));
+                    }
                 case "Grid":
                     {
-                        MvcApplication.Cookie.Value = "List";
+                        MvcApplication.Cookie.Values["view"] = "List";
                         HttpContext.Response.SetCookie(MvcApplication.Cookie);
-                        return Index("List");
+                        return Index("List", sortBy, order, Convert.ToInt32(page));
                     }
                 default:
                     {
                         m_logger.Error("Incorrect page view");
+                        return View("~/Views/Shared/Error.cshtml");
+                    }
+            }
+        }
+
+        public ActionResult Sort(string order, string sortBy, string view, int page)
+        {
+            MvcApplication.Cookie.Values["view"] = view;
+            MvcApplication.Cookie.Values["page"] = page.ToString();
+            switch (order)
+            {
+                case "asc":
+                    {
+                        MvcApplication.Cookie.Values["sortOrder"] = "asc";
+                        return Index(view, sortBy, "ASC", page);
+                    }
+                case "desc":
+                    {
+                        MvcApplication.Cookie.Values["sortOrder"] = "desc";
+                        return Index(view, sortBy, "DESC", page);
+                    }
+
+                default:
+                    {
+                        m_logger.Error("Incorrect sort order");
                         return View("~/Views/Shared/Error.cshtml");
                     }
             }

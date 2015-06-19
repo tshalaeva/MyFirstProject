@@ -38,6 +38,11 @@ namespace DataAccessLayer.Repositories
             return Data;
         }
 
+        public List<User> GetSorted(string sortBy, int from, int count, string order)
+        {
+            throw new NotImplementedException();
+        }
+
         public List<User> Get(int from, int count)
         {
             //
@@ -112,7 +117,12 @@ namespace DataAccessLayer.Repositories
         {
             //
             return Data;
-        } 
+        }
+
+        public List<Article> GetSorted(string sortBy, int from, int count, string order)
+        {
+            throw new NotImplementedException();
+        }
 
         public int Save(Article entity)
         {
@@ -182,6 +192,11 @@ namespace DataAccessLayer.Repositories
         {
             //
             return Get();
+        }
+
+        public List<BaseComment> GetSorted(string sortBy, int from, int count, string order)
+        {
+            throw new NotImplementedException();
         }
 
         public int Save(BaseComment entity)

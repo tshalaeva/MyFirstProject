@@ -108,6 +108,31 @@ namespace DataAccessLayer
             return table;
         }
 
+        public DataTable GetSortedData(string tableName, string sortBy, int from, int count, string order)
+        {
+            var table = new DataTable();
+            using (var connection = new SqlConnection(ConnectionString))
+            {
+                var cmdText = new SqlCommand(
+                        string.Format(
+                            "SELECT * FROM (SELECT *, ROW_NUMBER() OVER (ORDER BY {0} {1}) AS RowNum FROM [dbo].[{2}]) AS MyDerivedTable WHERE MyDerivedTable.RowNum BETWEEN {3} AND {4}", sortBy, order, tableName, from, from + count), connection);   
+                connection.Open();
+                var dataAdapter = new SqlDataAdapter(cmdText);
+                try
+                {
+                    dataAdapter.Fill(table);
+                    connection.Close();
+                    dataAdapter.Dispose();
+                }
+                catch (Exception)
+                {
+                    dataAdapter.Dispose();
+                }
+                connection.Close();
+            }
+            return table;
+        }
+
         public DataTable GetData(string tableName, object id)
         {
             var table = new DataTable();

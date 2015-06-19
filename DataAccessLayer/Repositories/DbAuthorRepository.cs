@@ -54,6 +54,11 @@ namespace DataAccessLayer.Repositories
             throw new NotImplementedException();
         }
 
+        public new List<Author> GetSorted(string sortBy, int from, int count, string order)
+        {
+            throw new NotImplementedException();
+        }
+
         public int Save(Author entity)
         {
             var authorId = Guid.NewGuid();

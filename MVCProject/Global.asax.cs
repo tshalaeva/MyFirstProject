@@ -17,7 +17,7 @@ namespace MVCProject
 
         private readonly NLog.Logger m_logger = NLog.LogManager.GetCurrentClassLogger();
 
-        private static readonly HttpCookie m_cookie = new HttpCookie("viewState");
+        private static readonly HttpCookie m_cookie = new HttpCookie("articleListing");
 
         public static HttpCookie Cookie
         {
@@ -45,7 +45,10 @@ namespace MVCProject
 
             var baseProjectPath = AppDomain.CurrentDomain.BaseDirectory;
             var appDataPath = Path.Combine(baseProjectPath, ".\\..\\App_Data");
-            AppDomain.CurrentDomain.SetData("DataDirectory", Path.GetFullPath(appDataPath));            
+            AppDomain.CurrentDomain.SetData("DataDirectory", Path.GetFullPath(appDataPath));
+            Cookie.Values.Add("view", "List");
+            Cookie.Values.Add("page", "1");
+            Cookie.Values.Add("sortOrder", "");
         }
     }
 }
